@@ -923,7 +923,7 @@
                     gv1.batchEditApi.SetCellValue(index1, "RecordId", values[6]);
                     gv1.batchEditApi.SetCellValue(index1, "RRDocdate", values[7]);
                     gv1.batchEditApi.SetCellValue(index1, "LotID", values[8]);
-                    gv1.batchEditApi.SetCellValue(index1, "Qty", 0);
+                    gv1.batchEditApi.SetCellValue(index1, "Qty", bulkQty == values[5] ? values[9] : 0);
                 }
 
 
@@ -2189,7 +2189,7 @@
                                                                             loader.Show();
                                                                            var g = glpallet.GetGridView();
                                                                
-                                                                        g.GetRowValues(e.visibleIndex, 'PalletID;MfgDate;ExpirationDate;BatchNumber;Location;RemainingQty;RecordId;RRdate;LotID', UpdateLottables); 
+                                                                        g.GetRowValues(e.visibleIndex, 'PalletID;MfgDate;ExpirationDate;BatchNumber;Location;RemainingQty;RecordId;RRdate;LotID;RemainingKilo', UpdateLottables); 
                                                                     }" />
                                                                 </dx:ASPxGridLookup>
                                                             </EditItemTemplate>

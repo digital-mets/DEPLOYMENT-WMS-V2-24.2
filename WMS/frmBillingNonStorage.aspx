@@ -1,8 +1,8 @@
-﻿<%@ page language="C#" autoeventwireup="true" codebehind="frmBillingNonStorage.aspx.cs" inherits="GWL.frmBillingNonStorage" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="frmBillingNonStorage.aspx.cs" Inherits="GWL.frmBillingNonStorage" %>
 
-<%@ register assembly="DevExpress.Web.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Data.Linq" tagprefix="dx" %>
+<%@ Register Assembly="DevExpress.Web.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 
-<%@ register assembly="DevExpress.Web.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
+<%@ Register Assembly="DevExpress.Web.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -343,24 +343,24 @@
     <!--#endregion-->
 </head>
 <body style="height: 910px">
-    <dx:aspxglobalevents id="ge" runat="server">
-        <clientsideevents controlsinitialized="OnControlsInitialized" />
-    </dx:aspxglobalevents>
+    <dx:ASPxGlobalEvents ID="ge" runat="server">
+        <ClientSideEvents ControlsInitialized="OnControlsInitialized" />
+    </dx:ASPxGlobalEvents>
     <form id="form1" runat="server" class="Entry">
-        <dx:aspxpanel id="toppanel" runat="server" fixedpositionoverlap="true" fixedposition="WindowTop" backcolor="#2A88AD" height="30px">
-            <panelcollection>
-                <dx:panelcontent runat="server" supportsdisabledattribute="True">
-                    <dx:aspxlabel runat="server" text="Billing Non Storage" font-bold="true" forecolor="White" font-size="X-Large"></dx:aspxlabel>
-                </dx:panelcontent>
-            </panelcollection>
-        </dx:aspxpanel>
-        <dx:aspxcallbackpanel id="cp" runat="server" width="806px" height="641px" clientinstancename="cp" oncallback="cp_Callback">
-            <clientsideevents endcallback="gridView_EndCallback"></clientsideevents>
-            <panelcollection>
-                <dx:panelcontent runat="server" supportsdisabledattribute="True">
-                    <dx:aspxformlayout id="frmlayout1" runat="server" height="565px" width="850px" style="margin-left: -3px">
-                        <settingsadaptivity adaptivitymode="SingleColumnWindowLimit" switchtosinglecolumnatwindowinnerwidth="600" />
-                        <items>
+        <dx:ASPxPanel ID="toppanel" runat="server" FixedPositionOverlap="true" FixedPosition="WindowTop" BackColor="#2A88AD" Height="30px">
+            <PanelCollection>
+                <dx:PanelContent runat="server" supportsdisabledattribute="True">
+                    <dx:ASPxLabel runat="server" Text="Billing Non Storage" Font-Bold="true" ForeColor="White" Font-Size="X-Large"></dx:ASPxLabel>
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>
+        <dx:ASPxCallbackPanel ID="cp" runat="server" Width="806px" Height="641px" ClientInstanceName="cp" OnCallback="cp_Callback">
+            <ClientSideEvents EndCallback="gridView_EndCallback"></ClientSideEvents>
+            <PanelCollection>
+                <dx:PanelContent runat="server" supportsdisabledattribute="True">
+                    <dx:ASPxFormLayout ID="frmlayout1" runat="server" Height="565px" Width="850px" Style="margin-left: -3px">
+                        <SettingsAdaptivity AdaptivityMode="SingleColumnWindowLimit" SwitchToSingleColumnAtWindowInnerWidth="600" />
+                        <Items>
 
                             <%--<!--#region Region Header --> --%>
                             <%-- <!--#endregion --> --%>
@@ -368,490 +368,491 @@
                             <%--<!--#region Region Details --> --%>
 
                             <%-- <!--#endregion --> --%>
-                            <dx:tabbedlayoutgroup>
-                                <items>
-                                    <dx:layoutgroup caption="Header" colcount="2">
-                                        <items>
-                                            <dx:layoutitem caption="Document Number:" name="DocNumber">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtDocnumber" runat="server" width="170px" onload="LookupLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Document Date:" name="DocDate">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxdateedit id="deDocDate" runat="server" oninit="deDocDate_Init" onload="Date_Load" width="170px">
-                                                        </dx:aspxdateedit>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="ServiceType:" name="ServiceType">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxgridlookup id="gvServiceType" runat="server" clientinstancename="gvServiceType" autogeneratecolumns="False" datasourceid="ServiceType" keyfieldname="ServiceType" onload="LookupLoad" textformatstring="{0}" width="170px">
-                                                            <gridviewproperties>
-                                                                <settingsbehavior allowfocusedrow="True" allowselectsinglerowonly="True" />
-                                                                <settings showfilterrow="True"></settings>
-                                                            </gridviewproperties>
-                                                            <columns>
-                                                                <dx:gridviewdatatextcolumn fieldname="ServiceType" readonly="True" showincustomizationform="True" visibleindex="0">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="Description" showincustomizationform="True" visibleindex="1">
-                                                                </dx:gridviewdatatextcolumn>
-                                                            </columns>
-                                                            <clientsideevents validation="OnValidation" valuechanged="ComboboxChanged" />
-                                                            <validationsettings display="None" errordisplaymode="ImageWithTooltip">
-                                                                <errorimage tooltip="ServiceType is required">
-                                                                </errorimage>
-                                                                <requiredfield isrequired="True" />
-                                                            </validationsettings>
-                                                            <invalidstyle backcolor="Pink">
-                                                            </invalidstyle>
-                                                        </dx:aspxgridlookup>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="DateFrom:" name="dtpDateFrom">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxdateedit id="dtpDateFrom" runat="server" oninit="dtpDateFrom_Init" onload="Date_Load" width="170px">
-                                                        </dx:aspxdateedit>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
+                            <dx:TabbedLayoutGroup>
+                                <Items>
+                                    <dx:LayoutGroup Caption="Header" ColCount="2">
+                                        <Items>
+                                            <dx:LayoutItem Caption="Document Number:" Name="DocNumber">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtDocnumber" runat="server" Width="170px" OnLoad="LookupLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Document Date:" Name="DocDate">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxDateEdit ID="deDocDate" runat="server" OnInit="deDocDate_Init" OnLoad="Date_Load" Width="170px">
+                                                        </dx:ASPxDateEdit>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="ServiceType:" Name="ServiceType">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxGridLookup ID="gvServiceType" runat="server" ClientInstanceName="gvServiceType" AutoGenerateColumns="False" DataSourceID="ServiceType" KeyFieldName="ServiceType" OnLoad="LookupLoad" TextFormatString="{0}" Width="170px">
+                                                            <GridViewProperties>
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                <Settings ShowFilterRow="True"></Settings>
+                                                            </GridViewProperties>
+                                                            <Columns>
+                                                                <dx:GridViewDataTextColumn FieldName="ServiceType" ReadOnly="True" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="Description" ShowInCustomizationForm="True" VisibleIndex="1">
+                                                                </dx:GridViewDataTextColumn>
+                                                            </Columns>
+                                                            <ClientSideEvents Validation="OnValidation" ValueChanged="ComboboxChanged" />
+                                                            <ValidationSettings Display="None" ErrorDisplayMode="ImageWithTooltip">
+                                                                <ErrorImage ToolTip="ServiceType is required">
+                                                                </ErrorImage>
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                            <InvalidStyle BackColor="Pink">
+                                                            </InvalidStyle>
+                                                        </dx:ASPxGridLookup>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="DateFrom:" Name="dtpDateFrom">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxDateEdit ID="dtpDateFrom" runat="server" OnInit="dtpDateFrom_Init" OnLoad="Date_Load" Width="170px">
+                                                        </dx:ASPxDateEdit>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
 
-                                            <dx:layoutitem caption="BizPartnerCode:" name="BizPartnerCode">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxgridlookup id="gvBizPartnerCode" clientinstancename="gvBizPartnerCode" runat="server" autogeneratecolumns="False" datasourceid="Masterfilebiz" keyfieldname="BizPartnerCode" onload="LookupLoad" textformatstring="{0}" width="170px">
-                                                            <gridviewproperties>
-                                                                <settingsbehavior allowfocusedrow="True" allowselectsinglerowonly="True" />
-                                                                <settings showfilterrow="True"></settings>
-                                                            </gridviewproperties>
-                                                            <columns>
-                                                                <dx:gridviewdatatextcolumn fieldname="BizPartnerCode" readonly="True" showincustomizationform="True" visibleindex="0">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="Name" showincustomizationform="True" visibleindex="1">
-                                                                </dx:gridviewdatatextcolumn>
-                                                            </columns>
-                                                            <clientsideevents validation="OnValidation" valuechanged="function(s,e){cp.PerformCallback('RR');}" />
-                                                            <validationsettings display="None" errordisplaymode="ImageWithTooltip">
-                                                                <errorimage tooltip="Supplier is required">
-                                                                </errorimage>
-                                                                <requiredfield isrequired="True" />
-                                                            </validationsettings>
-                                                            <invalidstyle backcolor="Pink">
-                                                            </invalidstyle>
-                                                        </dx:aspxgridlookup>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="DateTo:" name="dtpDateTo">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxdateedit id="dtpDateTo" runat="server" oninit="dtpDateTo_Init" onload="Date_Load" width="170px">
-                                                        </dx:aspxdateedit>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Warehouse Code">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxgridlookup id="gvWarehouse" clientinstancename="gvWarehouse" runat="server" width="170px" datasourceid="sdsWarehouse" keyfieldname="WarehouseCode" textformatstring="{0}">
-                                                            <gridviewproperties>
-                                                                <settingsbehavior allowfocusedrow="True" allowselectsinglerowonly="True" />
-                                                                <settings showfilterrow="True"></settings>
-                                                            </gridviewproperties>
-                                                            <clientsideevents validation="OnValidation" valuechanged="function(s,e){cp.PerformCallback('RR');}" />
+                                            <dx:LayoutItem Caption="BizPartnerCode:" Name="BizPartnerCode">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxGridLookup ID="gvBizPartnerCode" ClientInstanceName="gvBizPartnerCode" runat="server" AutoGenerateColumns="False" DataSourceID="Masterfilebiz" KeyFieldName="BizPartnerCode" OnLoad="LookupLoad" TextFormatString="{0}" Width="170px">
+                                                            <GridViewProperties>
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                <Settings ShowFilterRow="True"></Settings>
+                                                            </GridViewProperties>
+                                                            <Columns>
+                                                                <dx:GridViewDataTextColumn FieldName="BizPartnerCode" ReadOnly="True" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="Name" ShowInCustomizationForm="True" VisibleIndex="1">
+                                                                </dx:GridViewDataTextColumn>
+                                                            </Columns>
+                                                            <ClientSideEvents Validation="OnValidation" ValueChanged="function(s,e){cp.PerformCallback('RR');}" />
+                                                            <ValidationSettings Display="None" ErrorDisplayMode="ImageWithTooltip">
+                                                                <ErrorImage ToolTip="Supplier is required">
+                                                                </ErrorImage>
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                            <InvalidStyle BackColor="Pink">
+                                                            </InvalidStyle>
+                                                        </dx:ASPxGridLookup>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="DateTo:" Name="dtpDateTo">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxDateEdit ID="dtpDateTo" runat="server" OnInit="dtpDateTo_Init" OnLoad="Date_Load" Width="170px">
+                                                        </dx:ASPxDateEdit>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Warehouse Code">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxGridLookup ID="gvWarehouse" ClientInstanceName="gvWarehouse" runat="server" Width="170px" DataSourceID="sdsWarehouse" KeyFieldName="WarehouseCode" TextFormatString="{0}">
+                                                            <GridViewProperties>
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                <Settings ShowFilterRow="True"></Settings>
+                                                            </GridViewProperties>
+                                                            <ClientSideEvents Validation="OnValidation" ValueChanged="function(s,e){cp.PerformCallback('RR');}" />
 
 
-                                                            <validationsettings display="None" errordisplaymode="ImageWithTooltip">
-                                                                <errorimage tooltip="ServiceType is required">
-                                                                </errorimage>
-                                                                <requiredfield isrequired="True" />
-                                                            </validationsettings>
-                                                            <invalidstyle backcolor="Pink">
-                                                            </invalidstyle>
-                                                        </dx:aspxgridlookup>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Total Amount:" name="TotalAmount ">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtTotalAmount" runat="server" clientinstancename="txtTotalAmount" readonly="True" width="170px">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
+                                                            <ValidationSettings Display="None" ErrorDisplayMode="ImageWithTooltip">
+                                                                <ErrorImage ToolTip="ServiceType is required">
+                                                                </ErrorImage>
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                            <InvalidStyle BackColor="Pink">
+                                                            </InvalidStyle>
+                                                        </dx:ASPxGridLookup>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Total Amount:" Name="TotalAmount ">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtTotalAmount" runat="server" ClientInstanceName="txtTotalAmount" ReadOnly="True" Width="170px">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
 
-                                            <dx:layoutitem caption="ProfitCenterCode:" name="ProfitCenterCode">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxgridlookup id="gvProfit" clientinstancename="gvProfit" runat="server" datasourceid="ProfitCenterCode" width="170px" keyfieldname="ProfitCenterCode" textformatstring="{0}" autogeneratecolumns="False" onload="LookupLoad">
-                                                            <gridviewproperties>
-                                                                <settingsbehavior allowfocusedrow="True" allowselectsinglerowonly="True" />
-                                                                <settings showfilterrow="True"></settings>
-                                                            </gridviewproperties>
-                                                            <columns>
-                                                                <dx:gridviewdatatextcolumn fieldname="ProfitCenterCode" readonly="True" showincustomizationform="True" visibleindex="0">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="Description" showincustomizationform="True" visibleindex="1">
-                                                                </dx:gridviewdatatextcolumn>
-                                                            </columns>
-                                                            <clientsideevents validation="OnValidation" />
-                                                            <validationsettings display="None" errordisplaymode="ImageWithTooltip">
-                                                                <errorimage tooltip="Supplier is required">
-                                                                </errorimage>
-                                                                <requiredfield isrequired="True" />
-                                                            </validationsettings>
-                                                            <invalidstyle backcolor="Pink">
-                                                            </invalidstyle>
-                                                        </dx:aspxgridlookup>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="TotalVat:" name="TotalVat">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtTotalVat" runat="server" width="170px" readonly="True" clientinstancename="txtTotalVat">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="ContractNumber:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtContractNumber" clientinstancename="txtContractNumber" runat="server" width="170px" readonly="true">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="BillingStatement:" name="BillingStatement">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtBillingStatement" runat="server" width="170px" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="BillingPeriodType:" name="BillingPeriodType">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtBillingPeriodType" clientinstancename="txtBillingPeriodType" runat="server" width="170px" readonly="true">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="" name="Genereatebtn">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxbutton id="Generatebtn" runat="server" autopostback="False" text="Generate" theme="MetropolisBlue" width="170px">
-                                                            <clientsideevents click="Generate" />
-                                                        </dx:aspxbutton>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                        </items>
-                                    </dx:layoutgroup>
-                                    <dx:layoutgroup caption="User Defined" colcount="2">
-                                        <items>
-                                            <dx:layoutitem name="Field1" caption="Field 1:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField1" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 6:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField6" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 2:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField2" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 7:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField7" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 3:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField3" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 8:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField8" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 4:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField4" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 9:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField9" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 5:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHField5" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Field 5:">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtServType" runat="server" onload="TextboxLoad">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                        </items>
-                                    </dx:layoutgroup>
-                                    <dx:layoutgroup caption="Journal Entries">
-                                        <items>
-                                            <dx:layoutitem caption="">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxgridview id="gvJournal" runat="server" autogeneratecolumns="False" width="850px" clientinstancename="gvJournal" keyfieldname="RTransType;TransType">
-                                                            <clientsideevents init="OnInitTrans" batcheditconfirmshowing="OnConfirm" custombuttonclick="OnCustomClick" />
-                                                            <settingspager mode="ShowAllRecords" />
-                                                            <settingsediting mode="Batch" />
-                                                            <settings horizontalscrollbarmode="Visible" verticalscrollbarmode="Auto" columnminwidth="120" verticalscrollableheight="130" />
-                                                            <settingsbehavior allowsort="False"></settingsbehavior>
-                                                            <settingsdatasecurity allowdelete="False" allowedit="False" allowinsert="False" />
-                                                            <columns>
-                                                                <dx:gridviewdatatextcolumn fieldname="AccountCode" name="jAccountCode" showincustomizationform="True" visibleindex="0" width="120px" caption="Account Code">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="AccountDescription" name="jAccountDescription" showincustomizationform="True" visibleindex="1" width="150px" caption="Account Description">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="SubsidiaryCode" name="jSubsidiaryCode" showincustomizationform="True" visibleindex="2" width="120px" caption="Subsidiary Code">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="SubsidiaryDescription" name="jSubsidiaryDescription" showincustomizationform="True" visibleindex="3" width="150px" caption="Subsidiary Description">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="ProfitCenter" name="jProfitCenter" showincustomizationform="True" visibleindex="4" width="120px" caption="Profit Center">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="CostCenter" name="jCostCenter" showincustomizationform="True" visibleindex="5" width="120px" caption="Cost Center">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="Debit" name="jDebit" showincustomizationform="True" visibleindex="6" width="120px" caption="Debit  Amount">
-                                                                </dx:gridviewdatatextcolumn>
-                                                                <dx:gridviewdatatextcolumn fieldname="Credit" name="jCredit" showincustomizationform="True" visibleindex="7" width="120px" caption="Credit Amount">
-                                                                </dx:gridviewdatatextcolumn>
-                                                            </columns>
-                                                        </dx:aspxgridview>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                        </items>
-                                    </dx:layoutgroup>
-                                    <dx:layoutgroup caption="Audit Trail" colcount="2">
-                                        <items>
-                                            <dx:layoutitem caption="Added By">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHAddedBy" runat="server" width="170px" readonly="True">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Added Date">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHAddedDate" runat="server" width="170px" readonly="True">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Last Edited By">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHLastEditedBy" runat="server" width="170px" readonly="True">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Last Edited Date">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHLastEditedDate" runat="server" width="170px" readonly="True">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Submitted By">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHSubmittedBy" runat="server" width="170px" readonly="True">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                            <dx:layoutitem caption="Submitted Date">
-                                                <layoutitemnestedcontrolcollection>
-                                                    <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                        <dx:aspxtextbox id="txtHSubmittedDate" runat="server" width="170px" readonly="True">
-                                                        </dx:aspxtextbox>
-                                                    </dx:layoutitemnestedcontrolcontainer>
-                                                </layoutitemnestedcontrolcollection>
-                                            </dx:layoutitem>
-                                        </items>
-                                    </dx:layoutgroup>
-                                </items>
-                            </dx:tabbedlayoutgroup>
+                                            <dx:LayoutItem Caption="ProfitCenterCode:" Name="ProfitCenterCode">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxGridLookup ID="gvProfit" ClientInstanceName="gvProfit" runat="server" DataSourceID="ProfitCenterCode" Width="170px" KeyFieldName="ProfitCenterCode" TextFormatString="{0}" AutoGenerateColumns="False" OnLoad="LookupLoad">
+                                                            <GridViewProperties>
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                <Settings ShowFilterRow="True"></Settings>
+                                                            </GridViewProperties>
+                                                            <Columns>
+                                                                <dx:GridViewDataTextColumn FieldName="ProfitCenterCode" ReadOnly="True" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="Description" ShowInCustomizationForm="True" VisibleIndex="1">
+                                                                </dx:GridViewDataTextColumn>
+                                                            </Columns>
+                                                            <ClientSideEvents Validation="OnValidation" />
+                                                            <ValidationSettings Display="None" ErrorDisplayMode="ImageWithTooltip">
+                                                                <ErrorImage ToolTip="Supplier is required">
+                                                                </ErrorImage>
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                            <InvalidStyle BackColor="Pink">
+                                                            </InvalidStyle>
+                                                        </dx:ASPxGridLookup>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="TotalVat:" Name="TotalVat">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtTotalVat" runat="server" Width="170px" ReadOnly="True" ClientInstanceName="txtTotalVat">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="ContractNumber:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtContractNumber" ClientInstanceName="txtContractNumber" runat="server" Width="170px" ReadOnly="true">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="BillingStatement:" Name="BillingStatement">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtBillingStatement" runat="server" Width="170px" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="BillingPeriodType:" Name="BillingPeriodType">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtBillingPeriodType" ClientInstanceName="txtBillingPeriodType" runat="server" Width="170px" ReadOnly="true">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="" Name="Genereatebtn">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxButton ID="Generatebtn" runat="server" AutoPostBack="False" Text="Generate" Theme="MetropolisBlue" Width="170px">
+                                                            <ClientSideEvents Click="Generate" />
+                                                        </dx:ASPxButton>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                        </Items>
+                                    </dx:LayoutGroup>
+                                    <dx:LayoutGroup Caption="User Defined" ColCount="2">
+                                        <Items>
+                                            <dx:LayoutItem Name="Field1" Caption="Field 1:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField1" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 6:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField6" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 2:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField2" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 7:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField7" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 3:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField3" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 8:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField8" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 4:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField4" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 9:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField9" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Field 5:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHField5" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Service Type:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtServType" runat="server" OnLoad="TextboxLoad">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                        </Items>
+                                    </dx:LayoutGroup>
+                                    <dx:LayoutGroup Caption="Journal Entries">
+                                        <Items>
+                                            <dx:LayoutItem Caption="">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxGridView ID="gvJournal" runat="server" AutoGenerateColumns="False" Width="850px" ClientInstanceName="gvJournal" KeyFieldName="RTransType;TransType">
+                                                            <ClientSideEvents Init="OnInitTrans" BatchEditConfirmShowing="OnConfirm" CustomButtonClick="OnCustomClick" />
+                                                            <SettingsPager Mode="ShowAllRecords" />
+                                                            <SettingsEditing Mode="Batch" />
+                                                            <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" ColumnMinWidth="120" VerticalScrollableHeight="130" />
+                                                            <SettingsBehavior AllowSort="False"></SettingsBehavior>
+                                                            <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
+                                                            <Columns>
+                                                                <dx:GridViewDataTextColumn FieldName="AccountCode" Name="jAccountCode" ShowInCustomizationForm="True" VisibleIndex="0" Width="120px" Caption="Account Code">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="AccountDescription" Name="jAccountDescription" ShowInCustomizationForm="True" VisibleIndex="1" Width="150px" Caption="Account Description">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="SubsidiaryCode" Name="jSubsidiaryCode" ShowInCustomizationForm="True" VisibleIndex="2" Width="120px" Caption="Subsidiary Code">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="SubsidiaryDescription" Name="jSubsidiaryDescription" ShowInCustomizationForm="True" VisibleIndex="3" Width="150px" Caption="Subsidiary Description">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="ProfitCenter" Name="jProfitCenter" ShowInCustomizationForm="True" VisibleIndex="4" Width="120px" Caption="Profit Center">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="CostCenter" Name="jCostCenter" ShowInCustomizationForm="True" VisibleIndex="5" Width="120px" Caption="Cost Center">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="Debit" Name="jDebit" ShowInCustomizationForm="True" VisibleIndex="6" Width="120px" Caption="Debit  Amount">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="Credit" Name="jCredit" ShowInCustomizationForm="True" VisibleIndex="7" Width="120px" Caption="Credit Amount">
+                                                                </dx:GridViewDataTextColumn>
+                                                            </Columns>
+                                                        </dx:ASPxGridView>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                        </Items>
+                                    </dx:LayoutGroup>
+                                    <dx:LayoutGroup Caption="Audit Trail" ColCount="2">
+                                        <Items>
+                                            <dx:LayoutItem Caption="Added By">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHAddedBy" runat="server" Width="170px" ReadOnly="True">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Added Date">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHAddedDate" runat="server" Width="170px" ReadOnly="True">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Last Edited By">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHLastEditedBy" runat="server" Width="170px" ReadOnly="True">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Last Edited Date">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHLastEditedDate" runat="server" Width="170px" ReadOnly="True">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Submitted By">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHSubmittedBy" runat="server" Width="170px" ReadOnly="True">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Submitted Date">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtHSubmittedDate" runat="server" Width="170px" ReadOnly="True">
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                        </Items>
+                                    </dx:LayoutGroup>
+                                </Items>
+                            </dx:TabbedLayoutGroup>
 
-                            <dx:layoutgroup caption="Lines">
-                                <items>
-                                    <dx:layoutitem caption="">
-                                        <layoutitemnestedcontrolcollection>
-                                            <dx:layoutitemnestedcontrolcontainer runat="server">
-                                                <dx:aspxgridview id="gv1" runat="server" autogeneratecolumns="False" width="747px"
-                                                    oncommandbuttoninitialize="gv_CommandButtonInitialize" oncelleditorinitialize="gv1_CellEditorInitialize" clientinstancename="gv1"
-                                                    onrowvalidating="grid_RowValidating" onbatchupdate="gv1_BatchUpdate" keyfieldname="DocNumber;LineNumber">
-                                                    <clientsideevents batcheditconfirmshowing="OnConfirm" batcheditrowvalidating="Grid_BatchEditRowValidating"
-                                                        batcheditstartediting="OnStartEditing" batcheditendediting="OnEndEditing" init="OnInitTrans" />
-                                                    <settingspager mode="ShowAllRecords" />
-<%--                                                    <a href="frmBillingMC.aspx.cs">frmBillingMC.aspx.cs</a>--%>
-                                                    <settingsediting mode="Batch" />
-                                                    <settings horizontalscrollbarmode="Visible" verticalscrollbarmode="Auto" columnminwidth="120" verticalscrollableheight="130" />
-                                                    <columns>
-                                                        <dx:gridviewdatatextcolumn fieldname="DocNumber" visible="True"
-                                                            visibleindex="0" width="0px">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn fieldname="LineNumber" visibleindex="2" caption="Line" readonly="True" width="0px" visible="True">
-                                                        </dx:gridviewdatatextcolumn>
+                            <dx:LayoutGroup Caption="Lines">
+                                <Items>
+                                    <dx:LayoutItem Caption="">
+                                        <LayoutItemNestedControlCollection>
+                                            <dx:LayoutItemNestedControlContainer runat="server">
+                                                <dx:ASPxGridView ID="gv1" runat="server" AutoGenerateColumns="False" Width="747px"
+                                                    OnCommandButtonInitialize="gv_CommandButtonInitialize" OnCellEditorInitialize="gv1_CellEditorInitialize" ClientInstanceName="gv1"
+                                                    OnRowValidating="grid_RowValidating" OnBatchUpdate="gv1_BatchUpdate" KeyFieldName="DocNumber;LineNumber">
+                                                    <ClientSideEvents BatchEditConfirmShowing="OnConfirm" BatchEditRowValidating="Grid_BatchEditRowValidating"
+                                                        BatchEditStartEditing="OnStartEditing" BatchEditEndEditing="OnEndEditing" Init="OnInitTrans" />
+                                                    <SettingsPager Mode="ShowAllRecords" />
+                                                    <%--                                                    <a href="frmBillingMC.aspx.cs">frmBillingMC.aspx.cs</a>--%>
+                                                    <SettingsEditing Mode="Batch" />
+                                                    <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" ColumnMinWidth="120" VerticalScrollableHeight="130" />
+                                                    <Columns>
+                                                        <dx:GridViewDataTextColumn FieldName="DocNumber" Visible="True"
+                                                            VisibleIndex="0" Width="0px">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn FieldName="LineNumber" VisibleIndex="2" Caption="Line" ReadOnly="True" Width="0px" Visible="True">
+                                                        </dx:GridViewDataTextColumn>
 
-                                                        <dx:gridviewcommandcolumn buttontype="Image" showincustomizationform="True" visibleindex="1" width="60px">
-                                                            <custombuttons>
-                                                                <dx:gridviewcommandcolumncustombutton id="Details">
-                                                                    <image iconid="support_info_16x16"></image>
-                                                                </dx:gridviewcommandcolumncustombutton>
-                                                            </custombuttons>
+                                                        <dx:GridViewCommandColumn ButtonType="Image" ShowInCustomizationForm="True" VisibleIndex="1" Width="60px">
+                                                            <CustomButtons>
+                                                                <dx:GridViewCommandColumnCustomButton ID="Details">
+                                                                    <Image IconID="support_info_16x16"></Image>
+                                                                </dx:GridViewCommandColumnCustomButton>
+                                                            </CustomButtons>
 
-                                                        </dx:gridviewcommandcolumn>
+                                                        </dx:GridViewCommandColumn>
 
-                                                        <dx:gridviewdatatextcolumn caption="Field1" name="Field1" width="170px" showincustomizationform="True" visibleindex="16" fieldname="Field1" unboundtype="String" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field2" name="Field2" width="170px" showincustomizationform="True" visibleindex="17" fieldname="Field2" unboundtype="String" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field3" name="Field3" width="170px" showincustomizationform="True" visibleindex="18" fieldname="Field3" unboundtype="String" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field4" name="Field4" width="170px" showincustomizationform="True" visibleindex="19" fieldname="Field4" unboundtype="Decimal" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field5" name="Field5" width="170px" showincustomizationform="True" visibleindex="20" fieldname="Field5" unboundtype="Decimal" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field6" name="Field6" width="170px" showincustomizationform="True" visibleindex="21" fieldname="Field6" unboundtype="Decimal" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field7" name="Field7" width="170px" showincustomizationform="True" visibleindex="22" fieldname="Field7" unboundtype="Decimal" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field8" name="Field8" width="170px" showincustomizationform="True" visibleindex="23" fieldname="Field8" unboundtype="String" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
-                                                        <dx:gridviewdatatextcolumn caption="Field9" name="Field9" width="170px" showincustomizationform="True" visibleindex="24" fieldname="Field9" unboundtype="String" readonly="True">
-                                                        </dx:gridviewdatatextcolumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field1" Name="Field1" Width="170px" ShowInCustomizationForm="True" VisibleIndex="16" FieldName="Field1" UnboundType="String" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field2" Name="Field2" Width="170px" ShowInCustomizationForm="True" VisibleIndex="17" FieldName="Field2" UnboundType="String" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field3" Name="Field3" Width="170px" ShowInCustomizationForm="True" VisibleIndex="18" FieldName="Field3" UnboundType="String" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field4" Name="Field4" Width="170px" ShowInCustomizationForm="True" VisibleIndex="19" FieldName="Field4" UnboundType="Decimal" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field5" Name="Field5" Width="170px" ShowInCustomizationForm="True" VisibleIndex="20" FieldName="Field5" UnboundType="Decimal" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field6" Name="Field6" Width="170px" ShowInCustomizationForm="True" VisibleIndex="21" FieldName="Field6" UnboundType="Decimal" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field7" Name="Field7" Width="170px" ShowInCustomizationForm="True" VisibleIndex="22" FieldName="Field7" UnboundType="Decimal" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field8" Name="Field8" Width="170px" ShowInCustomizationForm="True" VisibleIndex="23" FieldName="Field8" UnboundType="String" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Field9" Name="Field9" Width="170px" ShowInCustomizationForm="True" VisibleIndex="24" FieldName="Field9" UnboundType="String" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn Caption="Service Type" Name="ServType" Width="170px" ShowInCustomizationForm="True" VisibleIndex="25" FieldName="ServType" UnboundType="String" ReadOnly="True">
+                                                        </dx:GridViewDataTextColumn>
+                                                    </Columns>
+                                                </dx:ASPxGridView>
+                                            </dx:LayoutItemNestedControlContainer>
+                                        </LayoutItemNestedControlCollection>
+                                    </dx:LayoutItem>
+                                </Items>
+                            </dx:LayoutGroup>
 
-                                                    </columns>
-                                                </dx:aspxgridview>
-                                            </dx:layoutitemnestedcontrolcontainer>
-                                        </layoutitemnestedcontrolcollection>
-                                    </dx:layoutitem>
-                                </items>
-                            </dx:layoutgroup>
-
-                        </items>
-                    </dx:aspxformlayout>
-                    <dx:aspxpanel id="BottomPanel" runat="server" fixedposition="WindowBottom" backcolor="#FFFFFF" height="30px">
-                        <panelcollection>
-                            <dx:panelcontent runat="server" supportsdisabledattribute="True">
+                        </Items>
+                    </dx:ASPxFormLayout>
+                    <dx:ASPxPanel ID="BottomPanel" runat="server" FixedPosition="WindowBottom" BackColor="#FFFFFF" Height="30px">
+                        <PanelCollection>
+                            <dx:PanelContent runat="server" supportsdisabledattribute="True">
                                 <div class="pnl-content">
-                                    <dx:aspxcheckbox style="display: inline-block;" id="glcheck" runat="server" clientinstancename="glcheck" textalign="Left" text="Prevent auto-close upon update" width="200px"></dx:aspxcheckbox>
-                                    <dx:aspxbutton id="updateBtn" runat="server" text="Add" autopostback="False" cssclass="btn" clientinstancename="btn"
-                                        usesubmitbehavior="false" causesvalidation="true">
-                                        <clientsideevents click="OnUpdateClick" />
-                                    </dx:aspxbutton>
+                                    <dx:ASPxCheckBox Style="display: inline-block;" ID="glcheck" runat="server" ClientInstanceName="glcheck" TextAlign="Left" Text="Prevent auto-close upon update" Width="200px"></dx:ASPxCheckBox>
+                                    <dx:ASPxButton ID="updateBtn" runat="server" Text="Add" AutoPostBack="False" CssClass="btn" ClientInstanceName="btn"
+                                        UseSubmitBehavior="false" CausesValidation="true">
+                                        <ClientSideEvents Click="OnUpdateClick" />
+                                    </dx:ASPxButton>
                                 </div>
-                            </dx:panelcontent>
-                        </panelcollection>
-                    </dx:aspxpanel>
-                </dx:panelcontent>
-            </panelcollection>
-        </dx:aspxcallbackpanel>
-        <dx:aspxpopupcontrol id="DeleteControl" runat="server" width="250px" height="100px" headertext="Warning!"
-            closeaction="CloseButton" closeonescape="True" modal="True" clientinstancename="DeleteControl"
-            popuphorizontalalign="WindowCenter" popupverticalalign="WindowCenter">
-            <contentcollection>
-                <dx:popupcontrolcontentcontrol runat="server">
-                    <dx:aspxlabel id="ASPxLabel1" runat="server" text="Are you sure you want to delete this specific document?" />
+                            </dx:PanelContent>
+                        </PanelCollection>
+                    </dx:ASPxPanel>
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxCallbackPanel>
+        <dx:ASPxPopupControl ID="DeleteControl" runat="server" Width="250px" Height="100px" HeaderText="Warning!"
+            CloseAction="CloseButton" CloseOnEscape="True" Modal="True" ClientInstanceName="DeleteControl"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server">
+                    <dx:ASPxLabel ID="ASPxLabel1" runat="server" Text="Are you sure you want to delete this specific document?" />
                     <table>
                         <tr>
                             <td>&nbsp;</td>
                         </tr>
                         <tr>
                             <td>
-                                <dx:aspxbutton id="Ok" runat="server" text="Ok" autopostback="False" usesubmitbehavior="false">
-                                    <clientsideevents click="function (s, e){  cp.PerformCallback('ConfDelete');  e.processOnServer = false;}" />
-                                </dx:aspxbutton>
+                                <dx:ASPxButton ID="Ok" runat="server" Text="Ok" AutoPostBack="False" UseSubmitBehavior="false">
+                                    <ClientSideEvents Click="function (s, e){  cp.PerformCallback('ConfDelete');  e.processOnServer = false;}" />
+                                </dx:ASPxButton>
                                 <td>
-                                    <dx:aspxbutton id="Cancel" runat="server" text="Cancel">
-                                        <clientsideevents click="function (s,e){ DeleteControl.Hide(); }" />
-                                    </dx:aspxbutton>
+                                    <dx:ASPxButton ID="Cancel" runat="server" Text="Cancel">
+                                        <ClientSideEvents Click="function (s,e){ DeleteControl.Hide(); }" />
+                                    </dx:ASPxButton>
                         </tr>
                     </table>
-                </dx:popupcontrolcontentcontrol>
-            </contentcollection>
-        </dx:aspxpopupcontrol>
+                </dx:PopupControlContentControl>
+            </ContentCollection>
+        </dx:ASPxPopupControl>
     </form>
 
     <!--#region Region Datasource-->
     <%--<!--#region Region Header --> --%>
     <asp:ObjectDataSource ID="odsHeader" runat="server" SelectMethod="getdata" TypeName="Entity.BillingNonStorage" DataObjectTypeName="Entity.BillingNonStorage" DeleteMethod="DeleteData" InsertMethod="InsertData" UpdateMethod="UpdateData">
-        <selectparameters>
+        <SelectParameters>
             <asp:QueryStringParameter DefaultValue="" Name="DocNumber" QueryStringField="docnumber" Type="String" />
-        </selectparameters>
+        </SelectParameters>
     </asp:ObjectDataSource>
     <asp:ObjectDataSource ID="odsDetail" runat="server" SelectMethod="getdetail" TypeName="Entity.BillingNonStorage+BillingNonStorageDetail" DataObjectTypeName="Entity.BillingNonStorage+BillingNonStorageDetail" DeleteMethod="DeleteBillingNonStorageDetail" InsertMethod="AddBillingNonStorageDetail" UpdateMethod="UpdateBillingNonStorageDetail">
-        <selectparameters>
+        <SelectParameters>
             <asp:QueryStringParameter Name="DocNumber" QueryStringField="DocNumber" Type="String" />
             <asp:SessionParameter Name="Conn" SessionField="ConnString" Type="String" />
-        </selectparameters>
+        </SelectParameters>
     </asp:ObjectDataSource>
     <asp:SqlDataSource ID="sdsDetail" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT * FROM  WMS.BillingOtherServiceDetail where DocNumber  is null " OnInit="Connection_Init"></asp:SqlDataSource>
     <asp:ObjectDataSource ID="odsJournalEntry" runat="server" SelectMethod="getJournalEntry" TypeName="Entity.BillingNonStorage+JournalEntry">
-        <selectparameters>
+        <SelectParameters>
             <asp:QueryStringParameter Name="DocNumber" QueryStringField="docnumber" Type="String" />
             <asp:SessionParameter Name="Conn" SessionField="ConnString" Type="String" />
-        </selectparameters>
+        </SelectParameters>
     </asp:ObjectDataSource>
     <asp:SqlDataSource ID="Masterfileitem" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT [ItemCode], [FullDesc], [ShortDesc] FROM Masterfile.[Item] where isnull(IsInactive,0)=0" OnInit="Connection_Init"></asp:SqlDataSource>
     <asp:SqlDataSource ID="Masterfileitemdetail" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT [ItemCode], [ColorCode], [ClassCode],[SizeCode] FROM Masterfile.[ItemDetail] where isnull(IsInactive,0)=0" OnInit="Connection_Init"></asp:SqlDataSource>
