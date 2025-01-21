@@ -1,0 +1,1142 @@
+﻿using DevExpress.Spreadsheet;
+using DevExpress.Spreadsheet.Export;
+using DevExpress.Web;
+using DevExpress.Web.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using GearsLibrary;
+using Entity;
+using System.Data;
+using DevExpress.Data.Filtering;
+using GearsAccounting;
+
+namespace GWL
+{
+    public partial class frmCollectionReceipt : System.Web.UI.Page
+    {
+        Boolean error = false;//Boolean for grid validation
+        Boolean view = false;//Boolean for view state
+        Boolean check = false;//Boolean for grid validation
+
+        Entity.CollectionReceipt _Entity = new Entity.CollectionReceipt();//Calls entity odsHeader
+        Entity.CollectionReceipt.CollectionCredit _Credit = new Entity.CollectionReceipt.CollectionCredit();
+        Entity.CollectionReceipt.CollectionChecks _Checks = new Entity.CollectionReceipt.CollectionChecks();
+        Entity.CollectionReceipt.CollectionARChecks _ARChecks = new Entity.CollectionReceipt.CollectionARChecks();
+
+        #region page load/entry
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            Gears.UseConnectionString(Session["ConnString"].ToString());
+
+            string referer;
+            try
+            {
+                referer = Request.ServerVariables["http_referer"];
+            }
+            catch
+            {
+                referer = "";
+            }
+
+            if (referer == null)
+            {
+                Response.Redirect("~/error.aspx");
+            }
+
+            txtDocNumber.Value = Request.QueryString["docnumber"].ToString();
+            txtDocNumber.ReadOnly = true;
+
+            string strParam = Request.QueryString["parameters"].ToString();
+
+            if (!IsPostBack)
+            {
+                if (strParam == "A")
+                {
+                    FormTitle.Text = "Acknowledgement Receipt";
+                    this.Title = "Acknowledgement Receipt";
+                    frmlayout1.FindItemOrGroupByName("Cash").ClientVisible = false;
+                    frmlayout1.FindItemOrGroupByName("DirectCredit").ClientVisible = false;
+                    frmlayout1.FindItemOrGroupByName("MaturingChecks").ClientVisible = false;
+                }
+
+                Session["ColRClearData"] = "0";
+                Session["ColRRcptType"] = null;
+                Session["ColRBizAcct"] = null;
+                Session["ColRCustCode"] = null;
+                Session["ColRDocDate"] = null;
+                Session["ColRCollType"] = null;
+
+                _Entity.getdata(txtDocNumber.Text, Session["ConnString"].ToString());
+                dtpDocDate.Text = Convert.ToDateTime(_Entity.DocDate.ToString()).ToShortDateString();
+                aglCustomerCode.Value = _Entity.CustomerCode.ToString();
+                txtName.Value = _Entity.Name.ToString();
+                aglCollector.Value = _Entity.Collector.ToString();
+                aglBizAccount.Value = _Entity.BizAccount.ToString();
+                aglCurrency.Value = _Entity.Currency.ToString();
+                txtRemarks.Value = _Entity.Remarks.ToString();
+                txtHCash.Value = _Entity.TotalCashAmount.ToString();
+                txtHCredit.Value = _Entity.TotalBankCredit.ToString();
+                txtHCheck.Value = _Entity.TotalCheckAmount.ToString();
+                txtDCash.Value = _Entity.CashAmount.ToString();
+                if (strParam == "A")
+                {
+                    cbxReceiptType.Items.Add("Acknowledgement Receipt", "A");
+                    cbxReceiptType.Enabled = false;
+                }
+                if (String.IsNullOrEmpty(_Entity.ReceiptType) && strParam == "A")
+                {
+                    cbxReceiptType.Value = "A";
+                }
+                else
+                {
+                    cbxReceiptType.Value = _Entity.ReceiptType;
+                }
+                cbxCollType.Value = _Entity.CollectionType;
+                
+                aglARChecks.Text = _Entity.RefARChecks.ToString();
+
+                txtHField1.Value = _Entity.Field1.ToString();
+                txtHField2.Value = _Entity.Field2.ToString();
+                txtHField3.Value = _Entity.Field3.ToString();
+                txtHField4.Value = _Entity.Field4.ToString();
+                txtHField5.Value = _Entity.Field5.ToString();
+                txtHField6.Value = _Entity.Field6.ToString();
+                txtHField7.Value = _Entity.Field7.ToString();
+                txtHField8.Value = _Entity.Field8.ToString();
+                txtHField9.Value = _Entity.Field9.ToString();
+
+                txtHAddedBy.Text = _Entity.AddedBy;
+                txtHAddedDate.Text = _Entity.AddedDate;
+                txtHLastEditedBy.Text = _Entity.LastEditedBy;
+                txtHLastEditedDate.Text = _Entity.LastEditedDate;
+                txtHSubmittedBy.Text = _Entity.SubmittedBy;
+                txtHSubmittedDate.Text = _Entity.SubmittedDate;
+                txtCancelledBy.Text = _Entity.CancelledBy;
+                txtCancelledDate.Text = _Entity.CancelledDate;
+                txtPostedBy.Text = _Entity.PostedBy;
+                txtPostedDate.Text = _Entity.PostedDate;
+                //}
+
+                gvChecks.KeyFieldName = "LineNumber";
+                gvCredit.KeyFieldName = "LineNumber";
+                //gvARChecks.KeyFieldName = "LineNumber";
+                popup.ShowOnPageLoad = true;
+
+                //V=View, E=Edit, N=New
+                switch (Request.QueryString["entry"].ToString())
+                {
+                    case "N":
+                        if (strParam == "A")
+                        {
+                            cbxReceiptType.Value = "A";
+                        }
+
+                        if (!String.IsNullOrEmpty(_Entity.LastEditedBy))
+                        {
+                            updateBtn.Text = "Update";
+                        }
+                        else
+                        {
+                            updateBtn.Text = "Add";
+                        }
+                        break;
+                    case "E":
+                        updateBtn.Text = "Update";
+                        break;
+                    case "V":
+                        view = true;
+                        updateBtn.Text = "Close";
+                        glcheck.ClientVisible = false;
+                        break;
+                    case "D":
+                        view = true;
+                        updateBtn.Text = "Delete";
+                        break;
+                }
+
+                if (Request.QueryString["entry"].ToString() == "N")
+                {
+                    gvChecks.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+                    gvCredit.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+                    gvARChecks.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+                }
+                Session["ColRRcptType"] = cbxReceiptType.Value;
+                Session["ColRBizAcct"] = _Entity.BizAccount;
+                Session["ColRCustCode"] = _Entity.CustomerCode;
+                Session["ColRDocDate"] = _Entity.DocDate;
+                Session["ColRCollType"] = _Entity.CollectionType;
+
+                Filter();
+            }
+            
+            DataTable Checks = new DataTable();
+            DataTable Credit = new DataTable();
+            DataTable ARChecks = new DataTable();
+
+            ARChecks = Gears.RetriveData2("SELECT * FROM Accounting.CollectionARChecks WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+            gvARChecks.DataSource = null;
+            gvARChecks.DataSourceID = (ARChecks.Rows.Count > 0 ? "odsARChecks" : "sdsARChecks");
+
+            Checks = Gears.RetriveData2("SELECT * FROM Accounting.CollectionChecks WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+            gvChecks.DataSource = null;
+            gvChecks.DataSourceID = (Checks.Rows.Count > 0 ? "odsChecks" : "sdsChecks");
+
+            Credit = Gears.RetriveData2("SELECT * FROM Accounting.CollectionCredit WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+            gvCredit.DataSource = null;
+            gvCredit.DataSourceID = (Credit.Rows.Count > 0 ? "odsCredit" : "sdsCredit");
+
+            gvJournal.DataSourceID = "odsJournalEntry";
+        }
+        #endregion
+
+        #region Validation
+        private void Validate()
+        {
+            GearsLibrary.Gears.GearsParameter gparam = new Gears.GearsParameter();
+            gparam._DocNo = _Entity.DocNumber;
+            gparam._UserId = Session["Userid"].ToString();
+            gparam._TransType = Request.QueryString["transtype"].ToString();
+            gparam._Connection = Session["ConnString"].ToString();
+            string strresult = GearsAccounting.GAccounting.CollectionReceipt_Validate(gparam);
+            if (strresult != "")
+            {
+                cp.JSProperties["cp_valmsg"] = strresult;//Message variable to client side
+            }
+        }
+        #endregion
+
+        #region Post
+        private void Post()
+        {
+            GearsLibrary.Gears.GearsParameter gparam = new Gears.GearsParameter();
+            gparam._DocNo = _Entity.DocNumber;
+            gparam._UserId = Session["Userid"].ToString();
+            gparam._TransType = Request.QueryString["transtype"].ToString();
+            gparam._Table = "Accounting.Collection";
+            gparam._Factor = -1;
+            gparam._Connection = Session["ConnString"].ToString();
+            string strresult = GearsAccounting.GAccounting.CollectionReceipt_Post(gparam);
+            if (strresult != "")
+            {
+                cp.JSProperties["cp_valmsg"] = strresult;//Message variable to client side
+            }
+        }
+        #endregion
+
+        #region Set controls' state/behavior/etc...
+        protected void TextboxLoad(object sender, EventArgs e)//Control for all textbox
+        {
+            ASPxTextBox text = sender as ASPxTextBox;
+            text.ReadOnly = view;
+        }
+        protected void LookupLoad(object sender, EventArgs e)//Control for all lookup in header
+        {
+            ASPxGridLookup look = sender as ASPxGridLookup;
+            look.DropDownButton.Enabled = !view;
+            look.ReadOnly = view;                       
+        }
+        protected void gvLookupLoad(object sender, EventArgs e)//Control for all lookup in details/grid
+        {
+            if (Request.QueryString["entry"].ToString() == "V" || Request.QueryString["entry"].ToString() == "D")
+            {
+                ASPxGridLookup look = sender as ASPxGridLookup;
+                look.Enabled = false;
+            }
+            else
+            {
+                ASPxGridLookup look = sender as ASPxGridLookup;
+                look.Enabled = true;
+            }
+        }
+
+        protected void gvTextBoxLoad(object sender, EventArgs e)//Control for all lookup in details/grid
+        {
+            if (Request.QueryString["entry"].ToString() == "V" || Request.QueryString["entry"].ToString() == "D")
+            {
+                GridViewDataTextColumn text = sender as GridViewDataTextColumn;
+                text.ReadOnly = true;
+            }
+            else
+            {
+                GridViewDataTextColumn text = sender as GridViewDataTextColumn;
+                text.ReadOnly = false;
+            }
+        }
+
+        protected void CheckBoxLoad(object sender, EventArgs e)
+        {
+            var check = sender as ASPxCheckBox;
+            check.ReadOnly = view;
+        }
+
+        protected void ComboBoxLoad(object sender, EventArgs e)
+        {
+            var combo = sender as ASPxComboBox;
+            combo.ReadOnly = view;
+        }
+
+        protected void gv1_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)//Control for grid
+        {
+        }
+
+        protected void Date_Load(object sender, EventArgs e)//Control for all date editor
+        {
+            ASPxDateEdit date = sender as ASPxDateEdit;
+            date.DropDownButton.Enabled = !view;
+            date.ReadOnly = view;
+        }
+        protected void Button_Load(object sender, EventArgs e)//Control for all textbox
+        {
+            ASPxButton button = sender as ASPxButton;
+            button.ClientVisible = !view;
+        }
+        protected void SpinEdit_Load(object sender, EventArgs e)//Control for all numeric entries in header
+        {
+            ASPxSpinEdit spinedit = sender as ASPxSpinEdit;
+            spinedit.ReadOnly = view;
+        }
+        protected void ComboBox_Load(object sender, EventArgs e)//Control for all numeric entries in header
+        {
+            ASPxComboBox combo = sender as ASPxComboBox;
+            combo.ReadOnly = view;
+            combo.DropDownButton.Visible = !view;
+
+        }
+        protected void gv_CommandButtonInitialize(object sender, ASPxGridViewCommandButtonEventArgs e)
+        {   //Sets icon for grid/Control for Enabling/Disabling of buttons on grid.
+            if (e.ButtonType == ColumnCommandButtonType.Delete)
+            {
+                e.Image.IconID = "actions_cancel_16x16";
+            }
+            if (e.ButtonType == ColumnCommandButtonType.New)
+            {
+                e.Image.IconID = "actions_addfile_16x16";
+
+            }
+            if (e.ButtonType == ColumnCommandButtonType.Edit)
+            {
+                e.Image.IconID = "actions_addfile_16x16";
+            }
+            if (e.ButtonType == ColumnCommandButtonType.Update)
+                e.Visible = false;
+
+            if (Request.QueryString["entry"] != "N" || Request.QueryString["entry"] != "E")
+            {
+                if (e.ButtonType == ColumnCommandButtonType.Edit ||
+                    e.ButtonType == ColumnCommandButtonType.Cancel)
+                    e.Visible = false;
+            }
+
+            if (Request.QueryString["entry"] == "N" || Request.QueryString["entry"] == "E")
+            {
+                if (e.ButtonType == ColumnCommandButtonType.New || e.ButtonType == ColumnCommandButtonType.Delete)
+                    {
+                        e.Visible = true;
+                    }
+            }
+
+            if (Request.QueryString["entry"] == "V" || Request.QueryString["entry"] == "D")
+            {
+                if (e.ButtonType == ColumnCommandButtonType.New || e.ButtonType == ColumnCommandButtonType.Delete)
+                {
+                    e.Visible = false;
+                }
+            }
+        }
+
+        protected void gvReceipts_CommandButtonInitialize(object sender, ASPxGridViewCommandButtonEventArgs e)
+        {   //Sets icon for grid/Control for Enabling/Disabling of buttons on grid.
+            if (e.ButtonType == ColumnCommandButtonType.Delete)
+            {
+                e.Image.IconID = "actions_cancel_16x16";
+            }
+            if (e.ButtonType == ColumnCommandButtonType.New)
+            {
+                e.Image.IconID = "actions_addfile_16x16";
+
+            }
+            if (e.ButtonType == ColumnCommandButtonType.Edit)
+            {
+                e.Image.IconID = "actions_addfile_16x16";
+            }
+            if (e.ButtonType == ColumnCommandButtonType.Update)
+                e.Visible = false;
+
+            if (Request.QueryString["entry"] != "N" || Request.QueryString["entry"] != "E")
+            {
+                if (e.ButtonType == ColumnCommandButtonType.Edit ||
+                    e.ButtonType == ColumnCommandButtonType.Cancel ||
+                    e.ButtonType == ColumnCommandButtonType.New || 
+                    e.ButtonType == ColumnCommandButtonType.Delete)
+                    e.Visible = false;
+            }
+
+            if (Request.QueryString["entry"] == "N" || Request.QueryString["entry"] == "E")
+            {
+                if (e.ButtonType == ColumnCommandButtonType.New || e.ButtonType == ColumnCommandButtonType.Delete)
+                {
+                    e.Visible = true;
+                }
+            }
+        }
+        protected void gv1_CustomButtonInitialize(object sender, ASPxGridViewCustomButtonEventArgs e)
+        {
+            if (Request.QueryString["entry"] == "N")
+            {
+                if (e.ButtonID == "Details" || e.ButtonID == "CountSheet")
+                {
+                    e.Visible = DevExpress.Utils.DefaultBoolean.False;
+                }
+            }
+
+            if (Request.QueryString["entry"] == "V" || Request.QueryString["entry"] == "D")
+            {
+                if (e.ButtonID == "Delete" || e.ButtonID == "AdjustmentDelete" || e.ButtonID == "ApplicationDelete")
+                {
+                    e.Visible = DevExpress.Utils.DefaultBoolean.False;
+                }
+            }
+        }
+
+        protected void gvReceipts_CustomButtonInitialize(object sender, ASPxGridViewCustomButtonEventArgs e)
+        {
+            if (Request.QueryString["entry"] == "N")
+            {
+                if (e.ButtonID == "Details" || e.ButtonID == "CountSheet")
+                {
+                    e.Visible = DevExpress.Utils.DefaultBoolean.False;
+                }
+            }
+
+            if (Request.QueryString["entry"] == "V" || Request.QueryString["entry"] == "D")
+            {
+                if (e.ButtonID == "Delete" || e.ButtonID == "CreditDelete" || e.ButtonID == "ChecksDelete")
+                {
+                    e.Visible = DevExpress.Utils.DefaultBoolean.False;
+                }
+            }
+        }
+        #endregion
+
+        #region Lookup Settings
+        protected void lookup_Init(object sender, EventArgs e)
+        {
+            ASPxGridLookup gridLookup = sender as ASPxGridLookup;
+            gridLookup.GridView.CustomCallback += new ASPxGridViewCustomCallbackEventHandler(gridView_CustomCallback);
+        }
+        public void gridView_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        {
+            string column = e.Parameters.Split('|')[0];//Set column name
+            if (column.Contains("GLP_AIC") || column.Contains("GLP_AC") || column.Contains("GLP_F")) return;//Traps the callback
+            string value = e.Parameters.Split('|')[1];//Set Item Code
+            string val = e.Parameters.Split('|')[2];//Set column value
+            if (val.Contains("GLP_AIC") || val.Contains("GLP_AC") || val.Contains("GLP_F")) return;//Traps the callback
+            var itemlookup = sender as ASPxGridView;
+        }
+
+        #endregion
+
+        #region Callback functions(Inserting/Updating/Deleting/Validating)
+        protected void cp_Callback(object sender, CallbackEventArgsBase e)
+        {
+            _Entity.DocNumber = txtDocNumber.Value.ToString();
+            _Entity.DocDate = dtpDocDate.Text;
+            _Entity.CustomerCode = String.IsNullOrEmpty(aglCustomerCode.Text) ? null : aglCustomerCode.Value.ToString();
+            _Entity.Name = String.IsNullOrEmpty(txtName.Text) ? null : txtName.Text;
+            _Entity.Collector = String.IsNullOrEmpty(aglCollector.Text) ? null : aglCollector.Text;
+            _Entity.BizAccount = String.IsNullOrEmpty(aglBizAccount.Text) ? null : aglBizAccount.Value.ToString();
+            _Entity.Currency = String.IsNullOrEmpty(aglCurrency.Text) ? "PHP" : aglCurrency.Value.ToString();
+            _Entity.Remarks = String.IsNullOrEmpty(txtRemarks.Text) ? null : txtRemarks.Text;
+            _Entity.TotalCashAmount = String.IsNullOrEmpty(txtHCash.Text) ? 0 : Convert.ToDecimal(txtHCash.Value.ToString());
+            _Entity.TotalCheckAmount = String.IsNullOrEmpty(txtHCheck.Text) ? 0 : Convert.ToDecimal(txtHCheck.Value.ToString());
+            _Entity.TotalBankCredit = String.IsNullOrEmpty(txtHCredit.Text) ? 0 : Convert.ToDecimal(txtHCredit.Value.ToString());
+            _Entity.CashAmount = String.IsNullOrEmpty(txtDCash.Text) ? 0 : Convert.ToDecimal(txtDCash.Value.ToString());
+            _Entity.RefARChecks = String.IsNullOrEmpty(aglARChecks.Text) ? null : aglARChecks.Text;
+            _Entity.Connection = Session["ConnString"].ToString();
+            if (cbxReceiptType.ClientVisible)
+            {
+                _Entity.ReceiptType = (cbxReceiptType.Value == null) ? null : cbxReceiptType.Value.ToString();
+            }
+            else
+            {
+                _Entity.ReceiptType = "A";
+            }
+            _Entity.CollectionType = (cbxCollType.Value == null) ? null : cbxCollType.Value.ToString();
+            _Entity.Field1 = String.IsNullOrEmpty(txtHField1.Text) ? null : txtHField1.Text;
+            _Entity.Field2 = String.IsNullOrEmpty(txtHField2.Text) ? null : txtHField2.Text;
+            _Entity.Field3 = String.IsNullOrEmpty(txtHField3.Text) ? null : txtHField3.Text;
+            _Entity.Field4 = String.IsNullOrEmpty(txtHField4.Text) ? null : txtHField4.Text;
+            _Entity.Field5 = String.IsNullOrEmpty(txtHField5.Text) ? null : txtHField5.Text;
+            _Entity.Field6 = String.IsNullOrEmpty(txtHField6.Text) ? null : txtHField6.Text;
+            _Entity.Field7 = String.IsNullOrEmpty(txtHField7.Text) ? null : txtHField7.Text;
+            _Entity.Field8 = String.IsNullOrEmpty(txtHField8.Text) ? null : txtHField8.Text;
+            _Entity.Field9 = String.IsNullOrEmpty(txtHField9.Text) ? null : txtHField9.Text;
+
+            _Entity.LastEditedBy = Session["userid"].ToString();
+            _Entity.LastEditedDate = DateTime.Now.ToString();
+
+            switch (e.Parameter)
+            {
+                case "Add":
+
+                    gvChecks.UpdateEdit();
+                    gvCredit.UpdateEdit();
+                    //gvARChecks.UpdateEdit();
+                    
+                    string strError = Functions.Submitted(_Entity.DocNumber, "Accounting.Collection", 1, Session["ConnString"].ToString());//NEWADD factor 1 if submit, 2 if approve
+                    if (!string.IsNullOrEmpty(strError))
+                    {
+                        cp.JSProperties["cp_message"] = strError;
+                        cp.JSProperties["cp_success"] = true;
+                        cp.JSProperties["cp_forceclose"] = true;
+                        return;
+                    }
+
+                    if (error == false)
+                    {
+                        check = true;
+                        _Entity.LastEditedBy = Session["userid"].ToString();
+                        _Entity.UpdateData(_Entity);
+                        if (Session["ColRClearData"] == "1")
+                        {
+                            gvARChecks.DataSource = null;
+                            gvARChecks.DataSourceID = sdsARChecksDtl.ID;
+                            gvARChecks.UpdateEdit();
+                        }
+                        else
+                        {
+                            gvARChecks.DataSource = null;
+                            gvARChecks.DataSourceID = "odsARChecks";
+                            odsARChecks.SelectParameters["DocNumber"].DefaultValue = txtDocNumber.Text;
+                            gvARChecks.UpdateEdit();
+                        }
+
+                        gvCredit.DataSource = null;
+                        gvCredit.DataSourceID = "odsCredit";
+                        odsCredit.SelectParameters["DocNumber"].DefaultValue = txtDocNumber.Text;
+                        gvCredit.UpdateEdit();
+
+                        gvChecks.DataSource = null;
+                        gvChecks.DataSourceID = "odsChecks";
+                        odsChecks.SelectParameters["DocNumber"].DefaultValue = txtDocNumber.Text;
+                        gvChecks.UpdateEdit();
+
+                        Post();
+                        Validate();
+
+                        DataTable ARChecksDtl = Gears.RetriveData2("SELECT * FROM Accounting.CollectionARChecks WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+                        gvARChecks.DataSource = null;
+                        gvARChecks.DataSourceID = (ARChecksDtl.Rows.Count > 0 ? "odsARChecks" : "sdsARChecks");
+                        //if (gvARChecks.DataSource != null)
+                        //{
+                        //    gvARChecks.DataSource = null;
+                        //}
+
+                        DataTable Checksdtl = Gears.RetriveData2("SELECT * FROM Accounting.CollectionChecks WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+                        gvChecks.DataSource = null;
+                        gvChecks.DataSourceID = (Checksdtl.Rows.Count > 0 ? "odsChecks" : "sdsChecks");
+                        //if (gvChecks.DataSource != null)
+                        //{
+                        //    gvChecks.DataSource = null;
+                        //}
+
+                        DataTable Creditdtl = Gears.RetriveData2("SELECT * FROM Accounting.CollectionCredit WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+                        gvCredit.DataSource = null;
+                        gvCredit.DataSourceID = (Creditdtl.Rows.Count > 0 ? "odsCredit" : "sdsCredit");
+                        //if (gvCredit.DataSource != null)
+                        //{
+                        //    gvCredit.DataSource = null;
+                        //}
+
+                        cp.JSProperties["cp_message"] = "Successfully Added!";
+                        cp.JSProperties["cp_success"] = true;
+                        cp.JSProperties["cp_close"] = true;
+                        Session["Refresh"] = "1";
+                    }
+                    else
+                    {
+                        cp.JSProperties["cp_message"] = "Please check all the fields!";
+                        cp.JSProperties["cp_success"] = true;
+                    }
+                    break;
+
+                case "Update":
+
+                    //gvARChecks.UpdateEdit();
+                    gvChecks.UpdateEdit();
+                    gvCredit.UpdateEdit();
+                    
+                    string strError1 = Functions.Submitted(_Entity.DocNumber, "Accounting.Collection", 1, Session["ConnString"].ToString());//NEWADD factor 1 if submit, 2 if approve
+                    if (!string.IsNullOrEmpty(strError1))
+                    {
+                        cp.JSProperties["cp_message"] = strError1;
+                        cp.JSProperties["cp_success"] = true;
+                        cp.JSProperties["cp_forceclose"] = true;
+                        return;
+                    }
+
+                    if (error == false)
+                    {
+                        check = true;
+                        _Entity.LastEditedBy = Session["userid"].ToString();
+                        _Entity.UpdateData(_Entity);
+                        if (Session["ColRClearData"] == "1")
+                        {
+                            _Entity.DeleteOldDetail(txtDocNumber.Text, Session["ConnString"].ToString());
+                            gvARChecks.DataSource = null;
+                            gvARChecks.DataSourceID = sdsARChecksDtl.ID;
+                            gvARChecks.UpdateEdit();
+                        }
+                        else
+                        {
+                            gvARChecks.DataSource = null;
+                            gvARChecks.DataSourceID = "odsARChecks";
+                            odsARChecks.SelectParameters["DocNumber"].DefaultValue = txtDocNumber.Text;
+                            gvARChecks.UpdateEdit();
+                        }
+
+                        gvCredit.DataSource = null;
+                        gvCredit.DataSourceID = "odsCredit";
+                        //if (gvCredit.DataSource != null)
+                        //{
+                        //    gvCredit.DataSource = null;
+                        //}
+                        odsCredit.SelectParameters["DocNumber"].DefaultValue = txtDocNumber.Text;
+                        gvCredit.UpdateEdit();
+
+                        gvChecks.DataSource = null;
+                        gvChecks.DataSourceID = "odsChecks";
+                        //if (gvChecks.DataSource != null) 
+                        //{
+                        //    gvChecks.DataSource = null;
+                        //}
+                        odsChecks.SelectParameters["DocNumber"].DefaultValue = txtDocNumber.Text;
+                        gvChecks.UpdateEdit();
+
+                        Post();
+                        Validate();
+
+                        DataTable ARChecksDtl = Gears.RetriveData2("SELECT * FROM Accounting.CollectionARChecks WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+                        gvARChecks.DataSource = null;
+                        gvARChecks.DataSourceID = (ARChecksDtl.Rows.Count > 0 ? "odsARChecks" : "sdsARChecks");
+                        //if (gvARChecks.DataSource != null)
+                        //{
+                        //    gvARChecks.DataSource = null;
+                        //}
+
+                        DataTable Checksdtl = Gears.RetriveData2("SELECT * FROM Accounting.CollectionChecks WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+                        gvChecks.DataSource = null;
+                        gvChecks.DataSourceID = (Checksdtl.Rows.Count > 0 ? "odsChecks" : "sdsChecks");
+
+                        DataTable Creditdtl = Gears.RetriveData2("SELECT * FROM Accounting.CollectionCredit WHERE DocNumber ='" + Request.QueryString["docnumber"].ToString() + "'", Session["ConnString"].ToString());
+                        gvCredit.DataSource = null;
+                        gvCredit.DataSourceID = (Creditdtl.Rows.Count > 0 ? "odsCredit" : "sdsCredit");
+
+                        cp.JSProperties["cp_message"] = "Successfully Updated!";
+                        cp.JSProperties["cp_success"] = true;
+                        cp.JSProperties["cp_close"] = true;
+                        Session["Refresh"] = "1";
+                    }
+                    else
+                    {
+                        cp.JSProperties["cp_message"] = "Please check all the fields!";
+                        cp.JSProperties["cp_success"] = true;
+                    }
+                    break;
+
+
+                case "Delete":
+                    cp.JSProperties["cp_delete"] = true;
+                    break;
+
+                case "ConfDelete":
+                    _Entity.DeleteData(_Entity);
+                    cp.JSProperties["cp_close"] = true;
+                    cp.JSProperties["cp_message"] = "Successfully deleted";
+                    break;
+
+                case "Close":
+
+                    cp.JSProperties["cp_close"] = true;
+                    gvChecks.DataSource = null;
+                    gvCredit.DataSource = null;
+                    gvARChecks.DataSource = null;
+
+                    break;
+
+                case "CollTypeChanged":
+                case "DocDateChanged":
+
+                    if (cbxReceiptType.Value == "M")
+                    {
+                        aglARChecks.Text = "";
+                        Session["ColRClearData"] = "1";
+                        Session["ColRRcptType"] = cbxReceiptType.Value;
+                        Session["ColRBizAcct"] = aglBizAccount.Value;
+                        Session["ColRCustCode"] = aglCustomerCode.Value;
+                        Session["ColRDocDate"] = dtpDocDate.Value;
+                        Session["ColRCollType"] = cbxCollType.Value;
+
+                        // 2017-02-12  TL  Ensure credit and check amount will not be loaded during edit 
+                        gvChecks.DataSourceID = null;
+                        gvChecks.DataBind();
+                        sdsChecksDtl.SelectCommand = "SELECT * FROM Accounting.CollectionChecks WHERE 1=0";
+                        gvChecks.DataSource = sdsChecksDtl;
+                        //if (gvChecks.DataSourceID != "")
+                        //{
+                        //    gvChecks.DataSourceID = null;
+                        //}
+                        gvChecks.DataBind();
+
+                        sdsCreditDtl.SelectCommand = "SELECT * FROM Accounting.CollectionCredit WHERE 1=0";
+                        gvCredit.DataSource = null;
+                        gvCredit.DataSource = sdsCreditDtl;
+                        if (gvCredit.DataSourceID != "")
+                        {
+                            gvCredit.DataSourceID = null;
+                        }
+                        gvCredit.DataBind();
+                        // 2017-02-12  TL  (End)
+
+                        Filter();
+                        cp.JSProperties["cp_generated"] = true;
+                        cp.JSProperties["cp_cleargrid"] = true;
+                    }
+                    break;
+
+                case "RcptTypeChanged":
+
+                    aglARChecks.Text = "";
+                    Session["ColRClearData"] = "1";
+                    Session["ColRRcptType"] = cbxReceiptType.Value;
+                    Session["ColRBizAcct"]  = aglBizAccount.Value;
+                    Session["ColRCustCode"] = aglCustomerCode.Value;
+                    Session["ColRDocDate"]  = dtpDocDate.Value;
+                    Session["ColRCollType"] = cbxCollType.Value;
+
+                    txtDCash.Value = 0;
+
+                    gvChecks.DataSourceID = null;
+                    gvChecks.DataBind();
+                    sdsChecksDtl.SelectCommand = "SELECT * FROM Accounting.CollectionChecks WHERE 1=0" ;
+                    gvChecks.DataSource = sdsChecksDtl;
+                    //if (gvChecks.DataSourceID != "")
+                    //{
+                    //    gvChecks.DataSourceID = null;
+                    //}
+                    gvChecks.DataBind();
+
+                    sdsCreditDtl.SelectCommand = "SELECT * FROM Accounting.CollectionCredit WHERE 1=0";
+                    gvCredit.DataSource = null;
+                    gvCredit.DataSource = sdsCreditDtl;
+                    if (gvCredit.DataSourceID != "")
+                    {
+                        gvCredit.DataSourceID = null;
+                    }
+                    gvCredit.DataBind();
+
+                    sdsARChecksDtl.SelectCommand = Detail();
+                    gvARChecks.DataSource = null;
+                    gvARChecks.DataSource = sdsARChecksDtl;
+                    if (gvARChecks.DataSourceID != "")
+                    {
+                        gvARChecks.DataSourceID = null;
+                    }
+                    gvARChecks.DataBind();
+
+                    Filter();
+                    cp.JSProperties["cp_generated"] = true;
+                    cp.JSProperties["cp_cleargrid"] = true;
+                    break;
+
+                case "CustomerChanged":
+
+                    aglBizAccount.Text = "";
+                    txtName.Text = "";
+                    aglCollector.Text = "";
+
+                    DataTable customer = new DataTable();
+
+                    customer = Gears.RetriveData2("SELECT Name, Collector FROM Masterfile.BPCustomerInfo WHERE BizPartnerCode = '" + aglCustomerCode.Text + "'", Session["ConnString"].ToString());
+
+                    if (customer.Rows.Count > 0)
+                    {
+                        txtName.Text = customer.Rows[0]["Name"].ToString();
+                        aglCollector.Text = customer.Rows[0]["Collector"].ToString();
+                    }
+                    
+                    sdsChecks.SelectCommand = "SELECT * FROM Accounting.CollectionChecks WHERE 1=0";
+                    sdsChecks.DataBind();
+                    gvChecks.DataSource = null;
+                    gvChecks.DataSourceID = "sdsChecks";
+                    //if (gvChecks.DataSource != null) { gvChecks.DataSource = null; }
+                    gvChecks.DataBind();
+
+                    sdsCredit.SelectCommand = "SELECT * FROM Accounting.CollectionCredit WHERE 1=0";
+                    sdsCredit.DataBind();
+                    gvCredit.DataSource = null; 
+                    gvCredit.DataSourceID = "sdsCredit";
+                    //if (gvCredit.DataSource != null) { gvCredit.DataSource = null; }
+                    gvCredit.DataBind();
+
+                    aglARChecks.Text = "";
+                    Session["ColRClearData"] = "1";
+                    Session["ColRRcptType"] = cbxReceiptType.Value;
+                    Session["ColRBizAcct"]  = null;
+                    Session["ColRCustCode"] = aglCustomerCode.Value;
+                    Session["ColRDocDate"]  = dtpDocDate.Value;
+                    Session["ColRCollType"] = cbxCollType.Value;
+                    Filter();
+                    cp.JSProperties["cp_generated"] = true;
+                    cp.JSProperties["cp_cleargrid"] = true;
+
+                    break;
+
+                case "BizAcctChanged":
+
+                    aglCustomerCode.Text = "";
+                    txtName.Text = "";
+                    aglCollector.Text = "";
+
+                    DataTable bizaccount = new DataTable();
+
+                    bizaccount = Gears.RetriveData2("SELECT BizAccountName AS Name FROM Masterfile.BizAccount WHERE BizAccountCode = '" + aglBizAccount.Text + "'", Session["ConnString"].ToString());
+
+                    if (bizaccount.Rows.Count > 0)
+                    {
+                        txtName.Text = bizaccount.Rows[0]["Name"].ToString();
+                    }
+
+                    gvChecks.DataSourceID = null;
+                    gvChecks.DataBind();
+                    sdsChecksDtl.SelectCommand = "SELECT * FROM Accounting.CollectionChecks WHERE 1=0" ;
+                    gvChecks.DataSource = sdsChecksDtl;
+                    //if (gvChecks.DataSourceID != "")
+                    //{
+                    //    gvChecks.DataSourceID = null;
+                    //}
+                    gvChecks.DataBind();
+
+                    sdsCreditDtl.SelectCommand = "SELECT * FROM Accounting.CollectionCredit WHERE 1=0";
+                    gvCredit.DataSourceID = null;
+                    gvCredit.DataSource = sdsCreditDtl;
+                    //if (gvCredit.DataSourceID != "")
+                    //{
+                    //    gvCredit.DataSourceID = null;
+                    //}
+                    gvCredit.DataBind();
+
+                    aglARChecks.Text = "";
+                    Session["ColRClearData"] = "1";
+                    Session["ColRRcptType"] = cbxReceiptType.Value;
+                    Session["ColRBizAcct"]  = aglBizAccount.Value;
+                    Session["ColRCustCode"] = null;
+                    Session["ColRDocDate"]  = dtpDocDate.Value;
+                    Session["ColRCollType"] = cbxCollType.Value;
+                    Filter();
+                    cp.JSProperties["cp_generated"] = true;
+                    cp.JSProperties["cp_cleargrid"] = true;
+
+                    break;
+
+                case "CallbackARChecks":
+
+                    Session["ColRClearData"] = "1";
+                    GetSelectedVal();
+                    cp.JSProperties["cp_generated"] = true;
+
+                    break;
+
+            }
+        }
+        protected void grid_RowValidating(object sender, DevExpress.Web.Data.ASPxDataValidationEventArgs e)
+        {
+        }
+        //dictionary method to hold error 
+        void AddError(Dictionary<GridViewColumn, string> errors, GridViewColumn column, string errorText)
+        {
+            if (errors.ContainsKey(column)) return;
+            errors[column] = errorText;
+        }
+        
+        protected void gvARChecks_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        {
+            if ((error == true || error == false) && check == false)
+            {
+                e.Handled = true;
+                e.InsertValues.Clear();
+                e.UpdateValues.Clear();
+            }
+
+            if (check == true && Session["ColRClearData"] == "1")
+            {
+                e.Handled = true;
+                DataTable source = GetSelectedVal();
+                string strDocNumber = txtDocNumber.Text.ToUpper();
+
+                foreach (ASPxDataDeleteValues values in e.DeleteValues)
+                {
+                    try
+                    {
+                        //object[] keys = { values.Keys["LineNumber"], values.Keys["RecordID"] };
+                        object[] keys = { values.Keys["RecordID"] };
+                        source.Rows.Remove(source.Rows.Find(keys));
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+
+                foreach (ASPxDataUpdateValues values in e.UpdateValues)
+                {
+                    object[] keys = { values.NewValues["LineNumber"],values.NewValues["RecordID"] };
+                    DataRow row = source.Rows.Find(keys);
+                    //^^^
+                    row["RecordID"] = values.NewValues["RecordID"];
+                }
+
+                foreach (DataRow dtRow in source.Rows)
+                {
+                    _ARChecks.DocNumber = strDocNumber;
+                    _ARChecks.RecordID = dtRow["RecordID"].ToString();
+                    _ARChecks.Bank = dtRow["Bank"].ToString();
+                    _ARChecks.Branch = dtRow["Branch"].ToString();
+                    _ARChecks.CheckNumber = dtRow["CheckNumber"].ToString();
+                    _ARChecks.CheckDate = Convert.ToDateTime(dtRow["CheckDate"]);
+                    _ARChecks.CheckAmount = Convert.ToDecimal(dtRow["CheckAmount"]);
+                    _ARChecks.AddCollectionARChecks(_ARChecks);
+                }
+            }            
+        }
+
+        protected void gvChecks_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        {
+            if ((error == true || error == false) && check == false)
+            {
+                e.Handled = true;
+                e.InsertValues.Clear();
+                e.UpdateValues.Clear();
+            }
+        }
+
+        protected void gvCredit_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
+        {
+            if ((error == true || error == false) && check == false)
+            {
+                e.Handled = true;
+                e.InsertValues.Clear();
+                e.UpdateValues.Clear();
+            }
+        }
+
+        #endregion
+        
+        protected void gvARChecks_Init(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                Session["appdetail"] = null;
+            }
+
+            if (Session["appdetail"] != null)
+            {
+                gvARChecks.DataSource = sdsARChecksDtl;
+            }
+        }
+        protected void gvChecks_Init(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                Session["appdetail"] = null;
+            }
+
+            if (Session["appdetail"] != null)
+            {
+                gvChecks.DataSource = sdsChecksDtl;
+            }
+        }
+        private DataTable GetSelectedVal()
+        {
+            //gvChecks.DataSourceID = null;
+            //gvChecks.DataBind();
+            //sdsChecksDtl.SelectCommand = "SELECT * FROM Accounting.CollectionChecks WHERE '"+DateTime.Today.ToString()+"'=''";
+            //gvChecks.DataSource = sdsChecksDtl;
+            ////if (gvChecks.DataSourceID != "")
+            ////{
+            ////    gvChecks.DataSourceID = null;
+            ////}
+            //gvChecks.DataBind();
+
+            gvARChecks.DataSourceID = null;
+            gvARChecks.DataBind();
+            DataTable dt = new DataTable();
+            //string[] selectedtrans = aglARChecks.Text.Split(';');
+            //CriteriaOperator selectionCriteria = new InOperator("DocNumber", selectedtrans);
+            //string selection = selectionCriteria.ToString();
+
+            sdsARChecksDtl.SelectCommand = Detail();
+            gvARChecks.DataSource = sdsARChecksDtl;
+            //if (gvARChecks.DataSourceID != "")
+            //{
+            //    gvARChecks.DataSourceID = null;
+            //}
+            gvARChecks.DataBind();
+
+            foreach (GridViewColumn col in gvARChecks.VisibleColumns)
+            {
+                GridViewDataColumn dataColumn = col as GridViewDataColumn;
+                if (dataColumn == null) continue;
+                dt.Columns.Add(dataColumn.FieldName);
+            }
+            for (int i = 0; i < gvARChecks.VisibleRowCount; i++)
+            {
+                DataRow row = dt.Rows.Add();
+                foreach (DataColumn col in dt.Columns)
+                    row[col.ColumnName] = gvARChecks.GetRowValues(i, col.ColumnName);
+            }
+
+            dt.PrimaryKey = new DataColumn[] { dt.Columns["RecordID"] };
+
+            return dt;
+        }    
+        protected void dtpDocDate_Init(object sender, EventArgs e)
+        {
+            if (Request.QueryString["entry"] == "N")
+            {
+                dtpDocDate.Date = DateTime.Now;
+            }
+        }        
+        protected void Connection_Init(object sender, EventArgs e)
+        {
+            ((SqlDataSource)sender).ConnectionString = Session["ConnString"].ToString();
+        }        
+        private void Filter()
+        {
+            sdsRefARChecks.ConnectionString = Session["ConnString"].ToString();
+            sdsBank.ConnectionString = Session["ConnString"].ToString();
+            sdsBranch.ConnectionString = Session["ConnString"].ToString();
+
+            //String _ReceiptType = string.IsNullOrEmpty(cbxReceiptType.Text) ?
+            //    ((Session["ColRRcptType"] == null) ? "" : Session["ColRRcptType"].ToString()) : cbxReceiptType.Value.ToString();
+            String _ReceiptType = (Session["ColRRcptType"] == null) ? "" : Session["ColRRcptType"].ToString();
+            if (_ReceiptType == "C")
+            {
+                frmlayout1.FindItemOrGroupByName("Cash").ClientVisible = true;
+                frmlayout1.FindItemOrGroupByName("DirectCredit").ClientVisible = true;
+                frmlayout1.FindItemOrGroupByName("ReceivedChecks").ClientVisible = true;
+                frmlayout1.FindItemOrGroupByName("MaturingChecks").ClientVisible = false;
+            }
+            else if (_ReceiptType == "M")
+            {
+                frmlayout1.FindItemOrGroupByName("Cash").ClientVisible = false;
+                frmlayout1.FindItemOrGroupByName("DirectCredit").ClientVisible = false;
+                frmlayout1.FindItemOrGroupByName("ReceivedChecks").ClientVisible = false;
+                frmlayout1.FindItemOrGroupByName("MaturingChecks").ClientVisible = true;
+            }
+
+            DateTime _DocDate = Convert.ToDateTime(Session["ColRDocDate"]);
+            String _CollType = (Session["ColRCollType"] == null ? "" : Session["ColRCollType"].ToString());
+
+            if (aglCustomerCode.Text != "" || (Session["ColRCustCode"] != null && Session["ColRCustCode"].ToString() != ""))
+            {
+                string cus = string.IsNullOrEmpty(aglCustomerCode.Text) ? Session["ColRCustCode"].ToString() : aglCustomerCode.Text;
+                if (_ReceiptType == "M")
+                {
+                    sdsRefARChecks.SelectCommand = "SELECT CHK.DocNumber+'/'+LineNumber AS RecordID, " +
+                                                   "       Bank, Branch, CheckNumber, CheckDate, CheckAmount " +
+                                                   "  FROM Accounting.CollectionChecks CHK " +
+                                                   "       INNER JOIN Accounting.Collection COL " +
+                                                   "       ON CHK.DocNumber = COL.DocNumber " +
+                                                   " WHERE ISNULL(COL.SubmittedBy,'') != '' AND COL.ReceiptType = 'A' AND " +
+                                                   "       COL.CustomerCode = '" + cus + "' AND COL.CollectionType = '" + _CollType + "' AND" +
+                                                   "       CHK.CheckDate <= '" + _DocDate.ToString("yyyy-MM-dd") + "' AND" +
+                                                   "       CollReceiptNum IS NULL ";
+                    aglARChecks.DataBind();
+                }
+                else
+                {
+                    sdsBank.SelectCommand = "SELECT DISTINCT A.BankCode AS Bank, C.Description, A.AccountNo, A.Branch FROM Masterfile.BPBankInfo A INNER JOIN "
+                        + " Masterfile.BizPartner B ON A.BizPartnerCode = B.BizPartnerCode LEFT JOIN Masterfile.Bank C ON A.BankCode = C.BankCode "
+                        + " WHERE A.BizPartnerCode = '" + cus + "'";
+                    glcheck.DataBind();
+                }
+            }
+            else if (aglBizAccount.Text != "" || (Session["ColRBizAcct"] != null && Session["ColRBizAcct"].ToString() != ""))
+            {
+                string bizacc = string.IsNullOrEmpty(aglBizAccount.Text) ? Session["ColRBizAcct"].ToString() : aglBizAccount.Text;
+                if (_ReceiptType == "M")
+                {
+                    sdsRefARChecks.SelectCommand = "SELECT CHK.DocNumber+'/'+LineNumber AS RecordID, " +
+                                                   "       Bank, Branch, CheckNumber, CheckDate, CheckAmount " +
+                                                   "  FROM Accounting.CollectionChecks CHK " +
+                                                   "       INNER JOIN Accounting.Collection COL " +
+                                                   "       ON CHK.DocNumber = COL.DocNumber " +
+                                                   " WHERE ISNULL(COL.SubmittedBy,'') != '' AND COL.ReceiptType = 'A' AND " +
+                                                   "       COL.BizAccount = '" + bizacc + "' AND COL.CollectionType = '" + _CollType + "' AND" +
+                                                   "       CHK.CheckDate <= '" + _DocDate.ToString("yyyy-MM-dd") + "' AND" +
+                                                   "       CollReceiptNum IS NULL ";
+                    aglARChecks.DataBind();
+                }
+                else
+                {
+                    sdsBank.SelectCommand = "SELECT DISTINCT A.BankCode AS Bank, C.Description, A.AccountNo, A.Branch FROM Masterfile.BPBankInfo A INNER JOIN "
+                        + " Masterfile.BizPartner B ON A.BizPartnerCode = B.BizPartnerCode LEFT JOIN Masterfile.Bank C ON A.BankCode = C.BankCode "
+                        + " WHERE B.BusinessAccountCode = '" + bizacc + "'";
+                    glcheck.DataBind();
+                }
+            }
+        }
+        public string Detail()
+        {
+            string query = "";
+            string Value = "";
+            int cnt = 0;
+            string bridge = "";
+
+            if (aglARChecks.Text == "")
+            {
+                Value = "1 = 0";
+            }
+            else
+            {
+                int count = aglARChecks.Text.Split(';').Length;
+                var pieces = aglARChecks.Text.Split(new[] { ';' }, count);
+
+                foreach (string c in pieces)
+                {
+                    if (cnt != 0)
+                    {
+                        bridge = " OR ";
+                    }
+                    Value += bridge + "(DocNumber+'/'+LineNumber = '" + c.ToString()  + "')";
+
+                    cnt = cnt + 1;
+                }
+            }
+
+            query = "SELECT RIGHT('00000'+ CONVERT(varchar,ROW_NUMBER() OVER (ORDER BY DocNumber,LineNumber)),5) AS LineNumber, " +
+                    "       DocNumber+'/'+LineNumber AS RecordID, Bank, Branch, CheckNumber, CheckDate, CheckAmount " +
+                    "  FROM Accounting.CollectionChecks WHERE CollReceiptNum IS NULL AND (" + Value + ")"; 
+            return query;
+        }
+        protected void aglARChecks_Init(object sender, EventArgs e)
+        {
+            Filter();
+        }
+
+        protected void glBank_Init(object sender, EventArgs e)
+        {
+            Filter();
+        }
+
+        protected void gvChecks_InitNewRow(object sender, ASPxDataInitNewRowEventArgs e)
+        {
+            e.NewValues["Bank"] = "";
+        }
+    }
+}

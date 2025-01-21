@@ -1,0 +1,49 @@
+﻿#calendar {
+    height: 100vh;
+    width: auto;
+}
+.modal-header .close {
+    padding: 1rem;
+    margin: -1rem -1rem -1rem auto;
+}
+button.close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+.close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+}
+.fc-license-message {
+    display: none;
+}
+button.custom.active {
+    background-color: #263442 !important;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+.fc-timeline-event-harness {
+    cursor: pointer;
+}
+#manpowerModal th {
+    text-align: center;
+}
+#manpowerModal tbody tr td:nth-child(2), #manpowerModal tbody tr td:nth-child(3), 
+#manpowerModal tbody tr td:nth-child(4), #summaryModal tbody tr td:nth-child(1), 
+#summaryModal tbody tr td:nth-child(4) {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.fc-datagrid-cell.fc-resource-group.fc-cell-shaded {
+    font-weight: 600;
+}

@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="SUPPLIER DELIVERY FOR RECEIVING" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="192.168.180.9_GWL-MGD_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="192.168.180.9" />
+          <Parameter Name="database" Value="GWL-MGD" />
+          <Parameter Name="useIntegratedSecurity" Value="False" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="sa" />
+          <Parameter Name="password" Value="IT4321$#@!" />
+        </Parameters>
+      </Connection>
+      <Query Type="StoredProcQuery" Name="gd_dashboard_SupPO2RR">
+        <Parameter Name="@DateFrom" Type="DevExpress.DataAccess.Expression">(System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.DateFrom])</Parameter>
+        <Parameter Name="@DateTo" Type="DevExpress.DataAccess.Expression">(System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.DateTo])</Parameter>
+        <Parameter Name="@Client" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.Client])</Parameter>
+        <Parameter Name="@BranchWH" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.WH])</Parameter>
+        <ProcName>gd_dashboard_SupPO2RR</ProcName>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="gd_dashboard_SupPO2RR">
+            <Field Name="WarehouseCode" Type="String" />
+            <Field Name="CustomerCode" Type="String" />
+            <Field Name="PO" Type="Decimal" />
+            <Field Name="RR" Type="Decimal" />
+            <Field Name="ICNcount" Type="Int32" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+      <CalculatedFields>
+        <CalculatedField Name="DateFrom" Expression="[Parameters.DateFrom]" DataType="DateTime" DataMember="gd_dashboard_SupPO2RR" />
+        <CalculatedField Name="WH" Expression="[Parameters.WH]" DataMember="gd_dashboard_SupPO2RR" />
+        <CalculatedField Name="DateTo" Expression="[Parameters.DateTo]" DataType="DateTime" DataMember="gd_dashboard_SupPO2RR" />
+        <CalculatedField Name="Client" Expression="[Parameters.Client]" DataMember="gd_dashboard_SupPO2RR" />
+      </CalculatedFields>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="DateFrom" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2000-01-01T00:00:00" />
+    <Parameter Name="DateTo" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2000-01-01T00:00:00" />
+    <Parameter Name="Client" Value="ALL" />
+    <Parameter Name="WH" Value="ALL" />
+  </Parameters>
+  <Items>
+    <Chart ComponentName="chartDashboardItem1" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_SupPO2RR">
+      <DataItems>
+        <Measure DataMember="PO" UniqueName="DataItem0">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Measure DataMember="RR" UniqueName="DataItem1">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Dimension DataMember="CustomerCode" UniqueName="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple Name="PO">
+              <Value UniqueName="DataItem0" />
+            </Simple>
+            <Simple Name="RR">
+              <Value UniqueName="DataItem1" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Grid ComponentName="gridDashboardItem2" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_SupPO2RR">
+      <DataItems>
+        <Dimension DataMember="DateFrom" Name="From" DateTimeGroupInterval="DayMonthYear" UniqueName="DataItem0" />
+        <Dimension DataMember="DateTo" Name="To" DateTimeGroupInterval="DayMonthYear" UniqueName="DataItem1" />
+        <Dimension DataMember="WH" UniqueName="DataItem2" />
+        <Dimension DataMember="Client" UniqueName="DataItem3" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem3" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <Pivot ComponentName="pivotDashboardItem1" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_SupPO2RR">
+      <DataItems>
+        <Dimension DataMember="CustomerCode" UniqueName="DataItem0" />
+        <Measure DataMember="PO" Name="PO" UniqueName="DataItem1">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Measure DataMember="RR" Name="RR" UniqueName="DataItem2">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Measure DataMember="ICNcount" Name="Count ICN docs" UniqueName="DataItem3">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+      </DataItems>
+      <Rows>
+        <Row UniqueName="DataItem0" />
+      </Rows>
+      <Values>
+        <Value UniqueName="DataItem1" />
+        <Value UniqueName="DataItem2" />
+        <Value UniqueName="DataItem3" />
+      </Values>
+    </Pivot>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical" Weight="52.398190045248867">
+        <LayoutItem DashboardItem="pivotDashboardItem1" Weight="69.1029900332226" />
+        <LayoutItem DashboardItem="gridDashboardItem2" Weight="30.897009966777407" />
+      </LayoutGroup>
+      <LayoutItem DashboardItem="chartDashboardItem1" Weight="47.601809954751133" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

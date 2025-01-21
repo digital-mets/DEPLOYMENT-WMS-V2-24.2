@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="Dashboard" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="localhost_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="192.168.180.9" />
+          <Parameter Name="database" Value="METS-ACTIVITY" />
+          <Parameter Name="useIntegratedSecurity" Value="False" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="sa" />
+          <Parameter Name="password" Value="IT4321$#@!" />
+        </Parameters>
+      </Connection>
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>select *
+  from dbo.Megamall_MB2 
+ where Year = 2015</Sql>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="CustomSqlQuery">
+            <Field Name="Date" Type="DateTime" />
+            <Field Name="Year" Type="Decimal" />
+            <Field Name="Month" Type="Decimal" />
+            <Field Name="BrandCode" Type="String" />
+            <Field Name="GenderCode" Type="String" />
+            <Field Name="ProductCategoryCode" Type="String" />
+            <Field Name="ProductSubCatCode" Type="String" />
+            <Field Name="ProductSubCatDesc" Type="String" />
+            <Field Name="FitCode" Type="String" />
+            <Field Name="FitName" Type="String" />
+            <Field Name="DesignCategory" Type="String" />
+            <Field Name="DesignCatDesc" Type="String" />
+            <Field Name="DesignSubCategory" Type="String" />
+            <Field Name="DesignSubCatDesc" Type="String" />
+            <Field Name="ProductGroup" Type="String" />
+            <Field Name="ProdGrpDesc" Type="String" />
+            <Field Name="ColorGroup" Type="String" />
+            <Field Name="ColorGroupDesc" Type="String" />
+            <Field Name="Fitting" Type="String" />
+            <Field Name="Silhouette" Type="String" />
+            <Field Name="Waist" Type="String" />
+            <Field Name="Sleeves" Type="String" />
+            <Field Name="NeckLine" Type="String" />
+            <Field Name="ItemCode" Type="String" />
+            <Field Name="ColorCode" Type="String" />
+            <Field Name="SizeCode" Type="String" />
+            <Field Name="ClassCode" Type="String" />
+            <Field Name="BegInv" Type="Decimal" />
+            <Field Name="Sales" Type="Decimal" />
+            <Field Name="EndInv" Type="Decimal" />
+            <Field Name="CurrInv" Type="Decimal" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="Brand" Value="">
+      <DynamicListLookUpSettings DataSourceName="dashboardSqlDataSource1" ValueMember="BrandCode" DisplayMember="BrandCode" />
+    </Parameter>
+    <Parameter Name="ProductCategoryCode" Value="">
+      <DynamicListLookUpSettings DataSourceName="dashboardSqlDataSource1" ValueMember="ProductCategoryCode" DisplayMember="ProductCategoryCode" />
+    </Parameter>
+    <Parameter Name="Gender" Value="">
+      <DynamicListLookUpSettings DataSourceName="dashboardSqlDataSource1" ValueMember="GenderCode" DisplayMember="GenderCode" />
+    </Parameter>
+  </Parameters>
+  <Items>
+    <RangeFilter ComponentName="rangeFilterDashboardItem1" Name="Range Filter 1" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Sales" UniqueName="DataItem1" />
+        <Dimension DataMember="Date" DateTimeGroupInterval="MonthYear" UniqueName="DataItem0" />
+        <Measure DataMember="BegInv" UniqueName="DataItem2" />
+      </DataItems>
+      <Argument UniqueName="DataItem0" />
+      <Series>
+        <Simple SeriesType="Line">
+          <Value UniqueName="DataItem1" />
+        </Simple>
+        <Simple SeriesType="Line">
+          <Value UniqueName="DataItem2" />
+        </Simple>
+      </Series>
+    </RangeFilter>
+    <Chart ComponentName="chartDashboardItem1" Name="Chart 1" ShowCaption="false" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Sales" UniqueName="DataItem2" />
+        <Dimension DataMember="Date" DateTimeGroupInterval="Month" UniqueName="DataItem4" />
+        <Measure DataMember="BegInv" UniqueName="DataItem0" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem4" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple SeriesType="Line">
+              <Value UniqueName="DataItem2" />
+            </Simple>
+            <Simple SeriesType="Line">
+              <Value UniqueName="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <ComboBox ComponentName="comboBoxDashboardItem1" Name="Sub Cat" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="ProductSubCatDesc" UniqueName="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+      </FilterDimensions>
+    </ComboBox>
+    <ComboBox ComponentName="comboBoxDashboardItem3" Name="Brand" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="BrandCode" UniqueName="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+      </FilterDimensions>
+    </ComboBox>
+    <Grid ComponentName="gridDashboardItem1" Name="Inventory" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery" IsMasterFilterCrossDataSource="true">
+      <InteractivityOptions MasterFilterMode="Multiple" />
+      <DataItems>
+        <Dimension DataMember="FitName" SortOrder="Descending" SortByMeasure="DataItem2" UniqueName="DataItem3" />
+        <Measure DataMember="BegInv" UniqueName="DataItem2" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem3" />
+        </GridDimensionColumn>
+        <GridMeasureColumn DisplayMode="Bar">
+          <Measure UniqueName="DataItem2" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <Pie ComponentName="pieDashboardItem1" Name="Fit" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <InteractivityOptions MasterFilterMode="Multiple" />
+      <DataItems>
+        <Measure DataMember="Sales" Name="Sales (Sum)" UniqueName="DataItem0" />
+        <Dimension DataMember="FitName" TopNEnabled="true" TopNShowOthers="true" TopNCount="10" TopNMeasure="DataItem0" UniqueName="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem2" />
+      </Arguments>
+      <Values>
+        <Value UniqueName="DataItem0" />
+      </Values>
+    </Pie>
+    <Chart ComponentName="chartDashboardItem2" Name="Chart 2" ShowCaption="false" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Sales" UniqueName="DataItem0" />
+        <Dimension DataMember="SizeCode" UniqueName="DataItem3" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem3" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value UniqueName="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem3" Name="Chart 3" ShowCaption="false" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="SizeCode" UniqueName="DataItem3" />
+        <Measure DataMember="BegInv" UniqueName="DataItem0" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem3" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value UniqueName="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Pie ComponentName="pieDashboardItem2" Name="Stock" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <InteractivityOptions MasterFilterMode="Multiple" />
+      <DataItems>
+        <Dimension DataMember="ItemCode" TopNEnabled="true" TopNCount="10" TopNMeasure="DataItem1" UniqueName="DataItem0" />
+        <Measure DataMember="Sales" Name="Sales (Sum)" UniqueName="DataItem1" />
+        <Dimension DataMember="ItemCode" SortOrder="Descending" TopNEnabled="true" TopNShowOthers="true" TopNCount="10" TopNMeasure="DataItem1" UniqueName="DataItem4" />
+      </DataItems>
+      <HiddenDimensions>
+        <Dimension UniqueName="DataItem0" />
+      </HiddenDimensions>
+      <Arguments>
+        <Argument UniqueName="DataItem4" />
+      </Arguments>
+      <Values>
+        <Value UniqueName="DataItem1" />
+      </Values>
+    </Pie>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutGroup Weight="84.033613445378151">
+        <LayoutGroup Orientation="Vertical" Weight="27.300150829562593">
+          <LayoutItem DashboardItem="comboBoxDashboardItem3" Weight="12.75" />
+          <LayoutItem DashboardItem="comboBoxDashboardItem1" Weight="12.75" />
+          <LayoutItem DashboardItem="gridDashboardItem1" Weight="74.5" />
+        </LayoutGroup>
+        <LayoutGroup Weight="72.6998491704374">
+          <LayoutGroup Orientation="Vertical" Weight="46.058091286307054">
+            <LayoutItem DashboardItem="pieDashboardItem1" Weight="50" />
+            <LayoutItem DashboardItem="pieDashboardItem2" Weight="50" />
+          </LayoutGroup>
+          <LayoutGroup Orientation="Vertical" Weight="53.941908713692946">
+            <LayoutItem DashboardItem="chartDashboardItem3" Weight="33" />
+            <LayoutItem DashboardItem="chartDashboardItem2" Weight="30" />
+            <LayoutItem DashboardItem="chartDashboardItem1" Weight="37" />
+          </LayoutGroup>
+        </LayoutGroup>
+      </LayoutGroup>
+      <LayoutItem DashboardItem="rangeFilterDashboardItem1" Weight="15.966386554621849" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

@@ -1,0 +1,475 @@
+<%@ Master Language="C#" MasterPageFile="~/Root.master" AutoEventWireup="true" CodeBehind="Main.master.cs" Inherits="GWL.MainMaster" %>
+
+<%-- DXCOMMENT: Page Main.master is a master page that contains central area layout --%>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="Content" runat="server">
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="Stylesheet" type="text/css" href="css/AutoCompleteStyles.css" />
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+    <%-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>--%>
+    <script src="js/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery-ui.min.js" type="text/javascript"></script>
+    <style>
+        .dxtv-ndTxt, .dxtv-ndChk, .dxtv-btn
+        {
+            margin-top: 0px !important;
+            padding-top: 0px !important;
+        }
+
+        #searchbox
+        {
+            background-color: #eaf8fc;
+            background-image: linear-gradient(#fff, #d4e8ec);
+            border-radius: 35px;    
+            border-width: 1px;
+            border-style: solid;
+            border-color: #c4d9df #a4c3ca #83afb7;            
+            width: 260px;
+            height: 40px;
+            padding: 5px;
+            margin: 5px auto 50px;
+            overflow: hidden; /* Clear floats */
+        }
+
+        .search, 
+        .submit {
+            float: left;
+        }
+
+        .search {
+            padding: 4px 9px;
+            height: 10px;
+            width: 250px;
+            border: 1px solid #a4c3ca;
+            font: normal 13px 'trebuchet MS', arial, helvetica;
+            background: #f1f1f1;
+            border-radius: 10px 3px 3px 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 1);            
+        }
+
+/* ----------------------- */
+
+        .submit
+        {       
+            background-color: #6cbb6b;
+            background-image: linear-gradient(#95d788, #6cbb6b);
+            border-radius: 3px 10px 10px 3px;    
+            border-width: 1px;
+            border-style: solid;
+            border-color: #7eba7c #578e57 #447d43;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 
+                        0 1px 0 rgba(255, 255, 255, 0.3) inset;
+            height: 28px;
+            margin: -28px 0 0 250px;
+            padding: 0;
+            width: 48px;
+            cursor: pointer;
+            font: bold 14px Arial, Helvetica;
+            color: #23441e;    
+            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+        }
+
+        .submit:hover {       
+            background-color: #95d788;
+            background-image: linear-gradient(#6cbb6b, #95d788);
+        }   
+
+        .submit:active {       
+            background: #95d788;
+            outline: none;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;        
+        }
+
+        .submit::-moz-focus-inner {
+               border: 0;  /* Small centering fix for Firefox */
+        }
+    </style>
+
+    <script>
+        //#region Node click function
+        function OnNodeClick(s, e) {
+            e.node.SetExpanded(!e.node.GetExpanded());
+            //$('img[alt=Collapse]').parent().next().css({ 'font-weight': '600' });
+            //$('img[alt=Expand]').parent().next().css({ 'font-weight': 'normal' });
+
+            carga.Show();
+            //var test = e.node.target.split('~');
+            splitter.GetPaneByName("ContentCenter").SetContentUrl(e.node.target);
+            //console.log(test);
+        }
+
+        function OnNodeClick2(targetnode) {
+            //$('img[alt=Collapse]').parent().next().css({ 'font-weight': '600' });
+            //$('img[alt=Expand]').parent().next().css({ 'font-weight': 'normal' });
+            carga.Show();
+            splitter.GetPaneByName("ContentCenter").SetContentUrl(targetnode);
+        }
+        function onPaneContentUrlLoaded(s, e) {
+            carga.Hide();
+        }
+        //#endregion
+
+        //#region Search Function
+        function Traverce(node) {
+            if (node.GetNodeCount() > 0)
+                for (var i = 0; i < node.GetNodeCount() ; i++) {
+                    var currentnode = node.GetNode(i);
+                    if (currentnode.GetText().toLowerCase() == searchedString) {
+                        console.log(currentnode.GetText().toLowerCase(), searchedString);
+                        var nodesparent = currentnode.parent;
+                        while (nodesparent != null) {
+                            nodesparent.SetExpanded(true);
+                            nodesparent = nodesparent.parent
+                        }
+                        treeview.SetSelectedNode(currentnode);
+                        OnNodeClick2(treeview.GetSelectedNode().target);
+                        stop = true;
+                        return;
+                    }
+                    else {
+                        if (!stop) Traverce(currentnode);
+                        else {
+                            stop = false;
+                            return;
+                        }
+                    }
+                }
+        }
+
+        var searchedString = "";
+        var stop = false;
+        function FindNode(s, e) {
+            searchedString = textbox.GetText();
+            if (searchedString == '') {
+                //alert('Please, input name of a node');
+                return;
+            }
+            searchedString.toLowerCase();
+            Traverce(treeview);
+        }
+        //#endregion
+
+        //#region Autocomplete
+        var nodestext;
+        function ListCheckedNodes(parent) {
+
+            for (var i = 0; i < parent.GetNodeCount() ; i++) {
+                label.SetText(label.GetText() + parent.GetNode(i).GetText() + ",");
+                nodestext = label.GetText() + " " + parent.GetNode(i).GetText();
+                if (parent.GetNode(i).GetNodeCount() != 0) {
+                    ListCheckedNodes(parent.GetNode(i));
+                }
+            }
+        }
+
+        var availableTags;
+        function OnInit(s, e) {
+            ListCheckedNodes(treeview);
+        }
+
+        function OnControlsInitialized(s, e) {
+            availableTags = nodestext.toLowerCase().split(',');
+            $(textbox.GetInputElement()).autocomplete({
+                source: availableTags,
+                position:
+                {
+                    my: "left bottom",
+                    at: "left top",
+                    of: textbox.GetMainElement()
+                },
+                select: function (event, ui) {
+                    textbox.SetValue(ui.item.value);
+                    FindNode();
+                }
+            });
+        }
+
+        jQuery(document).ready(function (event) {
+            var isExpired = false;
+            setInterval(checkSession, 2000);
+
+            //function checkSession() {
+            //    var xhr = $.ajax({
+            //        type: "POST",
+            //        url: "checksession.aspx/check",
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //        success: function (result) {
+            //            if (result.d && !isExpired) {
+            //                isExpired = true;
+            //                alert('User Session Expired. Please click Ok to refresh the window.');
+            //                window.location = '/DefaultSite.aspx'
+            //                //window.location = '/Login/Login.aspx'
+            //            }
+            //        }
+            //    });
+            //}
+
+            //2020-02-21 AC START Handling of Multiple Login and Check Userid session
+            function checkSession() {
+                var xhr = $.ajax({
+                    type: "POST",
+                    url: "/checksession.aspx/check",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.d == "isExpired") {
+                            alert('User Session Expired. Please click Ok to refresh the window.');
+                            window.location = '/DefaultSite.aspx'
+                            //window.location = '/Login/Login.aspx'
+                        }
+                        else if (result.d == "isUsed") {
+                            alert('Another User Has Logged In This Account');
+                            window.location = '/DefaultSite.aspx'
+                        }
+                    }
+                });
+            }
+            //2020-02-21 AC END Handling of Multiple Login and Check Userid session
+        });
+
+
+        //#endregion
+        //ExpandedChanged="function(s,e) {
+        //$('img[alt=Collapse]').parent().next().css({ 'font-weight': '450' });
+        //$('img[alt=Expand]').parent().next().css({ 'font-weight': 'normal' });
+        //}"
+        //#region future ref
+
+        //#endregion
+    </script>
+
+<%--<!--#region Region Commented --> --%>
+<%--        <dx:ASPxPanel ID="LeftPane" runat="server" FixedPosition="WindowLeft" ClientInstanceName="leftPane" CssClass="leftPane" Collapsible="True" Width="289px">
+            <SettingsAdaptivity CollapseAtWindowInnerWidth="1023" />
+            <Styles>
+                <Panel CssClass="panel"></Panel>
+            </Styles>
+            <PanelCollection>
+                <dx:PanelContent runat="server" SupportsDisabledAttribute="True">
+                        <div class="leftPanel">
+        <dx:ASPxTreeView ID="treeView" runat="server" EnableCallBacks="true" Width="100%">
+        </dx:ASPxTreeView>
+
+                        </div>
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>--%>
+
+<%--    <dx:ASPxPanel ID="LeftPane" runat="server" FixedPosition="WindowLeft" ClientInstanceName="leftPane" CssClass="leftPane" Collapsible="True" Width="1000px">
+            <SettingsAdaptivity CollapseAtWindowInnerWidth="1023" />
+            <Styles>
+                <Panel CssClass="panel"></Panel>
+            </Styles>
+            <PanelCollection>
+                <dx:PanelContent runat="server" SupportsDisabledAttribute="True">--%>
+                        
+        <%--<dx:ASPxTreeView ID="treeView" runat="server" EnableCallBacks="true" Width="100%">
+        </dx:ASPxTreeView>--%>
+<%--<!--#endregion --> --%>
+
+<dx:ASPxPopupControl ID="Messagepop" runat="server" ClientInstanceName="Messagepop"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="350px" Height="200px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ShowOnPageLoad="false"
+            HeaderText="" HeaderStyle-Font-Size="X-Large" Font-Bold="true" AllowDragging="True" PopupAnimationType="Fade" EnableViewState="False">
+                                    <ContentCollection>
+                                        <dx:PopupControlContentControl runat="server">
+                                            <dx:ASPxPanel ID="ASPxPanel2" runat="server">
+                                                <PanelCollection>
+                                                    <dx:PanelContent runat="server">
+                                                    <dx:ASPxLabel Font-Size="Medium" Font-Bold="true" ID="Messagetxt" runat="server" Text=""></dx:ASPxLabel>
+                                                    </dx:PanelContent>
+                                                 </PanelCollection>
+                                                </dx:ASPxPanel>
+                                            </dx:PopupControlContentControl>
+                                    </ContentCollection>
+        </dx:ASPxPopupControl>
+    <dx:ASPxPopupControl ID="popContractPrompt" runat="server" ClientInstanceName="popContractPrompt"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="450px" Height="200px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ShowOnPageLoad="false"
+            HeaderText="Expiring Contracts in 30 Days" HeaderStyle-Font-Size="X-Large" Font-Bold="true" AllowDragging="True" PopupAnimationType="Fade" EnableViewState="False">
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server">
+                    <dx:ASPxPanel ID="ASPxPanel1" runat="server">
+                        <PanelCollection>
+                            <dx:PanelContent runat="server">
+                            <dx:ASPxGridView ID="gvContractPrompt" runat="server" AutoGenerateColumns="False" Width="446px" ClientInstanceName="gvContractPrompt" KeyFieldName="DocNumber;ContractType;DaysLeft">
+                            <SettingsPager Mode="ShowAllRecords" />  
+                            <SettingsEditing Mode="Batch"/>
+                            <Settings HorizontalScrollBarMode="Hidden" VerticalScrollBarMode="Auto" ColumnMinWidth="120" VerticalScrollableHeight="130"  /> 
+                            <SettingsBehavior AllowSort="False"></SettingsBehavior>
+                            <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
+                            <Columns>
+                                <dx:GridViewDataTextColumn FieldName="BizPartnerCode" Name="aBizPartnerCode" ShowInCustomizationForm="True" VisibleIndex="0" Width ="100px" Caption="Business Partner" HeaderStyle-Wrap="True" 
+                                                            HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
+                                </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataTextColumn FieldName="Name" Name="aName" ShowInCustomizationForm="True" VisibleIndex="1" Width ="150px" Caption="Name" HeaderStyle-Wrap="True" 
+                                                            HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
+                                </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataTextColumn FieldName="DocNumber" Name="aDocNumber" ShowInCustomizationForm="True" VisibleIndex="2" Width ="150px" Caption="Contract Number" HeaderStyle-Wrap="True" 
+                                                            HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
+                                </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataTextColumn FieldName="ContractType" Name="aContractType" ShowInCustomizationForm="True" VisibleIndex="3" Width ="150px" Caption="Contract Type" HeaderStyle-Wrap="True" 
+                                                            HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
+                                </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataDateColumn Caption="Effectivity Date" FieldName="EffectivityDate" Name="aEffectivityDate" ShowInCustomizationForm="True" VisibleIndex="4" Width="100px">
+                                    <PropertiesDateEdit DisplayFormatString="MM/d/yyyy">
+                                    </PropertiesDateEdit>
+                                </dx:GridViewDataDateColumn>
+								<dx:GridViewDataTextColumn FieldName="DaysLeft" Name="aDaysLeft" ShowInCustomizationForm="True" VisibleIndex="5" Width ="99px" Caption="Day(s) Left" HeaderStyle-Wrap="True" 
+                                                            HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
+                                </dx:GridViewDataTextColumn>
+                            </Columns>
+                        </dx:ASPxGridView>
+                            </dx:PanelContent>
+                            </PanelCollection>
+                        </dx:ASPxPanel>
+                    </dx:PopupControlContentControl>
+            </ContentCollection>
+    </dx:ASPxPopupControl>
+ <dx:ASPxSplitter ID="ASPxSplitter1" runat="server"
+                ClientInstanceName="splitter" Height="100%" Width="100%">
+                <Styles>
+                    <Pane>
+                        <Paddings Padding="0px" />
+                        <Border BorderWidth="0px" />
+                    </Pane>
+                    <VerticalSeparator BackColor="#CCCCFF" BackgroundImage-Repeat="NoRepeat">
+                    </VerticalSeparator>
+                </Styles>
+                <Panes>
+                    <dx:SplitterPane Size="300px">
+                        <Panes>
+                    <%--Banner--%>
+                    <dx:SplitterPane Name="Banner" Size="5px" AllowResize="False">
+                    <PaneStyle CssClass="leftPane">
+                    <Paddings Padding="5px"></Paddings>
+                        </PaneStyle>
+                        <ContentCollection>
+                            <dx:SplitterContentControl runat="server" SupportsDisabledAttribute="True" >
+                                 <dx:ASPxLabel runat="server" Text="Departments" Font-Bold="true"></dx:ASPxLabel>
+                            </dx:SplitterContentControl>
+                        </ContentCollection>
+                    </dx:SplitterPane>
+
+                    <%--Menu--%>
+                    <dx:SplitterPane MinSize="10px" MaxSize="500px"  ScrollBars="Vertical" Name="ContentLeft" ShowCollapseBackwardButton="True">
+                        <PaneStyle CssClass="leftPane">
+                        <Paddings Padding="1px"></Paddings>
+                        </PaneStyle>
+                            <PaneStyle>
+                                <Paddings Padding="1px" />
+                            </PaneStyle>
+                        <ContentCollection>
+                            <dx:SplitterContentControl runat="server" SupportsDisabledAttribute="True" >
+                                <br />
+                                <div class="leftPanel">
+                                <div id="loadingcont">
+                                    <dx:ASPxTreeView ID="treeView" ClientInstanceName="treeview" runat="server" AllowSelectNode="true" AutoPostBack="false">
+                                        <Styles>
+                                            <Node>
+                                                <SelectedStyle Font-Bold="true" ForeColor="#35aaeb" BackColor="Transparent" />
+                                            </Node>
+                                        </Styles>
+                                        <ClientSideEvents NodeClick="OnNodeClick" Init="OnInit" />
+                                    </dx:ASPxTreeView>
+                                    <%--<div id="searchbox">
+                                    <dx:ASPxTextBox ID="ASPxTextBox1" runat="server" ClientInstanceName="textbox" CssClass="search" placeholder="Search here">
+                                    </dx:ASPxTextBox>
+                                    <dx:ASPxButton ID="ASPxButton1" runat="server" ClientInstanceName="searchbutton"
+                                        Text="Find" AutoPostBack="False" CssClass="submit">
+                                        <ClientSideEvents Click="FindNode"/>
+                                    </dx:ASPxButton>
+                                    </div>--%>
+                                    <dx:ASPxGlobalEvents ID="globalEvents" runat="server">
+                                    <ClientSideEvents ControlsInitialized="OnControlsInitialized" />
+                                    </dx:ASPxGlobalEvents>
+                                </div>
+                                </div>
+                            </dx:SplitterContentControl>
+                        </ContentCollection>
+                    </dx:SplitterPane>
+
+                    <%--Search Bar--%>
+                    <dx:SplitterPane AutoHeight="true" Name="Searchbar" MinSize="70px" MaxSize="70px"  ShowCollapseForwardButton="True">
+                    <PaneStyle CssClass="leftPane">
+                    <Paddings Padding="1px"></Paddings>
+                        </PaneStyle>
+                        <ContentCollection>
+                            <dx:SplitterContentControl runat="server" SupportsDisabledAttribute="True" >
+                                <div class="leftPanel">
+                                 <%--<div id="searchbox">--%>
+                                    <dx:ASPxTextBox ID="ASPxTextBox2" runat="server" ClientInstanceName="textbox" CssClass="search" placeholder="Search here">
+                                    </dx:ASPxTextBox>
+                                    <dx:ASPxButton ID="ASPxButton2" runat="server" ClientInstanceName="searchbutton"
+                                        Text="Find" AutoPostBack="False" CssClass="submit">
+                                        <ClientSideEvents Click="FindNode"/>
+                                    </dx:ASPxButton>
+                                 <%--</div>--%>
+                                 </div>
+                            </dx:SplitterContentControl>
+                        </ContentCollection>
+                    </dx:SplitterPane>
+                    </Panes>
+                    </dx:SplitterPane>
+
+                    <dx:SplitterPane AutoHeight="true" ContentUrl="IT/frmDashboard.aspx" Name="ContentCenter" ScrollBars="Auto">
+                        <PaneStyle CssClass="contentPane"></PaneStyle>
+                        <Separator Visible="True">
+                            <SeparatorStyle>
+                                <Border BorderWidth="0px" />
+                                <BorderTop BorderWidth="0px" />
+                            </SeparatorStyle>
+                        </Separator>
+                        <ContentCollection>
+                            <dx:SplitterContentControl runat="server" SupportsDisabledAttribute="True">
+                                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                                </asp:ContentPlaceHolder>
+                            </dx:SplitterContentControl>
+                        </ContentCollection>
+                    </dx:SplitterPane>
+                </Panes>
+                <ClientSideEvents PaneContentUrlLoaded="onPaneContentUrlLoaded" />
+            </dx:ASPxSplitter>
+            <br />
+            
+            <%--<dx:ASPxLoadingPanel ID="ASPxLoadingPanel1" runat="server"
+                ClientInstanceName="carga" ContainerElementID="loadingcont">
+            </dx:ASPxLoadingPanel>--%>
+
+
+     <dx:ASPxLoadingPanel ID="ASPxLoadingPanel1" runat="server"
+                ClientInstanceName="carga" BackColor="Transparent" Border-BorderColor="Transparent" Height="77px" Image-Height="77px" Image-Url="images/loadinggear.gif" Text=""  ContainerElementID="loadingcont">
+            </dx:ASPxLoadingPanel>
+
+            <dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="label" Text="">
+            </dx:ASPxLabel>
+<%--                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>--%>
+
+<%--        <div class="contentPane">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>--%>
+            
+
+    
+<%-- DXCOMMENT: Configure a datasource for the left panel's ASPxNavBar --%>
+<asp:XmlDataSource ID="XmlDataSourceLeft" runat="server" DataFile="~/App_Data/SideMenu.xml"
+    XPath="/menu/*"></asp:XmlDataSource>
+</asp:Content>
+
+
+<%-- DXCOMMENT: Configure the left panel's ASPxNavBar --%>
+<%--<dx:ASPxNavBar ID="GWLMenu" runat="server" AutoCollapse="True" EnableAnimation="True" Width="100%">
+    <Groups>
+        <dx:NavBarGroup Name="first" Text="Accounting2">
+            <Items>
+                <dx:NavBarItem Name="Account Statement"></dx:NavBarItem>
+            </Items>
+        </dx:NavBarGroup>
+    </Groups> 
+    <Border BorderWidth="0px" />
+    <Paddings Padding="0px" />
+</dx:ASPxNavBar>--%>

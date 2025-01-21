@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Unsubmitted Transactions" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="192.168.180.9_GWL-LOGISTICSConnection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="192.168.180.9" />
+          <Parameter Name="database" Value="GWL-LOGISTICS" />
+          <Parameter Name="useIntegratedSecurity" Value="False" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="tech" />
+          <Parameter Name="password" Value="p@ssw0rdtech" />
+        </Parameters>
+      </Connection>
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>SELECT A.DocNumber, A.BizPartnerCode, A.WarehouseCode, A.DocDate,
+       A.Type, A.UnitOfMeasure, SUM (A.Qty) as Qty, SUM (convert (int,
+       A.PalletCount)) as PalletCount, A.ServiceType FROM
+       [GWL-MLI].WMS.TransactionStorage A INNER JOIN
+       WMS.TransactionStorage B ON A.Docnumber = B.Docnumber AND
+       A.BizpartnerCode = B.BizpartnerCode AND
+       A.WarehouseCode = B.WarehouseCode AND A.Type = B.Type WHERE
+       ISNULL (A.SubmittedBy, '') = '' AND ISNULL (A.SubmittedDate,
+       '') = '' AND ISNULL (A.PalletCount, '') ! = 'N/A' GROUP BY
+       A.DocNumber, A.BizPartnerCode, A.WarehouseCode, A.DocDate,
+       A.Type, A.UnitOfMeasure, A.ServiceType
+	order by A.Docdate asc</Sql>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="CustomSqlQuery">
+            <Field Name="DocNumber" Type="String" />
+            <Field Name="BizPartnerCode" Type="String" />
+            <Field Name="WarehouseCode" Type="String" />
+            <Field Name="DocDate" Type="DateTime" />
+            <Field Name="Type" Type="String" />
+            <Field Name="UnitOfMeasure" Type="String" />
+            <Field Name="Qty" Type="Decimal" />
+            <Field Name="PalletCount" Type="Int32" />
+            <Field Name="ServiceType" Type="String" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Chart ComponentName="chartDashboardItem1" Name="Chart 1" ShowCaption="false" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="BizPartnerCode" UniqueName="DataItem1" />
+        <Measure DataMember="Qty" UniqueName="DataItem2">
+          <NumericFormat FormatType="General" />
+        </Measure>
+        <Measure DataMember="PalletCount" UniqueName="DataItem4" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value UniqueName="DataItem2" />
+            </Simple>
+            <Simple>
+              <Value UniqueName="DataItem4" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Grid ComponentName="gridDashboardItem1" Name="Transaction Storage" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="DocNumber" UniqueName="DataItem0" />
+        <Dimension DataMember="BizPartnerCode" SortOrder="Descending" UniqueName="DataItem1" />
+        <Dimension DataMember="Type" UniqueName="DataItem3" />
+        <Dimension DataMember="DocDate" SortOrder="Descending" DateTimeGroupInterval="None" UniqueName="DataItem4" />
+        <Measure DataMember="Qty" UniqueName="DataItem5">
+          <NumericFormat FormatType="General" />
+        </Measure>
+        <Measure DataMember="PalletCount" UniqueName="DataItem6" />
+        <Dimension DataMember="ServiceType" UniqueName="DataItem8" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="DocNumber" Weight="97.275924604299675">
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="DocDate" Weight="74.57820886329641">
+          <Dimension UniqueName="DataItem4" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="BizPartnerCode" Weight="48.637962302149838">
+          <Dimension UniqueName="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="103.76098624458631">
+          <Dimension UniqueName="DataItem8" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="Type" Weight="41.072057055148747">
+          <Dimension UniqueName="DataItem3" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Qty (Sum)" Weight="83.224957717011932">
+          <Measure UniqueName="DataItem5" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="PalletCount (Sum)" Weight="55.123023942436475">
+          <Measure UniqueName="DataItem6" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+    </Grid>
+    <RangeFilter ComponentName="rangeFilterDashboardItem1" Name="Range Filter 1" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Measure DataMember="Qty" UniqueName="DataItem0" />
+        <Measure DataMember="PalletCount" UniqueName="DataItem1" />
+        <Dimension DataMember="DocDate" DateTimeGroupInterval="None" UniqueName="DataItem2" />
+      </DataItems>
+      <Argument UniqueName="DataItem2" />
+      <Series>
+        <Simple SeriesType="Area">
+          <Value UniqueName="DataItem0" />
+        </Simple>
+        <Simple SeriesType="Area">
+          <Value UniqueName="DataItem1" />
+        </Simple>
+      </Series>
+    </RangeFilter>
+    <ComboBox ComponentName="comboBoxDashboardItem2" Name="Year" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="DocDate" UniqueName="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+      </FilterDimensions>
+    </ComboBox>
+    <ComboBox ComponentName="comboBoxDashboardItem3" Name="Client" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="BizPartnerCode" UniqueName="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+      </FilterDimensions>
+    </ComboBox>
+    <ComboBox ComponentName="comboBoxDashboardItem1" Name="Month" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="DocDate" DateTimeGroupInterval="Month" UniqueName="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+      </FilterDimensions>
+    </ComboBox>
+    <ComboBox ComponentName="comboBoxDashboardItem4" Name="Warehouse" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="WarehouseCode" UniqueName="DataItem0" />
+      </DataItems>
+      <FilterDimensions>
+        <Dimension UniqueName="DataItem0" />
+      </FilterDimensions>
+    </ComboBox>
+  </Items>
+  <ColorSheme>
+    <Entry DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery" Color="-2934272">
+      <MeasureKey>
+        <Definition DataMember="Qty" />
+      </MeasureKey>
+    </Entry>
+    <Entry DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery" Color="-14936142">
+      <MeasureKey>
+        <Definition DataMember="PalletCount" />
+      </MeasureKey>
+    </Entry>
+  </ColorSheme>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutGroup Weight="77.131782945736433">
+        <LayoutItem DashboardItem="chartDashboardItem1" Weight="50" />
+        <LayoutGroup Orientation="Vertical" Weight="50">
+          <LayoutGroup Weight="12.814070351758794">
+            <LayoutItem DashboardItem="comboBoxDashboardItem4" Weight="25.05091649694501" />
+            <LayoutItem DashboardItem="comboBoxDashboardItem1" Weight="22.60692464358452" />
+            <LayoutItem DashboardItem="comboBoxDashboardItem2" Weight="23.014256619144604" />
+            <LayoutItem DashboardItem="comboBoxDashboardItem3" Weight="29.327902240325866" />
+          </LayoutGroup>
+          <LayoutItem DashboardItem="gridDashboardItem1" Weight="87.1859296482412" />
+        </LayoutGroup>
+      </LayoutGroup>
+      <LayoutItem DashboardItem="rangeFilterDashboardItem1" Weight="22.868217054263567" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

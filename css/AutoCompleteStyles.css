@@ -1,0 +1,23 @@
+﻿ul.ui-autocomplete
+{
+    border: solid 1px #000000;
+    list-style-type: none;
+    margin: 0px;
+    overflow: auto;
+    padding: 0px;
+    width: 350px;
+}
+ul.ui-autocomplete a.ui-corner-all
+{
+    background-color: #EEEEEE;
+    display: block;
+    font-weight: normal;
+    font-size: 12px;
+}
+ul.ui-autocomplete a.ui-state-hover
+{
+    background-color: #0A246A;
+    color: #000000;
+    cursor: pointer;
+    display: block;
+}

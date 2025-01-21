@@ -1,0 +1,76 @@
+﻿body[data-leftbar-compact-mode=condensed] {
+    min-height: 300px !important;
+}
+
+#tblModule {
+    width: 100%;
+}
+
+
+.spinner-border {
+    display: none;
+}
+
+.page-title {
+    padding: 8px;
+    margin: 0 1px 0 1px;
+    border-bottom: 1px solid rgba(211, 211, 211, 0.5);
+    color: rgb(30, 30, 45);
+}
+
+.collapsible {
+    box-sizing: border-box;
+    width: 100%;
+    max-height: 800px;
+    opacity: 1;
+    transition: opacity 100ms, max-height 100ms, padding-top 100ms;
+}
+
+    .collapsible.expand {
+        max-height: 800px;
+        opacity: 1;
+        overflow: auto;
+    }
+
+    .collapsible.hide {
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0 !important;
+        overflow: hidden;
+    }
+
+.dropdown-menu {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    cursor: pointer !important;
+}
+
+#btn-toggle-params > span {
+    font-size: 20px;
+    color: var(--secondary);
+}
+
+.collapsible-toggle-btn {
+    background-color: transparent;
+    border: none;
+}
+
+    .collapsible-toggle-btn:focus, .collapsible-toggle-btn:active {
+        background-color: transparent;
+        outline: none;
+        border: none;
+    }
+
+    .collapsible-toggle-btn:hover {
+        outline: 1px solid rgba(211, 211, 211, 0.5) !important;
+    }
+
+.horzintal-divider {
+    margin: 0 1px 0 1px;
+    height: 2px;
+    border-bottom: 1px solid rgba(211, 211, 211, 0.5);
+    color: rgb(30, 30, 45);
+}

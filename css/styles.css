@@ -1,0 +1,55 @@
+﻿/* Global Stylesheet */
+table.dxeTextBoxSys /*sets rounded textbox*/ {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.Entry h1 { /* Header Style */
+    background: #2A88AD;
+    padding: 20px 30px 15px 30px;
+    margin: -20px -20px 20px -20px;
+    border-radius: 10px 10px 0 0;
+    -webkit-border-radius: 10px 10px 0 0;
+    -moz-border-radius: 10px 10px 0 0;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+    font: normal 30px 'Bitter', serif;
+    -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    border: 1px solid #257C9E;
+}
+
+.Entry .btn { /* Button style */
+    background: #2A88AD;
+    padding: 3px 20px 3px 20px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    position: relative;
+    border: 1px solid #257C9E;
+    font-size: 15px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: normal;
+    font-family: 'Segoe UI', Helvetica, 'Droid Sans', Tahoma, Geneva, sans-serif;
+}
+
+    .Entry .btn:hover {
+        background: #2A6881;
+        -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+        -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+        box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+    }
+
+.hidden-column {
+    display: none;
+}

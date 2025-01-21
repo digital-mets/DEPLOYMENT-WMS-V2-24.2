@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Dashboard" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="localhost_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="192.168.180.9" />
+          <Parameter Name="database" Value="METS-ACTIVITY" />
+          <Parameter Name="useIntegratedSecurity" Value="False" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="sa" />
+          <Parameter Name="password" Value="IT4321$#@!" />
+        </Parameters>
+      </Connection>
+      <Query Type="CustomSqlQuery" Name="CustomSqlQuery">
+        <Sql>select top 100 B.*, A.PlantCode, A.WarehouseCode, A.MaxBaseQty, Latitude, Longitude
+  from MasterFile.Location A
+  left join WMS.Countsheetsetup B ON
+   A.LocationCode = B.Location and ISNULL
+       (SubmittedDate, '') ! = ''
+  left join Masterfile.Warehouse C
+  ON A.WarehouseCode = C.WarehouseCode</Sql>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="CustomSqlQuery">
+            <Field Name="TransType" Type="String" />
+            <Field Name="TransDoc" Type="String" />
+            <Field Name="TransLine" Type="String" />
+            <Field Name="LineNumber" Type="String" />
+            <Field Name="ItemCode" Type="String" />
+            <Field Name="ColorCode" Type="String" />
+            <Field Name="ClassCode" Type="String" />
+            <Field Name="SizeCode" Type="String" />
+            <Field Name="PalletID" Type="String" />
+            <Field Name="Location" Type="String" />
+            <Field Name="ExpirationDate" Type="DateTime" />
+            <Field Name="MfgDate" Type="DateTime" />
+            <Field Name="RRdate" Type="DateTime" />
+            <Field Name="OriginalBulkQty" Type="Decimal" />
+            <Field Name="OriginalBaseQty" Type="Decimal" />
+            <Field Name="OriginalLocation" Type="String" />
+            <Field Name="RemainingBulkQty" Type="Decimal" />
+            <Field Name="RemainingBaseQty" Type="Decimal" />
+            <Field Name="PickedBulkQty" Type="Decimal" />
+            <Field Name="PickedBaseQty" Type="Decimal" />
+            <Field Name="ReservedBulkQty" Type="Decimal" />
+            <Field Name="ReservedBaseQty" Type="Decimal" />
+            <Field Name="OriginalCost" Type="Decimal" />
+            <Field Name="UnitCost" Type="Decimal" />
+            <Field Name="Field1" Type="String" />
+            <Field Name="Field2" Type="String" />
+            <Field Name="Field3" Type="String" />
+            <Field Name="Field4" Type="String" />
+            <Field Name="Field5" Type="String" />
+            <Field Name="Field6" Type="String" />
+            <Field Name="Field7" Type="String" />
+            <Field Name="Field8" Type="String" />
+            <Field Name="Field9" Type="String" />
+            <Field Name="AddedBy" Type="String" />
+            <Field Name="AddedDate" Type="DateTime" />
+            <Field Name="LastEditedBy" Type="String" />
+            <Field Name="LastEditedDate" Type="DateTime" />
+            <Field Name="BarcodeNo" Type="String" />
+            <Field Name="SubmittedDate" Type="DateTime" />
+            <Field Name="PutawayDate" Type="DateTime" />
+            <Field Name="PlantCode" Type="String" />
+            <Field Name="WarehouseCode" Type="String" />
+            <Field Name="MaxBaseQty" Type="Decimal" />
+            <Field Name="Latitude" Type="Decimal" />
+            <Field Name="Longitude" Type="Decimal" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Pie ComponentName="pieDashboardItem1" Name="Items" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="ItemCode" TopNEnabled="true" TopNShowOthers="true" TopNMeasure="DataItem1" UniqueName="DataItem0" />
+        <Measure DataMember="RemainingBaseQty" Name="Top 5 Items" UniqueName="DataItem1" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem0" />
+      </Arguments>
+      <Values>
+        <Value UniqueName="DataItem1" />
+      </Values>
+    </Pie>
+    <Chart ComponentName="chartDashboardItem1" Name="Plant Capacity" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery">
+      <DataItems>
+        <Dimension DataMember="PlantCode" UniqueName="DataItem0" />
+        <Measure DataMember="RemainingBaseQty" UniqueName="DataItem1" />
+        <Measure DataMember="MaxBaseQty" UniqueName="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem0" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple Name="In Used" SeriesType="FullStackedBar">
+              <Value UniqueName="DataItem1" />
+            </Simple>
+            <Simple Name="Available" SeriesType="FullStackedBar">
+              <Value UniqueName="DataItem2" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <GeoPointMap ComponentName="geoPointMapDashboardItem1" Name="Map 1" DataSource="dashboardSqlDataSource1" DataMember="CustomSqlQuery" ShapefileArea="Asia" LockNavigation="true" ShapeTitleAttributeName="NAME_LONG" EnableClustering="true">
+      <DataItems>
+        <Measure DataMember="RemainingBaseQty" UniqueName="DataItem1">
+          <NumericFormat FormatType="Number" />
+        </Measure>
+        <Dimension DataMember="Latitude" UniqueName="DataItem0" />
+        <Dimension DataMember="Longitude" UniqueName="DataItem2" />
+      </DataItems>
+      <ViewArea TopLatitude="19.528930298693176" BottomLatitude="3.7174625376728203" LeftLongitude="110.52853321025469" RightLongitude="132.99340062489583" CenterPointLatitude="11.736305341497666" CenterPointLongitude="121.76096691757527" CreateViewerPaddings="false" />
+      <MapLegend />
+      <WeightedLegend />
+      <Latitude UniqueName="DataItem0" />
+      <Longitude UniqueName="DataItem2" />
+      <Value UniqueName="DataItem1" />
+    </GeoPointMap>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical" Weight="38.817998656816656">
+        <LayoutItem DashboardItem="pieDashboardItem1" Weight="43.202033036848796" />
+        <LayoutItem DashboardItem="geoPointMapDashboardItem1" Weight="56.797966963151204" />
+      </LayoutGroup>
+      <LayoutItem DashboardItem="chartDashboardItem1" Weight="61.182001343183344" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="OCN Status Monitoring" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="192.168.180.9_GWL-MGD_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="192.168.180.9" />
+          <Parameter Name="database" Value="GWL-MGD" />
+          <Parameter Name="useIntegratedSecurity" Value="False" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="sa" />
+          <Parameter Name="password" Value="IT4321$#@!" />
+        </Parameters>
+      </Connection>
+      <Query Type="StoredProcQuery" Name="gd_dashboard_OCNstatus">
+        <Parameter Name="@DateFrom" Type="DevExpress.DataAccess.Expression">(System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.Dfrom])</Parameter>
+        <Parameter Name="@DateTo" Type="DevExpress.DataAccess.Expression">(System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.Dto])</Parameter>
+        <Parameter Name="@Client" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.Client])</Parameter>
+        <Parameter Name="@BranchWH" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.WH])</Parameter>
+        <ProcName>gd_dashboard_OCNstatus</ProcName>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="gd_dashboard_OCNstatus">
+            <Field Name="WarehouseCode" Type="String" />
+            <Field Name="StorerKey" Type="String" />
+            <Field Name="CStatus" Type="String" />
+            <Field Name="Qty" Type="Decimal" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+      <CalculatedFields>
+        <CalculatedField Name="From" Expression="[Parameters.Dfrom]" DataType="DateTime" DataMember="gd_dashboard_OCNstatus" />
+        <CalculatedField Name="To" Expression="[Parameters.Dto]" DataType="DateTime" DataMember="gd_dashboard_OCNstatus" />
+        <CalculatedField Name="WH" Expression="[Parameters.WH]" DataMember="gd_dashboard_OCNstatus" />
+      </CalculatedFields>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="Dfrom" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2000-01-01T00:00:00" />
+    <Parameter Name="Dto" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2000-01-01T00:00:00" />
+    <Parameter Name="Client" Value="ALL" />
+    <Parameter Name="WH" Value="ALL" />
+  </Parameters>
+  <Items>
+    <Chart ComponentName="chartDashboardItem1" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_OCNstatus">
+      <DataItems>
+        <Measure DataMember="Qty" UniqueName="DataItem0">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Dimension DataMember="CStatus" UniqueName="DataItem1" />
+        <Dimension DataMember="StorerKey" UniqueName="DataItem2" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension UniqueName="DataItem1" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument UniqueName="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value UniqueName="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Pivot ComponentName="pivotDashboardItem1" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_OCNstatus">
+      <DataItems>
+        <Dimension DataMember="StorerKey" UniqueName="DataItem0" />
+        <Dimension DataMember="CStatus" UniqueName="DataItem1" />
+        <Measure DataMember="Qty" UniqueName="DataItem2">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+      </DataItems>
+      <Columns>
+        <Column UniqueName="DataItem1" />
+      </Columns>
+      <Rows>
+        <Row UniqueName="DataItem0" />
+      </Rows>
+      <Values>
+        <Value UniqueName="DataItem2" />
+      </Values>
+    </Pivot>
+    <Grid ComponentName="gridDashboardItem1" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_OCNstatus">
+      <DataItems>
+        <Dimension DataMember="From" DateTimeGroupInterval="None" UniqueName="DataItem0" />
+        <Dimension DataMember="To" DateTimeGroupInterval="None" UniqueName="DataItem1" />
+        <Dimension DataMember="WH" UniqueName="DataItem2" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem2" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical" Weight="49.95475113122172">
+        <LayoutItem DashboardItem="pivotDashboardItem1" Weight="66.943521594684384" />
+        <LayoutItem DashboardItem="gridDashboardItem1" Weight="33.056478405315616" />
+      </LayoutGroup>
+      <LayoutItem DashboardItem="chartDashboardItem1" Weight="50.04524886877828" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

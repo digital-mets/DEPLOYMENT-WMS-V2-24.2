@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+
+  <DataConnections>
+    <DataConnection Name="localhost_METS-EINSCOConnection" ProviderKey="MSSqlServer">
+      <Parameters>
+        <Parameter Name="server" Value="localhost" />
+        <Parameter Name="database" Value="METS-RETAIL" />
+        <Parameter Name="useIntegratedSecurity" Value="False" />
+        <Parameter Name="read only" Value="1" />
+        <Parameter Name="generateConnectionHelper" Value="false" />
+      </Parameters>
+    </DataConnection>
+  </DataConnections>
+  <DataSources>
+    <DataSource ComponentName="dataSource1" Name="DataSource1">
+      <DataProvider DataConnection="localhost_METS-EINSCOConnection" Sql="SELECT E.Description as ProductCat,F.Description as ProductSubCat,SUM(SalesQty) Sales,Docdate,&#xD;&#xA; SUM(ISNULL(ForecastQty,0)) as ForeCastQty&#xD;&#xA;FROM Retail.RData A&#xD;&#xA;INNER JOIN MasterFile.Item D&#xD;&#xA;ON A.ItemCode = D.ItemCode&#xD;&#xA;LEFT JOIN Planning.SalesForecast B&#xD;&#xA;ON D.ItemCategoryCode= B.ItemCategoryCode&#xD;&#xA;and Month(DocDate) = b.Month&#xD;&#xA;and Year(DocDate) = b.Year&#xD;&#xA;and B.ProductCategoryCode = D.ProductCategoryCode&#xD;&#xA;and B.ProductSubCategoryCode = D.ProductCategoryCode&#xD;&#xA;LEFT JOIN MasterFile.ProductCategory E&#xD;&#xA;ON D.ProductCategoryCode = E.ProductCategoryCode&#xD;&#xA;LEFT JOIN MasterFile.ProductCategorySub F&#xD;&#xA;ON D.ProductSubCatCode = F.ProductSubCatCode&#xD;&#xA;group by D.ItemCategoryCode,DocDate,D.ProductCategoryCode,E.Description,F.Description&#xD;&#xA;order by Sales Desc&#xD;&#xA;&#xD;&#xA;" />
+    </DataSource>
+  </DataSources>
+  <Items>
+    <Pie ComponentName="pieDashboardItem1" Name="Top Sales by Product Category" DataSource="dataSource1" IsMasterFilterCrossDataSource="true" ContentArrangementMode="FixedColumnCount">
+      <InteractivityOptions MasterFilterMode="Multiple" IsDrillDownEnabled="true" />
+      <DataItems>
+        <Measure DataMember="Sales" Name="Sales (Sum)" UniqueName="DataItem1" />
+        <Dimension DataMember="ProductCat" UniqueName="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem2" />
+      </Arguments>
+      <Values>
+        <Value UniqueName="DataItem1" />
+      </Values>
+    </Pie>
+    <RangeFilter ComponentName="rangeFilterDashboardItem1" Name="Range Filter 1" DataSource="dataSource1">
+      <DataItems>
+        <Dimension DataMember="Docdate" DateTimeGroupInterval="MonthYear" UniqueName="DataItem1" />
+        <Measure DataMember="Sales" UniqueName="DataItem0" />
+        <Measure DataMember="ForeCastQty" SummaryType="Max" UniqueName="DataItem2" />
+      </DataItems>
+      <Argument UniqueName="DataItem1" />
+      <Series>
+        <Simple SeriesType="Line">
+          <Value UniqueName="DataItem0" />
+        </Simple>
+        <Simple SeriesType="Line">
+          <Value UniqueName="DataItem2" />
+        </Simple>
+      </Series>
+    </RangeFilter>
+    <Chart ComponentName="chartDashboardItem1" Name="Sales vs Forecast" DataSource="dataSource1">
+      <DataItems>
+        <Dimension DataMember="Docdate" DateTimeGroupInterval="MonthYear" UniqueName="DataItem4" />
+        <Measure DataMember="Sales" UniqueName="DataItem2" />
+        <Measure DataMember="ForeCastQty" UniqueName="DataItem0" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem4" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple Name="ForeCastQty (Sum)" SeriesType="StackedSplineArea">
+              <Value UniqueName="DataItem0" />
+            </Simple>
+            <Simple Name="Sales (Sum)" SeriesType="StackedSplineArea">
+              <Value UniqueName="DataItem2" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Pie ComponentName="pieDashboardItem2" Name="Top Sales by Product Sub Category" DataSource="dataSource1">
+      <DataItems>
+        <Measure DataMember="Sales" Name="Sales (Sum)" UniqueName="DataItem0" />
+        <Dimension DataMember="ProductSubCat" UniqueName="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem2" />
+      </Arguments>
+      <Values>
+        <Value UniqueName="DataItem0" />
+      </Values>
+    </Pie>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutGroup Weight="86.565272496831426">
+        <LayoutItem DashboardItem="pieDashboardItem1" Weight="47.884486232370719" />
+        <LayoutGroup Weight="52.115513767629281" Orientation="Vertical">
+          <LayoutItem DashboardItem="pieDashboardItem2" Weight="51.098096632503662" />
+          <LayoutItem DashboardItem="chartDashboardItem1" Weight="48.901903367496338" />
+        </LayoutGroup>
+      </LayoutGroup>
+      <LayoutItem DashboardItem="rangeFilterDashboardItem1" Weight="13.434727503168569" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

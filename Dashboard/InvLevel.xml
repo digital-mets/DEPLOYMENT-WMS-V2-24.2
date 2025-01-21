@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Current Inventory Level" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="192.168.180.9_GWL-MGD_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="192.168.180.9" />
+          <Parameter Name="database" Value="GWL-MGD" />
+          <Parameter Name="useIntegratedSecurity" Value="False" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="sa" />
+          <Parameter Name="password" Value="IT4321$#@!" />
+        </Parameters>
+      </Connection>
+      <Query Type="StoredProcQuery" Name="gd_dashboard_Inv">
+        <Parameter Name="@BranchWH" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.WH])</Parameter>
+        <Parameter Name="@Client" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.Client])</Parameter>
+        <ProcName>gd_dashboard_Inv</ProcName>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="gd_dashboard_Inv">
+            <Field Name="WarehouseCode" Type="String" />
+            <Field Name="Customer" Type="String" />
+            <Field Name="Onhand" Type="Decimal" />
+            <Field Name="Allocated" Type="Decimal" />
+            <Field Name="Available" Type="Decimal" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+      <CalculatedFields>
+        <CalculatedField Name="WH" Expression="[Parameters.WH]" DataMember="gd_dashboard_Inv" />
+        <CalculatedField Name="Client" Expression="[Parameters.Client]" DataMember="gd_dashboard_Inv" />
+      </CalculatedFields>
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="WH" Value="ALL" />
+    <Parameter Name="Client" Value="ALL" />
+  </Parameters>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_Inv">
+      <DataItems>
+        <Dimension DataMember="WH" UniqueName="DataItem0" />
+        <Dimension DataMember="Customer" UniqueName="DataItem1" />
+        <Measure DataMember="Onhand" UniqueName="DataItem2">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Measure DataMember="Allocated" UniqueName="DataItem3">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Measure DataMember="Available" UniqueName="DataItem4">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem1" />
+        </GridDimensionColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem2" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem3" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem4" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <Chart ComponentName="chartDashboardItem1" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_Inv">
+      <DataItems>
+        <Dimension DataMember="Customer" UniqueName="DataItem0" />
+        <Measure DataMember="Onhand" UniqueName="DataItem2" />
+        <Measure DataMember="Allocated" UniqueName="DataItem1" />
+        <Measure DataMember="Available" UniqueName="DataItem3" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem0" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple>
+              <Value UniqueName="DataItem2" />
+            </Simple>
+            <Simple>
+              <Value UniqueName="DataItem1" />
+            </Simple>
+            <Simple>
+              <Value UniqueName="DataItem3" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Grid ComponentName="gridDashboardItem2" Name="" DataSource="dashboardSqlDataSource1" DataMember="gd_dashboard_Inv">
+      <DataItems>
+        <Dimension DataMember="Client" UniqueName="DataItem0" />
+        <Dimension DataMember="WarehouseCode" UniqueName="DataItem1" />
+        <Measure DataMember="Onhand" UniqueName="DataItem2">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Measure DataMember="Allocated" UniqueName="DataItem3">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+        <Measure DataMember="Available" UniqueName="DataItem4">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" IncludeGroupSeparator="true" />
+        </Measure>
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="Customer">
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem1" />
+        </GridDimensionColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem2" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem3" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem4" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup>
+      <LayoutGroup Orientation="Vertical" Weight="46.9683257918552">
+        <LayoutItem DashboardItem="gridDashboardItem1" Weight="53.654485049833887" />
+        <LayoutItem DashboardItem="gridDashboardItem2" Weight="46.345514950166113" />
+      </LayoutGroup>
+      <LayoutItem DashboardItem="chartDashboardItem1" Weight="53.0316742081448" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

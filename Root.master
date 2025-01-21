@@ -1,0 +1,605 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Root.master.cs" Inherits="GWL.RootMaster" %>
+
+<%-- DXCOMMENT: Page Root.master is a master page that contains the root layout (it includes Header, Cental Area, and Footer) --%>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Gears We Love</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="Content/Site.css" />
+    <style type="text/css">
+        .headerMenu {
+            height: 46px;
+            margin-top: 0px;
+            width: 290px;
+        }
+    </style>
+    <style type="text/css">
+    div.inline { float:left; }
+    .clearBoth { clear:both; }
+    </style>
+<script>
+
+
+
+    function OnMenuItemClick(s, e) {
+        console.log(e.item.name)
+        if (e.item.name == "changepw") {
+            changepwpop.Show();
+        }
+
+        if (e.item.name == "changewd") {
+            changewd.Show();
+        }
+
+        if (e.item.name == "changewh") {
+            changewh.Show();
+        }
+
+        if (e.item.name == "changeprnt") {
+            changeprnt.Show();
+        }
+
+        if (e.item.name == "version") {
+            version.Show();
+        }
+
+        if (e.item.name == "logout") {
+
+            // 2020-08-03   TL  Avoid hardcoded IP
+            //window.location.href = "http://192.168.180.7/Login/Login.aspx?mode=logout";
+            window.location.href = "http://gwl.mets.ph/Login/Login.aspx?mode=logout";
+            // 2020-08-03   TL  (End)
+
+        }
+        if (e.item.name == "message") {
+            messagepop.Show();
+        }
+
+        if (e.item.name == "switch") {
+            // 2020-08-03   TL  Avoid hardcoded IP
+            //window.location.href = "http://192.168.180.7";
+            window.location.href = "http://gwl.mets.ph";
+            // 2020-08-03   TL  (End)
+        }
+    }
+    var passryt = true;
+    var tpass1;
+    var tpass2;
+    var tpass3;
+    function Endcallback(s, e) {
+        if (s.cp_confirm != null) {
+            if (s.cp_confirm) {
+                delete (s.cp_confirm);
+                passryt = true;
+                checkryt(passryt);
+                pass1.SetText(tpass1);
+            }
+            else if (!s.cp_confirm) {
+                delete (s.cp_confirm);
+                passryt = false;
+                checkryt(passryt);
+            }
+        }
+        if (s.cp_confirm2 != null) {
+            if (s.cp_confirm2) {
+                delete (s.cp_confirm2);
+                subbtn.SetEnabled(true);
+                checkryt(passryt);
+                pass1.SetText(tpass1);
+                pass2.SetText(tpass2);
+                pass3.SetText(tpass3);
+            }
+            else if (!s.cp_confirm2) {
+                delete (s.cp_confirm2);
+                subbtn.SetEnabled(false);
+                checkryt(passryt);
+                pass1.SetText(tpass1);
+                pass2.SetText(tpass2);
+                pass3.SetText(tpass3);
+            }
+        }
+        if (s.cp_success) {
+            delete (s.cp_success);
+            alert('Password successfully changed!');
+            changepwpop.Hide();
+            pass1.SetText(null);
+            pass2.SetText(null);
+            pass3.SetText(null);
+        }
+    }
+
+    function checkryt(check) {
+        if (check == true) {
+            pass2.SetEnabled(true);
+            pass3.SetEnabled(true);
+        }
+        else {
+            pass2.SetEnabled(false);
+            pass3.SetEnabled(false);
+        }
+    }
+
+    function OnConfirm(s, e) {//function upon saving entry
+        console.log(e.requestTriggerID)
+        if (e.requestTriggerID === "ctl00_ctl00_cp" || e.requestTriggerID === undefined)//disables confirmation message upon saving.
+            e.cancel = true;
+    }
+</script>
+
+    </head>
+<body runat="server" id="Body">
+    <form id="form1" runat="server">
+        <dx:ASPxCallbackPanel ID="cp" runat="server" ClientInstanceName="cp" OnCallback="cp_Callback">
+            <ClientSideEvents EndCallback="Endcallback" />
+            <PanelCollection>
+                <dx:PanelContent>
+            <dx:ASPxPopupControl ID="Changepw" runat="server" ClientInstanceName="changepwpop"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="300px" Height="250px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter"
+            HeaderText="Change Password" AllowDragging="True" PopupAnimationType="None" EnableViewState="False">
+                                    <ContentCollection>
+                                        <dx:PopupControlContentControl runat="server">
+                                            <dx:ASPxPanel ID="Panel1" runat="server">
+                                                <PanelCollection>
+                                                    <dx:PanelContent runat="server">
+                                                        <table>
+                                                            <tr>
+                                                            <td/><dx:ASPxLabel runat="server" Text="Enter Password: "></dx:ASPxLabel>
+                                                            <td/><dx:ASPxTextbox ID="txtPass" Password="true"
+                                                                 ClientInstanceName="pass1" runat="server" AutoPostBack="false" EnableViewState="false">
+                                                                   <ClientSideEvents ValueChanged="function(s,e){
+                                                                       cp.PerformCallback('checkpw');
+                                                                       tpass1 = pass1.GetText();
+                                                                       pass1.SetText(null);
+                                                                       pass2.SetText(null);
+                                                                       }" />
+                                                                 </dx:ASPxTextbox>
+                                                            </tr>
+                                                            <tr>
+                                                            <td>
+                                                            &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxLabel ID="confirmpass" runat="server" Text=""
+                                                                   ></dx:ASPxLabel>
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td/><dx:ASPxLabel runat="server" Text="Enter New Password: "
+                                                                   ></dx:ASPxLabel>
+                                                            <td/><dx:ASPxTextbox Password="true" ID="txtPass2" ClientInstanceName="pass2" ClientEnabled="false" runat="server"  EnableViewState="false">
+                                                                     <ClientSideEvents ValueChanged="function(s,e){
+                                                                        tpass2 = pass2.GetText();
+                                                                       }" />      
+                                                            </dx:ASPxTextbox>
+                                                            </tr>
+                                                            <tr>
+                                                            <td>
+                                                            &nbsp;
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td/><dx:ASPxLabel runat="server" Text="Re-enter Password: "
+                                                                 ></dx:ASPxLabel>
+                                                            <td/><dx:ASPxTextbox Password="true" ID="txtPass3" ClientInstanceName="pass3" ClientEnabled="false" runat="server"  EnableViewState="false">
+                                                                    <ClientSideEvents ValueChanged="function(s,e){
+                                                                       cp.PerformCallback('confirmpw');
+                                                                       tpass3 = pass3.GetText();
+                                                                       }" /> 
+                                                                </dx:ASPxTextbox>
+                                                            </tr>
+                                                            <tr>
+                                                            <td>
+                                                            &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxLabel ID="confirmpass2" runat="server" Text=""
+                                                                   ></dx:ASPxLabel>
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td/>
+                                                            <td/><dx:ASPxButton ID="submit" runat="server" Text="Submit" ClientEnabled="false"
+                                                                ClientInstanceName="subbtn" UseSubmitBehavior="false" AutoPostBack="False">
+                                                                <ClientSideEvents Click="function(s, e) {
+                                                                  cp.PerformCallback('submit');
+                                                                }" />
+                                                            </dx:ASPxButton>
+                                                            </tr>
+                                                            </table>
+                                                    </dx:PanelContent>
+                                                 </PanelCollection>
+                                                </dx:ASPxPanel>
+                                            </dx:PopupControlContentControl>
+                                    </ContentCollection>
+        </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="Changewd" runat="server" ClientInstanceName="changewd"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="300px" Height="142px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter"
+            HeaderText="Change Work Date" AllowDragging="True" PopupAnimationType="None" EnableViewState="False">
+                                    <ContentCollection>
+                                        <dx:PopupControlContentControl runat="server">
+                                            <dx:ASPxPanel ID="ASPxPanel1" runat="server">
+                                                <PanelCollection>
+                                                    <dx:PanelContent runat="server">
+                                                        <table>
+                                                            <tr>
+                                                            <td/><dx:ASPxLabel runat="server" Text="Enter Work Date: "></dx:ASPxLabel>
+                                                            <td/>
+                                                                <dx:ASPxDateEdit ID="deWDDDate" runat="server" Width="170px">
+                                                                </dx:ASPxDateEdit>
+                                                            </tr>
+                                                            <tr>
+                                                            <td>
+                                                            &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                &nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td/>
+                                                            <td/><dx:ASPxButton ID="ASPxButton1" runat="server" Text="Submit" ClientEnabled="true"
+                                                                ClientInstanceName="subwbtn" UseSubmitBehavior="false" AutoPostBack="False" >
+                                                                <ClientSideEvents Click="function(s, e) {
+                                                                  cp.PerformCallback('submitwd');
+                                                                }" />
+                                                            </dx:ASPxButton>
+                                                            </tr>
+                                                            </table>
+                                                    </dx:PanelContent>
+                                                 </PanelCollection>
+                                                </dx:ASPxPanel>
+                                            </dx:PopupControlContentControl>
+                                    </ContentCollection>
+        </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="Changeprnt" runat="server" ClientInstanceName="changeprnt"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="300px" Height="100px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter"
+            HeaderText="Change Printer" AllowDragging="True" PopupAnimationType="None" EnableViewState="False">
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server">
+                    <dx:ASPxPanel ID="Panel4" runat="server">
+                        <PanelCollection>
+                            <dx:PanelContent runat="server">
+                                <table>
+                                    <tr>
+                                    <td/><dx:ASPxLabel runat="server" Text="Set printer: "/>
+                                    <td/>
+                                        <dx:ASPxGridLookup ID="glPrinter" runat="server" DataSourceID="sdsPrinter" KeyFieldName="Printer" TextFormatString="{0}" Width="170px">
+                                            <ClientSideEvents ValueChanged="function(s, e) { cp.PerformCallback('prntbtn'); }"/>
+                                            <GridViewProperties>
+                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                <Settings ShowFilterRow="True" />
+                                            </GridViewProperties>
+                                        </dx:ASPxGridLookup>
+                                    </tr>
+                                    <%--<tr>
+                                    <td/>
+                                    <td/><dx:ASPxButton ID="ASPxButton3" runat="server" Text="Submit" ClientEnabled="true"
+                                        ClientInstanceName="prntbtn" UseSubmitBehavior="false" AutoPostBack="False" >
+                                        <ClientSideEvents Click="function(s, e) { cp.PerformCallback('prntbtn'); }" />
+                                    </dx:ASPxButton>
+                                    </tr>--%>
+                                    </table>
+                            </dx:PanelContent>
+                            </PanelCollection>
+                        </dx:ASPxPanel>
+                    </dx:PopupControlContentControl>
+            </ContentCollection>
+        </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="changewh" runat="server" ClientInstanceName="changewh"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="300px" Height="142px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter"
+            HeaderText="Change Default Warehouse" AllowDragging="True" PopupAnimationType="None" EnableViewState="False">
+                                    <ContentCollection>
+                                        <dx:PopupControlContentControl runat="server">
+                                            <dx:ASPxPanel ID="ASPxPanel3" runat="server">
+                                                <PanelCollection>
+                                                    <dx:PanelContent runat="server">
+                                                        <table>
+                                                            <tr>
+                                                            <td/><dx:ASPxLabel runat="server" Text="Enter WarehouseCode: "></dx:ASPxLabel>
+                                                            <td/>
+                                                            <dx:ASPxGridLookup ID="glWarehouseCode" runat="server" DataSourceID="sdsWarehouse" KeyFieldName="WarehouseCode"  TextFormatString="{0}" Width="170px">
+                                                            <GridViewProperties>
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                <Settings ShowFilterRow="True" />
+                                                            </GridViewProperties>
+                                                  
+                                                        </dx:ASPxGridLookup>
+                                                            </tr>
+                                                            <tr>
+                                                            <td>
+                                                            &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                &nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td/>
+                                                            <td/><dx:ASPxButton ID="ASPxButton2" runat="server" Text="Submit" ClientEnabled="true"
+                                                                ClientInstanceName="subwbtn" UseSubmitBehavior="false" AutoPostBack="False" >
+                                                                <ClientSideEvents Click="function(s, e) {
+                                                                  cp.PerformCallback('submitwh');
+                                                                }" />
+                                                            </dx:ASPxButton>
+                                                            </tr>
+                                                            </table>
+                                                    </dx:PanelContent>
+                                                 </PanelCollection>
+                                                </dx:ASPxPanel>
+                                            </dx:PopupControlContentControl>
+                                    </ContentCollection>
+        </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="version" runat="server" ClientInstanceName="version"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="300px" Height="142px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter"
+            HeaderText="GEARS We Love" AllowDragging="True" PopupAnimationType="None" EnableViewState="False">
+                                    <ContentCollection>
+                                        <dx:PopupControlContentControl runat="server">
+                                            <dx:ASPxPanel ID="ASPxPanel2" runat="server">
+                                                <PanelCollection>
+                                                    <dx:PanelContent runat="server">
+                                                        <table>
+                                                           <tr>
+                                                            <td/><dx:ASPxLabel runat="server" Text="Software: Gears We Love 2016"></dx:ASPxLabel>
+                                                            <td/>
+                                                            </tr>
+                                                            <tr>
+                                                            <td/><dx:ASPxLabel ID="lblVersion" runat="server" Text="Version Build: 1.0.000000"></dx:ASPxLabel>
+                                                            <td/>
+                                                               
+                                                            </tr>
+                                                            <tr>
+                                                            <td>
+                                                            &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                &nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                            <td/>
+                                                                <dx:ASPxLabel runat="server" Text="Mets Innovative Solutions Inc"></dx:ASPxLabel>
+                                                            <td/>
+                                                            </tr>
+                                                            </table>
+                                                    </dx:PanelContent>
+                                                 </PanelCollection>
+                                                </dx:ASPxPanel>
+                                            </dx:PopupControlContentControl>
+                                    </ContentCollection>
+        </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="messagepop" runat="server" ClientInstanceName="messagepop"
+            CloseAction="CloseButton" CloseOnEscape="true" Modal="True" Width="300px" Height="400px"
+            PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter"
+            HeaderText="Global Message for Announcement" AllowDragging="True" PopupAnimationType="None" EnableViewState="False">
+                                    <ContentCollection>
+                                        <dx:PopupControlContentControl runat="server">
+                                            <dx:ASPxPanel ID="ASPxPanel4" runat="server">
+                                                <PanelCollection>
+                                                    <dx:PanelContent runat="server">
+                                                        <dx:ASPxGridView ID="gvMessage" runat="server" AutoGenerateColumns="False" ClientInstanceName="gvMessage" OnInitNewRow="gvMessage_InitNewRow"
+                                                                    Width="747px" OnCommandButtonInitialize="gv_CommandButtonInitialize"
+                                                                    KeyFieldName="RecordID">
+                                                                    <ClientSideEvents BatchEditConfirmShowing="OnConfirm" />
+                                                                    <SettingsPager Mode="ShowAllRecords"/> 
+                                                                    <SettingsBehavior AllowSort ="false" />
+                                                                    <Settings ColumnMinWidth="120" HorizontalScrollBarMode="Visible" VerticalScrollableHeight="380" VerticalScrollBarMode="Auto" />
+                                                                    <SettingsCommandButton>
+                                                                    <NewButton>
+                                                                        <Image IconID="actions_addfile_16x16"></Image>
+                                                                    </NewButton>
+                                                                    </SettingsCommandButton>        
+                                                                    <Columns>
+                                                                        <dx:GridViewCommandColumn ButtonType="Image" ShowNewButtonInHeader="true" ShowInCustomizationForm="True" VisibleIndex="0" Width="30px" ShowDeleteButton="false">
+                                                                            <%--<CustomButtons>
+                                                                                <dx:GridViewCommandColumnCustomButton ID="RunningINVInfo">
+                                                                                    <Image IconID="support_info_16x16">
+                                                                                    </Image>
+                                                                                </dx:GridViewCommandColumnCustomButton>
+                                                                            </CustomButtons>--%>
+                                                                        </dx:GridViewCommandColumn>
+                                                                        <dx:GridViewDataTextColumn FieldName="RecordID" ShowInCustomizationForm="True" VisibleIndex="1" ReadOnly="true" UnboundType="String" width="60px">
+                                                                        </dx:GridViewDataTextColumn>
+                                                                        <dx:GridViewDataTextColumn FieldName="Date" ShowInCustomizationForm="True" VisibleIndex="1" ReadOnly="true" UnboundType="String">
+                                                                        </dx:GridViewDataTextColumn>
+                                                                        <dx:GridViewDataTextColumn FieldName="Header" ShowInCustomizationForm="True" UnboundType="String" VisibleIndex="2" Width="70px">
+                                                                        </dx:GridViewDataTextColumn>
+                                                                        <dx:GridViewDataTextColumn FieldName="HeaderFont" ShowInCustomizationForm="True" VisibleIndex="3" UnboundType="String">
+                                                                        </dx:GridViewDataTextColumn>
+                                                                        <dx:GridViewDataTextColumn FieldName="Message" ShowInCustomizationForm="True" VisibleIndex="4" Width="300px">
+                                                                        </dx:GridViewDataTextColumn>
+                                                                        <dx:GridViewDataComboBoxColumn FieldName="Status" ShowInCustomizationForm="True" UnboundType="String" VisibleIndex="5">
+                                                                            <PropertiesComboBox>
+                                                                                <Items>
+                                                                                    <dx:ListEditItem Value="Show" />
+                                                                                    <dx:ListEditItem Value="Hide" />
+                                                                                </Items>
+                                                                            </PropertiesComboBox>
+                                                                        </dx:GridViewDataComboBoxColumn>
+                                                                    </Columns>
+                                                                  <SettingsEditing Mode="Batch" />
+                                                                </dx:ASPxGridView>
+                                                                <dx:ASPxButton ID="ASPxButton3" runat="server" Text="Submit" ClientEnabled="true"
+                                                                        ClientInstanceName="subwbtn" UseSubmitBehavior="false" AutoPostBack="False" >
+                                                                        <ClientSideEvents Click="function(s, e) {
+                                                                          cp.PerformCallback('gvMes');
+                                                                        }" />
+                                                                    </dx:ASPxButton>
+                                                    </dx:PanelContent>
+                                                 </PanelCollection>
+                                                </dx:ASPxPanel>
+                                            </dx:PopupControlContentControl>
+                                    </ContentCollection>
+        </dx:ASPxPopupControl>
+                </dx:PanelContent>
+            </PanelCollection>
+            
+        </dx:ASPxCallbackPanel>
+        
+    <dx:ASPxSplitter ID="ASPxSplitter1" runat="server" AllowResize="False" Orientation="Vertical"
+        FullscreenMode="True" SeparatorVisible="False" Height="100%" Width="100%">
+        <Styles>
+            <Pane>
+                <Paddings Padding="0px" />
+                <Border BorderWidth="0px" />
+            </Pane>
+        </Styles>
+        <Panes>
+            <dx:SplitterPane Name="Content" MinSize="375px">
+                <PaneStyle CssClass="mainContentPane"></PaneStyle>
+                <ContentCollection>
+                    <dx:SplitterContentControl ID="SplitterContentControl3" runat="server">
+                        <asp:ContentPlaceHolder ID="Content" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </dx:SplitterContentControl>
+                </ContentCollection>
+                <PaneStyle BackColor="Gray">
+                    <BorderBottom BorderWidth="1px" />
+                </PaneStyle>
+            </dx:SplitterPane>
+
+        </Panes>
+    </dx:ASPxSplitter>
+
+        <dx:ASPxPanel ID="HeaderPane" runat="server" FixedPosition="WindowTop" ClientInstanceName="headerPane" CssClass="headerPane" Collapsible="True" Height="40px" Width="749px">
+            <SettingsAdaptivity CollapseAtWindowInnerWidth="500" />
+            <Styles>
+                <Panel CssClass="panel"></Panel>
+                <ExpandBar CssClass="bar"></ExpandBar>
+            </Styles>
+            <PanelCollection>
+                <dx:PanelContent runat="server" SupportsDisabledAttribute="True">
+                        <div class="headerTop" style="margin-top:-15px;"> <%-- Top Menu --%>
+                            <div class="templateTitle">
+                                <asp:Image ID="Image1" runat="server" Height="30px" ImageUrl="~/images/poweredbyGEARS.png" Width="155px" />
+                            </div>
+                             <div class="templateTitle"><dx:ASPxLabel runat="server" Text="Garmentscores, Inc. | Friday, January 22, 2016 | Erastian George Sy"
+                                  Font-Bold="true" Font-Size="Small" ID="lblName" Height="30px" Width="550px"  
+                                            style="margin-left: 10px;margin-top: 13px;"></dx:ASPxLabel>
+                            </div>
+                            <div class="loginControl">
+                                <dx:ASPxMenu EnableAdaptivity="true" ID="ASPxMenu1" runat="server" ShowasToolbar="true"  ItemAutoWidth="False" 
+                                    ShowPopOutImages="True" Height="34px" style="margin-left: 140px" BackColor="White" OnItemDataBound="ASPxMenu1_ItemDataBound" Width="250px">
+                                   <ClientSideEvents ItemClick="OnMenuItemClick" />
+                                    <Items>
+                                        <dx:MenuItem Text="" ToolTip="Dashboard">
+                                            <Image IconID="chart_pie_16x16">
+                                            </Image>
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Name="changewh"  Text="" ToolTip="Default Warehouse">
+                                            <Image IconID="businessobjects_boorderitem_16x16">
+                                            </Image>
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Name="version" Text="" ToolTip="Build Version">
+                                            <Image IconID="programming_scripts_16x16">
+                                            </Image>
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Name="changewd" Text="" ToolTip="Click to change workdate">
+                                            <Image IconID="conditionalformatting_adateoccurring_16x16">
+                                            </Image>
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Name="changeprnt" Text="" ToolTip="Change printer">
+                                            <Image IconID="print_printdialog_16x16">
+                                            </Image>
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Text="" ToolTip="Settings">
+                                            <Items>
+                                                 <dx:MenuItem Text="Switch Company" Name="switch">
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Text="Send Global Message" Name="message">
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Text="Change Password" Name="changepw">
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Name="support" Text="Support (Freshdesk)" Target="_blank" NavigateUrl="https://metsit.freshdesk.com/helpdesk">
+                                                </dx:MenuItem>
+                                                <dx:MenuItem Text="Logout" Name="logout"  >
+                                                </dx:MenuItem>
+                                            </Items>
+                                            <Image IconID="programming_technology_16x16">
+                                            </Image>
+                                        </dx:MenuItem>
+                                    </Items>
+                                    <BorderTop BorderWidth="1px" />
+                                </dx:ASPxMenu>
+                            </div>
+                        </div>
+                        <div class="headerMenu">
+                            <%-- DXCOMMENT: Configure the header menu --%>
+
+
+                        </div>
+                </dx:PanelContent>
+            </PanelCollection>
+            <ExpandedPanelTemplate>
+                <div class="headerMenu">
+                    <%-- DXCOMMENT: Configure the header menu --%>
+<dx:ASPxMenu EnableAdaptivity="true" ID="ASPxMenu1" BackColor="White" runat="server" ItemAutoWidth="False" Width="100%" Orientation="Vertical">
+    <Items>
+        <dx:MenuItem Text="Dashboard">
+            <Image IconID="chart_pie_16x16">
+            </Image>
+        </dx:MenuItem>
+        <dx:MenuItem Text="Notification">
+            <Image IconID="mail_newmail_16x16">
+            </Image>
+        </dx:MenuItem>
+        <dx:MenuItem Text="Transactions">
+            <Image IconID="reports_groupheader_16x16">
+            </Image>
+        </dx:MenuItem>
+        <dx:MenuItem Text="Release Notes">
+            <Image IconID="edit_customization_16x16">
+            </Image>
+        </dx:MenuItem>
+        <dx:MenuItem Text="Settings">
+            <Image IconID="programming_technology_16x16">
+            </Image>
+        </dx:MenuItem>
+    </Items>
+    <Border BorderWidth="1px" />
+</dx:ASPxMenu>
+
+
+                </div>
+            </ExpandedPanelTemplate>
+            <ExpandBarTemplate>
+                <%--<div class="templateTitle">
+                    <a href="~/">GEARS</a></div>--%>
+            </ExpandBarTemplate>
+        </dx:ASPxPanel>
+
+<%--        <dx:ASPxPanel ID="MainPane" runat="server" CssClass="mainContentPane" style="margin-top: 50px;"> 
+            <PanelCollection>
+                <dx:PanelContent runat="server" SupportsDisabledAttribute="True">
+                    <asp:ContentPlaceHolder ID="Content" runat="server"/>
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>--%>
+
+
+    
+<%-- DXCOMMENT: Configure a datasource for the header menu --%>
+<asp:XmlDataSource ID="XmlDataSourceHeader" runat="server" DataFile="~/App_Data/TopMenu.xml"
+    XPath="/items/*"></asp:XmlDataSource>
+
+     <asp:SqlDataSource ID="sdsWarehouse" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT WarehouseCode, [Description] FROM Masterfile.[Warehouse] WHERE ISNULL([IsInactive],0) = 0">
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="sdsPrinter" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT Code AS Printer FROM It.GenericLookup WHERE LookUpKey = 'PRNTRSTTNG'"  >
+    </asp:SqlDataSource>
+    <asp:ObjectDataSource ID="odsMessage" runat="server" SelectMethod="getdetail" TypeName="Common.MessageClass" DataObjectTypeName="Common.MessageClass" InsertMethod="InsertData" UpdateMethod="UpdateData">
+        <SelectParameters>
+            <asp:QueryStringParameter Name="ItemCode" QueryStringField="docnumber" Type="String" />
+            <asp:SessionParameter Name="Conn" SessionField="ConnString" Type="String" /> 
+        </SelectParameters>
+    </asp:ObjectDataSource>
+    <asp:SqlDataSource ID="sdsMessage" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="select RecordID,CONVERT(varchar(50),Date) Date,Header,HeaderFont,Message,Status from IT.Message where RecordID is null "
+       >
+   </asp:SqlDataSource>
+    </form>
+       
+</body>
+</html>

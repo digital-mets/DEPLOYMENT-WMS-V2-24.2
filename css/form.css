@@ -1,0 +1,43 @@
+﻿
+.pnl-content {
+    text-align: right;
+}
+
+#cp_BottomPanel_updateBtn.btn-primary {
+    background-color: #2a88ad;
+    border-color: #2a88ad;
+}
+
+a.dxbButton_MetropolisBlue span.dx-vam {
+    display: none !important;
+}
+
+.table-responsive tr {
+    white-space: nowrap;
+}
+.table-responsive th:first-child {
+    min-width: 0px;
+}
+.table-responsive th {
+    min-width: 200px;
+}
+
+.table-responsive i {
+    color: #000;
+}
+.table-responsive i.fa-trash {
+    color: #b02a37;
+}
+.table-responsive button {
+    background: none !important;
+    border: none !important;
+}
+
+.dxeCalendarFastNavMonthArea_MetropolisBlue, .dxeCalendar_MetropolisBlue
+{
+    display: none;
+}
+
+input:read-only {
+  background-color: #ecf0f1 !important;
+}

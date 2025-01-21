@@ -1,0 +1,93 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="frmDashboard2.aspx.cs" Inherits="GWL.frmDashboard2" %>
+
+<%@ Register assembly="DevExpress.Dashboard.v15.1.Web, Version=15.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.DashboardWeb" tagprefix="dx" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/PerfSender.js" type="text/javascript"></script>
+<title></title>
+    <style type="text/css">
+        .auto-style2 {
+            height: 22px;
+            width: 72px;
+        }
+        
+        table {
+    border-collapse: collapse;
+            }
+
+        table, th, td {
+        border: 3px solid white;
+}
+
+        .auto-style3 {
+            font-size: small;
+        }
+
+        .auto-style4 {
+            width: 356px;
+        }
+
+        .auto-style5 {
+            width: 356px;
+            height: 33px;
+        }
+
+        .auto-style6 {
+            width: 356px;
+            height: 53px;
+        }
+
+    </style>
+</head>
+<body style="height: 107px">
+    <form id="form1" runat="server">
+    <div style="height: 99%">
+        <table  style="border: medium solid #FFFFFF; height: 83px; width: 413px; " border="1" >
+
+            <tr  >
+                <td rowspan="3" class="auto-style2" >
+                    <dx:ASPxImage ID="Image1" runat="server" height="83px" Width="82px">
+                        <EmptyImage Url="~/images/Profile.jpg">
+                        </EmptyImage>
+                        <Border BorderStyle="Solid" BorderColor="#999999" BorderWidth="1px" />
+                    </dx:ASPxImage>
+                </td>
+                <td class="auto-style5">
+                </td>
+            </tr>
+                        <tr>
+                <td class="auto-style6">
+                    <dx:ASPxLabel ID="lblName" runat="server" Text="Paul William Walker" Font-Bold="True" Font-Names="Segoe UI" Font-Size="Small">
+                    </dx:ASPxLabel>
+                            <br />
+                    <dx:ASPxLabel ID="lbldesignation" runat="server" Text="Software Engineer" Font-Bold="False" Font-Names="Segoe UI" Font-Size="Small" style="font-size: x-small">
+                    </dx:ASPxLabel>
+                    <br />
+                    <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" Text="My Feed" style="font-size: x-small" />
+                    &nbsp;<span class="auto-style3">| <dx:ASPxHyperLink ID="ASPxHyperLink2" runat="server" Text="My Profile" style="font-size: x-small" />
+                    </span>
+                            </td>
+
+            </tr>
+            <tr>
+                <td class="auto-style4">
+                    &nbsp;</td>
+               
+            </tr>
+
+
+        </table>
+       
+
+    </div>
+ <div style="height: 723px">
+        <dx:ASPxDashboardViewer ID="ASPxDashboardViewer1" runat="server" Height="719px" Width="994px" DashboardSource="~/Dashboard/SalesItem.xml" OnConfigureDataConnection="ASPxDashboardViewer1_ConfigureDataConnection">
+        </dx:ASPxDashboardViewer>
+ </div>
+    </form>
+</body>
+</html>
