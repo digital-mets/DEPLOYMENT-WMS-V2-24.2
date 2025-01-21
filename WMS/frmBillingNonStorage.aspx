@@ -743,7 +743,7 @@
                                                     <clientsideevents batcheditconfirmshowing="OnConfirm" batcheditrowvalidating="Grid_BatchEditRowValidating"
                                                         batcheditstartediting="OnStartEditing" batcheditendediting="OnEndEditing" init="OnInitTrans" />
                                                     <settingspager mode="ShowAllRecords" />
-                                                    <a href="frmBillingMC.aspx.cs">frmBillingMC.aspx.cs</a>
+<%--                                                    <a href="frmBillingMC.aspx.cs">frmBillingMC.aspx.cs</a>--%>
                                                     <settingsediting mode="Batch" />
                                                     <settings horizontalscrollbarmode="Visible" verticalscrollbarmode="Auto" columnminwidth="120" verticalscrollableheight="130" />
                                                     <columns>

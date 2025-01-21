@@ -3,7 +3,7 @@ let DateStart;
 let DateEnd;
 let customers = [];
 let warehouseCode = '';
-let pollingInterval = 30 * 1000;
+let pollingInterval = 60 * 1000;
 
 // Inbound chart data
 let transactions = {};
@@ -76,6 +76,11 @@ let monitoringLRAChart;
 let monitoringBillingSubmissionChart;
 let monitoringBillingInvoiceChart;
 let monitoringOnTimeSubmissionChart;
+const listItemShownCount = 30;
+let lastIndex = listItemShownCount;
+let startIndex = 0;
+const scrollItemIncrement = 10;
+let monitoringRows = [];
 
 // reponses of datatable requests
 let responses = {};
@@ -1135,8 +1140,9 @@ function loadTab(tab) {
         case 'tab-monitoring':
             showAllFilters();
             getMonitoringTruckStatus(customerCode, DateStart, DateEnd, async (rows) => {
-                fillMonitoringCounts(rows);
-                fillMonitoringList(rows);
+                monitoringRows = rows;
+                fillMonitoringCounts(monitoringRows);
+                fillMonitoringList(monitoringRows);
             });
             setMonitoringLineChart(customerCode, DateStart, DateEnd);
             setMonitoringTransactionsPieChart(customerCode, DateStart, DateEnd);
@@ -2874,7 +2880,7 @@ function setMonitoringRadialCharts(customerCode, dateFrom, dateTo) {
 }
 
 async function fillMonitoringCounts(rows) {
-    const total = rows.length;
+    let total = rows.length;
     let arrived = 0;
     let docked = 0;
     let loading = 0;
@@ -2904,6 +2910,7 @@ async function fillMonitoringCounts(rows) {
                 break;
         }
     });
+    total -= newTransaction;
     elementTextChanged($('.count-card #total-monitoring-count'), total, ($element) => {
         flipParent($element, 'div', total);
     });
@@ -2939,11 +2946,43 @@ async function fillMonitoringCounts(rows) {
     );
 }
 
-async function fillMonitoringList(rows) {
+$('#monitoring-list-container>div').on('scroll', function () {
+    const currentScrollTop = $(this).scrollTop(); // Current vertical scroll position
+    const lastScrollTop = $(this).data('last-scroll-top') || 0;
+    const scrollHeight = this.scrollHeight;
+    const clientHeight = this.clientHeight;
+    let scrollPoint = 0;
+    if (currentScrollTop === lastScrollTop) return;
+
+    $(this).data('last-scroll-top', currentScrollTop);
+    if (currentScrollTop === 0 && startIndex !== 0) {
+        startIndex -= scrollItemIncrement;
+        lastIndex -= scrollItemIncrement;
+        monitoringTransactions = [];
+        $('#monitoring-list').empty();
+        scrollPoint = (scrollHeight - clientHeight) * (1 / 4);
+        fillMonitoringList(monitoringRows, scrollPoint);
+    }
+    else if (currentScrollTop + clientHeight >= scrollHeight && lastIndex !== monitoringRows.length) {
+        startIndex += scrollItemIncrement;
+        lastIndex += scrollItemIncrement;
+        monitoringTransactions = [];
+        $('#monitoring-list').empty();
+        scrollPoint = (scrollHeight - clientHeight) * (3 / 4);
+        fillMonitoringList(monitoringRows, scrollPoint);
+    }
+});
+
+async function fillMonitoringList(rows, scroll = null) {
     let docNumbers = [];
     const rowHeight = 34; // on pixels
+    lastIndex = rows.length > lastIndex ? lastIndex : rows.length;
+    if ((lastIndex <= 0 || lastIndex < listItemShownCount)) lastIndex = rows.length >= listItemShownCount ? listItemShownCount : rows.length;
+    startIndex = startIndex > lastIndex - listItemShownCount ? lastIndex - listItemShownCount : startIndex;
+    startIndex = startIndex < 0 ? 0 : startIndex;
 
-    rows.forEach((row, index) => {
+    for (let index = startIndex; index < lastIndex; index++) {
+        let row = rows[index];
         let docNumber = row['DocNumber'];
         let progress = parseInt(row['Arrived']) + parseInt(row['Docked']) + parseInt(row['Loading']) + parseInt(row['Docs']) + parseInt(row['Departed']);
         docNumbers.push(docNumber);
@@ -2963,7 +3002,7 @@ async function fillMonitoringList(rows) {
             $(`#monitoring-list li[data-uid='${docNumber}'] div.filled.end`).removeClass('end');
 
             //Do progress fill animation
-            (async () => {
+            (() => {
                 const fillAnimationTiming = 250;
                 const delayVar = Math.abs(progress - prevProgress);
                 if (prevProgress < progress) {
@@ -3008,19 +3047,17 @@ async function fillMonitoringList(rows) {
                             break;
                     }
                 }
-
-
             })();
 
             //Reorder the list
             if (prevIndex > index) {
-                $listItem.css('top', (index * rowHeight).toString() + 'px');
+                $listItem.css('top', ((index - startIndex) * rowHeight).toString() + 'px');
                 $listItem.data('position', index);
                 $listItem.addClass('go-down');
                 setTimeout(() => { $listItem.removeClass('go-down') }, 500);
             }
             else if (prevIndex < index) {
-                $listItem.css('top', (index * rowHeight).toString() + 'px');
+                $listItem.css('top', ((index - startIndex) * rowHeight).toString() + 'px');
                 $listItem.data('position', index);
                 $listItem.addClass('go-up');
                 setTimeout(() => { $listItem.removeClass('go-up') }, 500);
@@ -3067,7 +3104,7 @@ async function fillMonitoringList(rows) {
                         <div class="container-col" data-docking="${row['DockingTime']}"></div>
                     </div>
                 </li>`);
-            $listItem.css('top', (index * rowHeight).toString() + 'px');
+            $listItem.css('top', ((index - startIndex) * rowHeight).toString() + 'px');
 
             $('ul#monitoring-list').append($listItem);
             setTimeout(() => { $(`ul#monitoring-list li[data-uid="${docNumber}"]`).addClass('show'); }, 100);
@@ -3100,11 +3137,11 @@ async function fillMonitoringList(rows) {
             //    $dwellTime.text(duration);
             //}
         }
-    });
+    };
 
     // Remove items not existing in the updated list
     const toRemove = monitoringTransactions.filter((docNumber) => { return !docNumbers.includes(docNumber); });
-    toRemove.forEach((docNumber) => {
+    toRemove.forEach(async (docNumber) => {
         $(`#monitoring-list li[data-uid='${docNumber}']`).removeClass('show');
         setTimeout(() => { $(`#monitoring-list li[data-uid='${docNumber}']`).animate({ height: "0" }, { speed: 500 }) }, 300);
         setTimeout(() => { $(`#monitoring-list li[data-uid='${docNumber}']`).remove() }, 700);
@@ -3120,7 +3157,10 @@ async function fillMonitoringList(rows) {
     //    flip($element, formattedDuration);
     //}
 
-
+    if (startIndex !== 0 && lastIndex !== rows.length) {
+        $('#monitoring-list-container>div.overflow-auto').data('last-scroll-top', scroll);
+        $('#monitoring-list-container>div.overflow-auto').scrollTop(scroll);
+    }
 }
 
 function elementTextChanged($element, newText, callback) {
