@@ -1,5 +1,6 @@
 ﻿body {
     height: 100vh;
+    --dim-height: 0;
 }
 
     body form {
@@ -34,6 +35,14 @@ input:read-only {
 div.dropdown-menu {
     max-height: 250px;
     overflow-y: auto;
+}
+
+.mdi-8px {
+    font-size: 14px;
+}
+
+.mdi-14px {
+    font-size: 14px;
 }
 
 .mdi-18px {
@@ -573,6 +582,7 @@ ul#monitoring-list {
     grid-area: list;
     padding: 4px;
     box-sizing: border-box;
+    /*transition: all 2s linear;*/
 }
 
 #monitoring-line-chart-container {
@@ -698,4 +708,101 @@ ul#monitoring-list {
 
 #monitoring-chart-group3 .apexcharts-track path {
     stroke: rgb(50, 52, 109);
+}
+
+.expand-btn {
+    position: absolute;
+    border: none;
+    color: rgb(80, 80, 80);
+    top: 4px;
+    right: 4px;
+    z-index: 12;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+    .expand-btn:hover {
+        background-color: rgba(255, 255, 255, 0.75);
+    }
+
+#monitoring-tab-pane.dim::before {
+    content: '';
+    position: absolute;
+    height: var(--dim-height);
+    width: 100%;
+    background-color: rgba(40, 40, 40, 0.35);
+    z-index: 13;
+}
+
+.expanded button.expand-btn {
+    z-index: 15;
+}
+
+#monitoring-list-container button.expand-btn {
+    top: 8px;
+    right: 8px;
+}
+
+#monitoring-line-chart-container button.expand-btn {
+    top: 8px;
+    right: 124px;
+    padding: 0;
+    background-color: transparent;
+}
+
+    #monitoring-line-chart-container button.expand-btn:hover {
+        background-color: transparent;
+    }
+
+#monitoring-list-container.expanded, #monitoring-box-chart-container1.expanded, #monitoring-box-chart-container2.expanded, #monitoring-line-chart-container.expanded {
+    grid-area: unset;
+    position: absolute !important;
+    padding: 4px;
+    box-sizing: border-box;
+    height: 80%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    left: 0;
+    right: 0;
+    z-index: 14;
+}
+
+#monitoring-chart-group1 > div:first-child > div:first-child.expanded, #monitoring-chart-group1 > div:first-child > div:last-child.expanded {
+    grid-area: unset;
+    position: absolute !important;
+    top: 0;
+    width: 50%;
+    height: 80% !important;
+    margin-top: 20px !important;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    z-index: 14;
+}
+
+#monitoring-transactions-pie-chart.chart-expand, #monitoring-truck-status-chart.chart-expand {
+    max-height: 400px !important;
+}
+
+#export-table {
+    margin: 0 !important;
+    background-color: white;
+}
+
+#export-table_wrapper > div.row:first-child {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+    padding-top: 0;
+}
+
+#export-table thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
 }
