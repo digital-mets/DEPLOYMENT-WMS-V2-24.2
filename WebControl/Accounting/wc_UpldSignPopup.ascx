@@ -264,7 +264,7 @@
                                                     <dx:LayoutItem ShowCaption="False" Name="SignBut">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer>
-                                                                <div class="my-container" style="padding: 0px 20px 20px 20px;font-style: italic;margin-top: -60px;">
+                                                                <div class="my-container" style="padding: 0px 20px 20px 20px;font-style: italic;margin-top: -60px;position: relative;z-index: 1000 !important;">
                                                                     <dx:ASPxCheckBox ID="checkbox" ClientInstanceName="ClientCheckBox" runat="server" Checked="false" Text="&quot;I consent to providing my e-signature, which will be securely stored and reused for future transactions in accordance with applicable laws and regulations.&quot;">
                                                                         <ClientSideEvents ValueChanged="function(s, e){ OnConsent(); }" />
                                                                     </dx:ASPxCheckBox>

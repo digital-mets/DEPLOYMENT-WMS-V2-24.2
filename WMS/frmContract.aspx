@@ -265,6 +265,7 @@
                     gv1.batchEditApi.SetCellValue(_indices[0], 'SplitBillRate', gvRefC.batchEditApi.GetCellValue(_refindices[i], 'SplitBillRate'));
 
                     gv1.batchEditApi.SetCellValue(_indices[0], 'HandlingUOM', gvRefC.batchEditApi.GetCellValue(_refindices[i], 'HandlingUOM'));
+                    gv1.batchEditApi.SetCellValue(_indices[0], 'HandlingOutUOM', gvRefC.batchEditApi.GetCellValue(_refindices[i], 'HandlingOutUOM'));
 
 
 
@@ -583,6 +584,9 @@
                     gHandlingUOMBulk.GetInputElement().value = cellInfo.value;
                 }
                 if (e.focusedColumn.fieldName === "HandlingUOM") {
+                    gHandlingUOM.GetInputElement().value = cellInfo.value;
+                }
+                if (e.focusedColumn.fieldName === "HandlingOutUOM") {
                     gHandlingUOM.GetInputElement().value = cellInfo.value;
                 }
                 if (e.focusedColumn.fieldName === "BillingPrintOutStr") {
@@ -1452,6 +1456,12 @@
             gv1.batchEditApi.EndEdit();
         }
 
+        function UpdateHandlingOutUOM(values) {
+            gv1.batchEditApi.SetCellValue(index, "HandlingOutUOM", values);
+
+            gv1.batchEditApi.EndEdit();
+        }
+
 
 
         // SKUCode valuechanged eventindex
@@ -1490,8 +1500,7 @@
                 const min = gv2.batchEditApi.GetCellValue(rowIndex, 'Min');
                 const max = gv2.batchEditApi.GetCellValue(rowIndex, 'Max');
 
-                if (serviceType.trim() !== '' && allocChargeable && ((min <= 0 && max <= 0) || (min > 0 && min > max) || (min < 0 || max < 0)))
-                {
+                if (serviceType.trim() !== '' && allocChargeable && ((min <= 0 && max <= 0) || (min > 0 && min > max) || (min < 0 || max < 0))) {
                     errors.push(`${serviceType} requires MIN and MAX value`);
                 }
             });
@@ -1793,7 +1802,7 @@
                                                                         </dx:LayoutItemNestedControlContainer>
                                                                     </LayoutItemNestedControlCollection>
                                                                 </dx:LayoutItem>
-                                                               <%-- <dx:LayoutItem Caption="Non Billable Days">
+                                                                <%-- <dx:LayoutItem Caption="Non Billable Days">
                                                                     <LayoutItemNestedControlCollection>
                                                                         <dx:LayoutItemNestedControlContainer runat="server">
                                                                             <dx:ASPxspinedit ID="NonBillableDays" runat="server" Width="170px" ClientInstanceName="NonBillableDays" ReadOnly="false" MinValue="0" MaxValue="1000" ClientEnabled="false">
@@ -1890,7 +1899,7 @@
                                                                                             <dx:GridViewDataTextColumn FieldName="Description" Name="Description" ShowInCustomizationForm="True" VisibleIndex="4" Width="180px" UnboundType="String" HeaderStyle-Wrap="True" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
                                                                                                 <Settings AllowSort="False"></Settings>
                                                                                                 <EditItemTemplate>
-                                                                                                    <dx:ASPxTextBox ID="txtBox" runat="server" ClientEnabled="false" 
+                                                                                                    <dx:ASPxTextBox ID="txtBox" runat="server" ClientEnabled="false"
                                                                                                         Value='<%# Bind("Description") %>' />
                                                                                                 </EditItemTemplate>
                                                                                                 <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="True"></HeaderStyle>
@@ -2271,6 +2280,34 @@
 
                                                                                                 <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="True"></HeaderStyle>
                                                                                             </dx:GridViewDataTextColumn>
+                                                                                            <dx:GridViewDataTextColumn FieldName="HandlingOutUOM" VisibleIndex="29" Width="180px" Name="HandlingOutUOM" Caption="Handling Out UOM" HeaderStyle-Wrap="True" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
+                                                                                                <Settings AllowSort="False"></Settings>
+                                                                                                <EditItemTemplate>
+                                                                                                    <dx:ASPxGridLookup ID="HandlingOutUOM" runat="server" AutoGenerateColumns="False" AutoPostBack="false"
+                                                                                                        DataSourceID="sdsUnitOfMeasure" KeyFieldName="UnitOfMeasure" ClientInstanceName="gHandlingOutUOM" TextFormatString="{0}" Width="180px" OnLoad="gvLookupLoad">
+                                                                                                        <GridViewProperties Settings-ShowFilterRow="true">
+                                                                                                            <SettingsBehavior AllowFocusedRow="True" AllowSelectByRowClick="True"
+                                                                                                                AllowSelectSingleRowOnly="True" />
+                                                                                                        </GridViewProperties>
+                                                                                                        <Columns>
+                                                                                                            <dx:GridViewDataTextColumn FieldName="UnitOfMeasure" VisibleIndex="0" UnboundType="String">
+                                                                                                                <Settings AllowAutoFilter="True" AutoFilterCondition="Contains" />
+                                                                                                            </dx:GridViewDataTextColumn>
+                                                                                                            <dx:GridViewDataTextColumn FieldName="Description" VisibleIndex="0" UnboundType="String">
+                                                                                                                <Settings AllowAutoFilter="True" AutoFilterCondition="Contains" />
+                                                                                                            </dx:GridViewDataTextColumn>
+                                                                                                        </Columns>
+                                                                                                        <%--<ClientSideEvents EndCallback="GridEnd" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" DropDown="lookup" CloseUp="gridLookup_CloseUp" />--%>
+                                                                                                        <ClientSideEvents KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" DropDown="lookup" CloseUp="gridLookup_CloseUp" ValueChanged="function(s,e){ 
+                                            var g = gHandlingOutUOM.GetGridView();
+                                            g.GetRowValues(g.GetFocusedRowIndex(), 'UnitOfMeasure', UpdateHandlingOutUOM);
+                }" />
+
+                                                                                                    </dx:ASPxGridLookup>
+                                                                                                </EditItemTemplate>
+
+                                                                                                <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="True"></HeaderStyle>
+                                                                                            </dx:GridViewDataTextColumn>
                                                                                             <dx:GridViewDataTextColumn FieldName="HandlingUOMBulk" VisibleIndex="29" Width="0" Name="HandlingUOMBulk" Caption="Handling UOM (Bulk)" HeaderStyle-Wrap="True" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
                                                                                                 <Settings AllowSort="False"></Settings>
                                                                                                 <EditItemTemplate>
@@ -2472,7 +2509,7 @@
                                                                                             <dx:GridViewDataTextColumn FieldName="Description" Name="Description" ShowInCustomizationForm="True" VisibleIndex="4" Width="180px" UnboundType="String" HeaderStyle-Wrap="True" HeaderStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" Settings-AllowSort="False">
                                                                                                 <Settings AllowSort="False"></Settings>
                                                                                                 <EditItemTemplate>
-                                                                                                    <dx:ASPxTextBox ID="txtBox" runat="server" ClientEnabled="false" 
+                                                                                                    <dx:ASPxTextBox ID="txtBox" runat="server" ClientEnabled="false"
                                                                                                         Value='<%# Bind("Description") %>' />
                                                                                                 </EditItemTemplate>
                                                                                                 <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="True"></HeaderStyle>

@@ -3,7 +3,7 @@ let DateStart;
 let DateEnd;
 let customers = [];
 let warehouseCode = '';
-let pollingInterval = 60 * 1000;
+let pollingInterval = 5 * 60 * 1000;
 
 // Inbound chart data
 let transactions = {};
@@ -79,7 +79,7 @@ let monitoringOnTimeSubmissionChart;
 const listItemShownCount = 30;
 let lastIndex = listItemShownCount;
 let startIndex = 0;
-const scrollItemIncrement = 10;
+const scrollItemIncrement = 10; 
 let monitoringRows = [];
 
 // reponses of datatable requests
@@ -691,6 +691,7 @@ function renderPieChart(chart, series, labels, elementQuerySelector, onClick = (
         series: series,
         chart: {
             type: 'pie',
+            height: 'auto',
             width: '90%',
             events: { dataPointSelection: onClick },
         },
@@ -713,12 +714,15 @@ function renderPieChart(chart, series, labels, elementQuerySelector, onClick = (
     return chart;
 }
 
-function renderLineChart(chart, series, elementQuerySelector, options = null) {
+function renderLineChart(chart, series, elementQuerySelector, onClick = () => { }, options = null) {
     let chartOptions = {
         series: series,
         chart: {
             height: '100%',
             type: 'line',
+            events: {
+                markerClick: onClick
+            },
             animations: {
                 enabled: true,
                 easing: 'linear',
@@ -727,11 +731,22 @@ function renderLineChart(chart, series, elementQuerySelector, options = null) {
                 }
             },
             toolbar: {
-                show: true
+                show: true,
+                tools: {
+                    download: true,
+                    selection: true,
+                    zoom: false,
+                    zoomin: true,
+                    zoomout: true,
+                    pan: true,
+                }
             },
             zoom: {
-                enabled: true
-            }
+                enabled: true,
+                zoomedArea: {
+                    enable: false
+                }
+            },
         },
         xaxis: {
             labels: {
@@ -743,9 +758,6 @@ function renderLineChart(chart, series, elementQuerySelector, options = null) {
         },
         stroke: {
             curve: 'straight'
-        },
-        markers: {
-            size: 0
         },
         legend: {
             show: false
@@ -771,7 +783,7 @@ function renderLineChart(chart, series, elementQuerySelector, options = null) {
     return chart;
 }
 
-function renderTreeMapChart(chart, series, elementQuerySelector, options = null) {
+function renderTreeMapChart(chart, series, elementQuerySelector, onClick = () => { }, options = null) {
     let chartOptions = {
         series: [
             { data: series }
@@ -781,6 +793,9 @@ function renderTreeMapChart(chart, series, elementQuerySelector, options = null)
             type: 'treemap',
             height: '100%',
             toolbar: { show: false },
+            events: {
+                dataPointSelection: onClick
+            }
         },
         colors: [
             'rgb(255, 87, 51)',
@@ -797,7 +812,7 @@ function renderTreeMapChart(chart, series, elementQuerySelector, options = null)
         plotOptions: {
             treemap: {
                 distributed: true,
-                enableShades: false
+                enableShades: false,
             }
         }
     };
@@ -818,7 +833,7 @@ function renderTreeMapChart(chart, series, elementQuerySelector, options = null)
     return chart;
 }
 
-function renderRadialBarChart(chart, series, labels, elementQuerySelector, options = null) {
+function renderRadialBarChart(chart, series, labels, elementQuerySelector, onClick = () => { }, options = null) {
     let chartOptions = {
         series: series,
         chart: {
@@ -828,6 +843,9 @@ function renderRadialBarChart(chart, series, labels, elementQuerySelector, optio
             margin: 0,
             padding: 0,
             useHtmlLabels: false,
+            events: {
+                dataPointSelection: onClick
+            }
         },
         plotOptions: {
             radialBar: {
@@ -944,6 +962,7 @@ function showAllFilters() {
 function loadTab(tab) {
     let customerCode = getCustomerCode();
     let warehouseCode = getWarehouseCode();
+    collapseAll();
     switch (tab) {
         case 'tab-inbound': {
             showAllFilters();
@@ -2726,7 +2745,7 @@ function setMonitoringTransactionsPieChart(customerCode, dateFrom, dateTo) {
                 Object.values(transactions),
                 Object.keys(transactions),
                 '#monitoring-transactions-pie-chart',
-                null,
+                transactionStatusChartOnClick,
                 { colors: ['rgb(0, 51, 102)', 'rgb(102, 179, 255)', 'rgb(255, 102, 0)', 'rgb(60, 179, 113)', 'rgb(210, 180, 140)'] }
             );
 
@@ -2748,7 +2767,8 @@ function setMonitoringTransactionsTreeChart(customerCode, dateFrom, dateTo) {
         data: JSON.stringify({ customerCode: customerCode, dateFrom: dateFrom, dateTo: dateTo }),
         success: (responseData) => {
             const series = parseData(responseData.d);
-            monitoringTransactionsTreeMapChart = renderTreeMapChart(monitoringTransactionsTreeMapChart, series, '#monitoring-transactions-treemap-chart')
+            monitoringTransactionsTreeMapChart = renderTreeMapChart(monitoringTransactionsTreeMapChart, series,
+                '#monitoring-transactions-treemap-chart', transactionTreeMapOnClick);
 
         },
         error: (error) => {
@@ -2769,7 +2789,8 @@ function setMonitoringInventoryTreeChart(customerCode, dateFrom, dateTo) {
         data: JSON.stringify({ customerCode: customerCode, dateFrom: dateFrom, dateTo: dateTo }),
         success: (responseData) => {
             const series = parseData(responseData.d);
-            monitoringInventoryTreeMapChart = renderTreeMapChart(monitoringInventoryTreeMapChart, series, '#monitoring-inventory-treemap-chart')
+            monitoringInventoryTreeMapChart = renderTreeMapChart(monitoringInventoryTreeMapChart, series,
+                '#monitoring-inventory-treemap-chart', inventoryTreeMapOnClick)
         },
         error: (error) => {
             //Swal.fire("", error.responseJSON.Message, "error");
@@ -2837,7 +2858,7 @@ function setMonitoringLineChart(customerCode, dateFrom, dateTo) {
             const minDate = new Date(data[data.length - 1]['DocDate']);
             monitoringLineChart = renderLineChart(monitoringLineChart,
                 [{ data: series, name: 'Inbound and Outbound Transactions' }],
-                '#monitoring-line-chart'
+                '#monitoring-line-chart', transactionsLineChartOnClick
             );
 
         },
@@ -2863,14 +2884,22 @@ function setMonitoringRadialCharts(customerCode, dateFrom, dateTo) {
                 percentages[item['Key']] = item['Value'];
             });
 
-            monitoringOnTimeSubmissionChart = renderRadialBarChart(monitoringOnTimeSubmissionChart, [percentages['OnTimeSubmission']], [''], '#monitoring-ontime-submission');
-            monitoringOrderFulfillmentChart = renderRadialBarChart(monitoringOrderFulfillmentChart, [percentages['OrderFulfillment']], [''], '#monitoring-order-fulfillment');
-            monitoringDwellTimeChart = renderRadialBarChart(monitoringDwellTimeChart, [percentages['DwellTime']], [''], '#monitoring-dwell-time');
-            monitoringAttachmentChart = renderRadialBarChart(monitoringAttachmentChart, [percentages['Attachment']], [''], '#monitoring-attachment');
-            monitoringIRAChart = renderRadialBarChart(monitoringIRAChart, [percentages['IRA']], [''], '#monitoring-ira');
-            monitoringLRAChart = renderRadialBarChart(monitoringLRAChart, [percentages['LRA']], [''], '#monitoring-lra');
-            monitoringBillingSubmissionChart = renderRadialBarChart(monitoringBillingSubmissionChart, [percentages['BillingSubmission']], [''], '#monitoring-billing-submission');
-            monitoringBillingInvoiceChart = renderRadialBarChart(monitoringBillingInvoiceChart, [percentages['BillingInvoice']], [''], '#monitoring-billing-invoice');
+            monitoringOnTimeSubmissionChart = renderRadialBarChart(monitoringOnTimeSubmissionChart, [percentages['OnTimeSubmission']], [''], '#monitoring-ontime-submission',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('On-time Submission', 'OnTimeSubmission') });
+            monitoringOrderFulfillmentChart = renderRadialBarChart(monitoringOrderFulfillmentChart, [percentages['OrderFulfillment']], [''], '#monitoring-order-fulfillment',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('Order Fulfillment', 'OrderFulfillment') });
+            monitoringDwellTimeChart = renderRadialBarChart(monitoringDwellTimeChart, [percentages['DwellTime']], [''], '#monitoring-dwell-time',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('Dwell Time', 'DwellTime') });
+            monitoringAttachmentChart = renderRadialBarChart(monitoringAttachmentChart, [percentages['Attachment']], [''], '#monitoring-attachment',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('Attachment', 'Attachment') });
+            monitoringIRAChart = renderRadialBarChart(monitoringIRAChart, [percentages['IRA']], [''], '#monitoring-ira',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('Inventory Replenishment Accuracy(IRA)', 'IRA') });
+            monitoringLRAChart = renderRadialBarChart(monitoringLRAChart, [percentages['LRA']], [''], '#monitoring-lra',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('Location Replenishment Accuracy(LRA)', 'LRA') });
+            monitoringBillingSubmissionChart = renderRadialBarChart(monitoringBillingSubmissionChart, [percentages['BillingSubmission']], [''], '#monitoring-billing-submission',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('Billing Submission', 'BillingSubmission') });
+            monitoringBillingInvoiceChart = renderRadialBarChart(monitoringBillingInvoiceChart, [percentages['BillingInvoice']], [''], '#monitoring-billing-invoice',
+                (_event, _chartContext, _config) => { kpiRedialBarsOnClick('Billing Invoice', 'BillingInvoice') });
         },
         error: (error) => {
             //Swal.fire("", error.responseJSON.Message, "error");
@@ -2879,7 +2908,7 @@ function setMonitoringRadialCharts(customerCode, dateFrom, dateTo) {
     });
 }
 
-async function fillMonitoringCounts(rows) {
+function fillMonitoringCounts(rows) {
     let total = rows.length;
     let arrived = 0;
     let docked = 0;
@@ -2935,12 +2964,12 @@ async function fillMonitoringCounts(rows) {
         ['New', 'Arrived', 'Docked', 'Loading', 'Docs', 'Departed'],
         '#monitoring-truck-status-chart',
         null,
-        //{ colors: ['rgb(130, 235, 240)', 'rgb(107, 229, 232)', 'rgb(65, 184, 214)', 'rgb(44, 139, 185)', 'rgb(46, 95, 153)', 'rgb(48, 53, 109)'], }
         {
             colors: ['rgb(144, 238, 144)', 'rgb(173, 216, 230)', 'rgb(100, 149, 237)', 'rgb(255, 102, 0)', 'rgb(255, 165, 0)', 'rgb(255, 69, 0)'],
             chart: {
                 type: 'donut',
                 width: '90%',
+                events: { dataPointSelection: truckStatusChartOnClick },
             },
         }
     );
@@ -2998,7 +3027,7 @@ async function fillMonitoringList(rows, scroll = null) {
             const $departed = $(`#monitoring-list li[data-uid='${docNumber}'] div.container-row div.container-col:nth-child(6)`);
             const $dwellTime = $(`#monitoring-list li[data-uid='${docNumber}'] div.container-row div.container-col:nth-child(7)`);
 
-            $listItem.data('progress', progress);
+           $listItem.data('progress', progress);
             $(`#monitoring-list li[data-uid='${docNumber}'] div.filled.end`).removeClass('end');
 
             //Do progress fill animation
@@ -3062,14 +3091,14 @@ async function fillMonitoringList(rows, scroll = null) {
                 $listItem.addClass('go-up');
                 setTimeout(() => { $listItem.removeClass('go-up') }, 500);
             }
-
+            
             //Set dwellTime
             if (row['DockingTime'] != null && row['LatestProgressTime'] != null) {
                 const timeDiff = getDateTimeDifference(new Date(row['LatestProgressTime']), new Date(row['DockingTime']));
                 const duration = timeDiff <= 0 ? '' : formatDuration(timeDiff);
                 elementTextChanged($dwellTime, duration);
             }
-
+            
             //Set dwellTime and timers
             //if (row['Docked'] == 1 && row['Departed'] !== 1 && row['DockingTime'] != $dwellTime.data('docking')) {
             //    const timeDiff = getDateTimeDifference(Date.now(), new Date(row['DockingTime']));
@@ -3232,3 +3261,392 @@ function clearMonitoringCharts(tab = 'tab-monitoring') {
     monitoringBillingSubmissionChart = null;
     monitoringBillingInvoiceChart = null;
 }
+
+function transactionStatusChartOnClick(_event, _chartContext, config) {
+    const customerCode = getCustomerCode();
+    const filterValue = config.w.config.labels[config.dataPointIndex];
+    showMonitoringDatatable('Transactions Status', customerCode, DateStart, DateEnd, 'TransactionStatus', filterValue);
+}
+function truckStatusChartOnClick(_event, _chartContext, config) {
+    const customerCode = getCustomerCode();
+    const filterValue = config.w.config.labels[config.dataPointIndex];
+    showMonitoringDatatable('Truck Status', customerCode, DateStart, DateEnd, 'TruckStatus', filterValue);
+}
+
+function transactionTreeMapOnClick(_event, _chartContext, config) {
+    const customerCode = getCustomerCode();
+    const filterValue = config.w.config.series[0].data[config.dataPointIndex]['x'];
+    showMonitoringDatatable('Transactions', customerCode, DateStart, DateEnd, 'Transactions per Client', filterValue);
+}
+
+function inventoryTreeMapOnClick(_event, _chartContext, config) {
+    const customerCode = getCustomerCode();
+    const filterValue = config.w.config.series[0].data[config.dataPointIndex]['x'];
+    showMonitoringDatatable('Inventory Volume', customerCode, DateStart, DateEnd, 'Inventory Volume', filterValue);
+}
+
+function kpiRedialBarsOnClick(title, filter) {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable(title, customerCode, DateStart, DateEnd, filter, '');
+}
+
+function transactionsLineChartOnClick(_event, _chartContext, config) {
+    const customerCode = getCustomerCode();
+    const filterValue = config.w.config.series[0].data[config.dataPointIndex]['x'];
+    showMonitoringDatatable(`${filterValue} Transactions`, customerCode, DateStart, DateEnd, 'Transactions per Day', filterValue);
+}
+
+$('#total-monitoring-count').parent('div.count-card').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Truck Status', customerCode, DateStart, DateEnd, 'TruckStatus', 'All');
+});
+
+$('#arrived-count').parent('div.count-card').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Truck Status', customerCode, DateStart, DateEnd, 'TruckStatus', 'Arrived');
+});
+
+$('#docked-count').parent('div.count-card').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Truck Status', customerCode, DateStart, DateEnd, 'TruckStatus', 'Docked');
+});
+
+$('#loading-count').parent('div.count-card').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Truck Status', customerCode, DateStart, DateEnd, 'TruckStatus', 'Loading');
+});
+
+$('#docs-count').parent('div.count-card').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Truck Status', customerCode, DateStart, DateEnd, 'TruckStatus', 'Docs');
+});
+
+$('#departed-count').parent('div.count-card').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Truck Status', customerCode, DateStart, DateEnd, 'TruckStatus', 'Departed');
+});
+
+$('#monitoring-clients').parent('div').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Active Clients', customerCode, DateStart, DateEnd, 'Clients', null);
+});
+
+$('#monitoring-skus').parent('div').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Active SKUs', customerCode, DateStart, DateEnd, 'SKUs', null);
+});
+
+$('#monitoring-wms-users').parent('div').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Active WMS Users', customerCode, DateStart, DateEnd, 'WMS Users', null);
+});
+
+$('#monitoring-rf-users').parent('div').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Active RF Users', customerCode, DateStart, DateEnd, 'RF Users', null);
+});
+
+$('#monitoring-warehouse-capacity').parent('div').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Warehouse Capacity', customerCode, DateStart, DateEnd, 'Warehouse Capacity', null);
+});
+
+$('#monitoring-pallet, #monitoring-unit, #monitoring-weight').parent('div').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Pallet Details', customerCode, DateStart, DateEnd, 'Pallet', null);
+});
+
+$('#monitoring-processed-requests').parent('h3').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Processed Requests', customerCode, DateStart, DateEnd, 'Processed Requests', null);
+});
+
+$('#monitoring-pending-requests').parent('h3').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Pending Requests', customerCode, DateStart, DateEnd, 'Pending Requests', null);
+});
+
+$('#monitoring-cancelled-requests').parent('h3').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Cancelled Requests', customerCode, DateStart, DateEnd, 'Cancelled Requests', null);
+})
+
+$('#monitoring-internal-transactions').parent('h3').on('click', () => {
+    const customerCode = getCustomerCode();
+    showMonitoringDatatable('Internal Transactions', customerCode, DateStart, DateEnd, 'Internal', null);
+});
+
+$('#monitoring-list-container>button.expand-btn').on('click', () => {
+    $('#monitoring-list-container').toggleClass('expanded');
+    dimBackground('#monitoring-tab-pane');
+    $('#monitoring-list-container>button.expand-btn>span').toggleClass('mdi mdi-arrow-expand');
+    $('#monitoring-list-container>button.expand-btn>span').toggleClass('mdi mdi-arrow-collapse');
+});
+
+$('#monitoring-chart-group1>div:first-child>div:first-child button.expand-btn').on('click', () => {
+    let $chart = $('#monitoring-transactions-pie-chart');
+    $('#monitoring-chart-group1>div:first-child>div:first-child').toggleClass('expanded');
+    $('#group1-filler').toggleClass('d-none');
+    $('#monitoring-chart-group1>div:first-child>div:first-child>button.expand-btn>span').toggleClass('mdi mdi-arrow-expand');
+    $('#monitoring-chart-group1>div:first-child>div:first-child>button.expand-btn>span').toggleClass('mdi mdi-arrow-collapse');
+    $chart.toggleClass('chart-expand');
+    dimBackground('#monitoring-tab-pane');
+
+    if ($chart.hasClass('chart-expand')) {
+        let prevHeight = monitoringTransactionsPieChart.w.config.chart.height;
+        let prevWidth = monitoringTransactionsPieChart.w.config.chart.width;
+        $chart.data('normal-height', prevHeight);
+        $chart.data('normal-width', prevWidth);
+        const expandedHeight = parseInt($('#monitoring-chart-group1>div:first-child>div:first-child').height()) * 0.9;
+        monitoringTransactionsPieChart.updateOptions({
+            chart: {
+                height: expandedHeight,
+                width: expandedHeight
+            }
+        });
+    }
+    else {
+        monitoringTransactionsPieChart.updateOptions({
+            chart: {
+                height: $chart.data('normal-height'),
+                width: $chart.data('normal-width')
+            }
+        });
+    }
+});
+
+$('#monitoring-chart-group1>div:first-child>div:last-child button.expand-btn').on('click', () => {
+    let $chart = $('#monitoring-truck-status-chart');
+    $('#monitoring-chart-group1>div:first-child>div:last-child').toggleClass('expanded');
+    $('#group1-filler').toggleClass('d-none');
+    $('#monitoring-chart-group1>div:first-child>div:last-child>button.expand-btn>span').toggleClass('mdi mdi-arrow-expand');
+    $('#monitoring-chart-group1>div:first-child>div:last-child>button.expand-btn>span').toggleClass('mdi mdi-arrow-collapse');
+    $chart.toggleClass('chart-expand');
+    dimBackground('#monitoring-tab-pane');
+
+    if ($chart.hasClass('chart-expand')) {
+        let prevHeight = monitoringTruckStatusChart.w.config.chart.height;
+        let prevWidth = monitoringTruckStatusChart.w.config.chart.width;
+        $chart.data('normal-height', prevHeight);
+        $chart.data('normal-width', prevWidth);
+        const expandedHeight = parseInt($('#monitoring-chart-group1>div:first-child>div:last-child').height()) * 0.9;
+        monitoringTruckStatusChart.updateOptions({
+            chart: {
+                height: expandedHeight,
+                width: expandedHeight
+            }
+        });
+    }
+    else {
+        monitoringTruckStatusChart.updateOptions({
+            chart: {
+                height: $chart.data('normal-height'),
+                width: $chart.data('normal-width')
+            }
+        });
+    }
+});
+
+$('#monitoring-box-chart-container1 button.expand-btn').on('click', () => {
+    let $chart = $('#monitoring-transactions-treemap-chart');
+    $('#monitoring-box-chart-container1').toggleClass('expanded');
+    dimBackground('#monitoring-tab-pane');
+    $('#monitoring-box-chart-container1 button.expand-btn>span').toggleClass('mdi mdi-arrow-expand');
+    $('#monitoring-box-chart-container1 button.expand-btn>span').toggleClass('mdi mdi-arrow-collapse');
+    $chart.toggleClass('chart-expand');
+
+    if ($chart.hasClass('chart-expand')) {
+        let prevHeight = monitoringTransactionsTreeMapChart.w.config.chart.height;
+        let prevWidth = monitoringTransactionsTreeMapChart.w.config.chart.width;
+        $chart.data('normal-height', prevHeight);
+        $chart.data('normal-width', prevWidth);
+        const expandedWidth = parseInt($('#monitoring-box-chart-container1').width()) * 0.9;
+        monitoringTransactionsTreeMapChart.updateOptions({
+            chart: {
+                width: expandedWidth,
+            },
+            plotOptions: {
+                treemap: {
+                    layout: 'horizontal'
+                }
+            },
+        });
+    }
+    else {
+        monitoringTransactionsTreeMapChart.updateOptions({
+            chart: {
+                height: $chart.data('normal-height'),
+                width: $chart.data('normal-width')
+            },
+            plotOptions: {
+                treemap: {
+                    layout: 'vertical'
+                }
+            },
+        });
+    }
+});
+
+$('#monitoring-box-chart-container2 button.expand-btn').on('click', () => {
+    let $chart = $('#monitoring-inventory-treemap-chart');
+    $('#monitoring-box-chart-container2').toggleClass('expanded');
+    dimBackground('#monitoring-tab-pane');
+    $('#monitoring-box-chart-container2 button.expand-btn>span').toggleClass('mdi mdi-arrow-expand');
+    $('#monitoring-box-chart-container2 button.expand-btn>span').toggleClass('mdi mdi-arrow-collapse');
+    $chart.toggleClass('chart-expand');
+
+    if ($chart.hasClass('chart-expand')) {
+        let prevHeight = monitoringInventoryTreeMapChart.w.config.chart.height;
+        let prevWidth = monitoringInventoryTreeMapChart.w.config.chart.width;
+        $chart.data('normal-height', prevHeight);
+        $chart.data('normal-width', prevWidth);
+        const expandedWidth = parseInt($('#monitoring-box-chart-container2').width()) * 0.9;
+        monitoringInventoryTreeMapChart.updateOptions({
+            chart: {
+                width: expandedWidth,
+            },
+            plotOptions: {
+                treemap: {
+                    layout: 'horizontal'
+                }
+            },
+        });
+    }
+    else {
+        monitoringInventoryTreeMapChart.updateOptions({
+            chart: {
+                height: $chart.data('normal-height'),
+                width: $chart.data('normal-width')
+            },
+            plotOptions: {
+                treemap: {
+                    layout: 'vertical'
+                }
+            },
+        });
+    }
+});
+
+$('#monitoring-line-chart-container>button.expand-btn').on('click', () => {
+    $('#monitoring-line-chart-container').toggleClass('expanded');
+    dimBackground('#monitoring-tab-pane');
+    $('#monitoring-line-chart-container>button.expand-btn>span').toggleClass('mdi mdi-arrow-expand');
+    $('#monitoring-line-chart-container>button.expand-btn>span').toggleClass('mdi mdi-arrow-collapse');
+});
+
+function dimBackground(selector) {
+    let height = parseInt($(selector).prop('scrollHeight'));
+    let paddingTop = parseInt($(selector).css('padding-top'));
+    let paddingBottom = parseInt($(selector).css('padding-bottom'));
+    $('body').css('--dim-height', (height + paddingTop + paddingBottom) + 'px');
+    $(selector).toggleClass('dim');
+}
+
+function collapseAll() {
+    $('#monitoring-tab-pane').removeClass('dim');
+    $('#monitoring-list-container').removeClass('expanded');
+    $('#monitoring-list-container>button.expand-btn>span').addClass('mdi-arrow-expand');
+    $('#monitoring-list-container>button.expand-btn>span').removeClass('mdi-arrow-collapse');
+
+    $('#monitoring-line-chart-container').removeClass('expanded');
+    $('#monitoring-line-chart-container>button.expand-btn>span').addClass('mdi-arrow-expand');
+    $('#monitoring-line-chart-container>button.expand-btn>span').removeClass('mdi-arrow-collapse');
+
+    $('#monitoring-transactions-pie-chart').removeClass('chart-expand');
+    $('#monitoring-chart-group1>div:first-child>div:first-child').removeClass('expanded');
+    $('#group1-filler').addClass('d-none');
+    $('#monitoring-chart-group1>div:first-child>div:first-child>button.expand-btn>span').addClass('mdi-arrow-expand');
+    $('#monitoring-chart-group1>div:first-child>div:first-child>button.expand-btn>span').removeClass('mdi-arrow-collapse');
+    $('#monitoring-truck-status-chart').removeClass('chart-expand');
+    $('#monitoring-chart-group1>div:first-child>div:last-child').removeClass('expanded');
+    $('#monitoring-chart-group1>div:first-child>div:last-child>button.expand-btn>span').addClass('mdi-arrow-expand');
+    $('#monitoring-chart-group1>div:first-child>div:last-child>button.expand-btn>span').removeClass('mdi-arrow-collapse');
+
+    $('#monitoring-transactions-treemap-chart').removeClass('chart-expand');
+    $('#monitoring-box-chart-container1').removeClass('expanded');
+    $('#monitoring-box-chart-container1 button.expand-btn>span').addClass('mdi-arrow-expand');
+    $('#monitoring-box-chart-container1 button.expand-btn>span').removeClass('mdi-arrow-collapse');
+
+    $('#monitoring-inventory-treemap-chart').removeClass('chart-expand');
+    $('#monitoring-box-chart-container2').removeClass('expanded');
+    $('#monitoring-box-chart-container2 button.expand-btn>span').addClass('mdi-arrow-expand');
+    $('#monitoring-box-chart-container2 button.expand-btn>span').removeClass('mdi-arrow-collapse');
+}
+
+async function getTransactions(customerCode, dateFrom, dateTo, filter, filterValue) {
+    return $.ajax({
+        type: "POST",
+        url: "frmDashboardBasic2.aspx/GetMonitoringDetailedTransactions",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        cache: false,
+        data: JSON.stringify({ customerCode: customerCode, dateFrom: dateFrom, dateTo: dateTo, filter: filter, filterValue: filterValue }),
+    });
+}
+
+function createHeaders(columns, tableID) {
+    $(`#${tableID} thead`).empty();
+    $(`#${tableID} thead`).append('<tr></tr>');
+    columns.forEach((column) => {
+        $(`#${tableID} thead tr:first-child`).append(`<th>${column}</th>`)
+    });
+}
+
+function showMonitoringDatatable(title, customerCode, dateFrom, dateTo, filter, filterValue) {
+    $('#export-modal').modal('show');
+    $('#export-modal-title').text(title);
+
+    if ($.fn.DataTable.isDataTable('table#export-table')) {
+        $("table#export-table").DataTable().clear();
+        $("table#export-table").DataTable().destroy();
+    }
+
+    $(`table#export-table thead`).empty();
+
+    (async () => {
+        let data = parseData((await getTransactions(customerCode, dateFrom, dateTo, filter, filterValue)).d);
+        if (data.length <= 0) {
+            $('#export-table').empty();
+            $('#export-table').append(`<tbody><tr><td>No data to display</td></tr></tbody>`);
+            return;
+        }
+
+        if (data[0]['Date']) {
+            data = data.map((row) => {
+                const date = Date.parse(row['Date']);
+                return { ...row, Date: moment(date).format('MMM D YYYY') }
+            })
+        }
+
+        const columns = Object.keys(data[0]);
+        let dataTableColumns = [];
+        columns.forEach((column) => {
+            dataTableColumns.push({ data: column });
+        });
+
+        $('#export-table').empty();
+        $('#export-table').append(`<thead></thead><tbody></tbody>`);
+
+        createHeaders(columns, 'export-table');
+
+        exportTable = $("table#export-table").DataTable({
+            processing: true,
+            orderCellsTop: true,
+            searching: false,
+            paging: false,
+            info: false,
+            data: data,
+            columns: dataTableColumns
+        });
+    })();
+}
+
+$('#btn-export-excel').on('click', () => {
+    const title = $('#export-modal-title').text();
+    $('#export-table').tableExport({ type: 'xls', fileName: `${title}-${moment(Date.now()).format('MM-DD-YYYY')}`, });
+});
+
+$('#btn-export-csv').on('click', () => {
+    const title = $('#export-modal-title').text();
+    $('#export-table').tableExport({ type: 'csv', fileName: `${title}-${moment(Date.now()).format('MM-DD-YYYY')}`, });
+});

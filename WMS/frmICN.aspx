@@ -1207,7 +1207,7 @@
                                                             BatchEditStartEditing="OnStartEditing" BatchEditEndEditing="OnEndEditing" BatchEditRowValidating="Grid_BatchEditRowValidating" />
                                                         <SettingsPager Mode="ShowAllRecords" />
                                                         <SettingsEditing Mode="Batch" />
-                                                        <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" ColumnMinWidth="120" VerticalScrollableHeight="530" ShowFooter="True" />
+                                                        <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" VerticalScrollableHeight="530" ShowFooter="True" />
 
                                                         <SettingsBehavior AllowSort="False"></SettingsBehavior>
 

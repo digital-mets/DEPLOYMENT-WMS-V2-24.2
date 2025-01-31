@@ -80,6 +80,31 @@
             </div>
         </div>
 
+        <div class="modal fade" id="export-modal" tabindex="-1" role="dialog" aria-labelledby="export-modal-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="export-modal-title">...</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body pt-0">
+                            <table name="export-table" class="table dataTable w-100" id="export-table"></table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary mr-3" data-dismiss="modal">Close</button>
+                            <button class="btn btn btn-primary d-inline-flex align-items-center" id="btn-export-excel">
+                                Excel
+                            </button>
+                            <button class="btn btn btn-primary d-inline-flex align-items-center" id="btn-export-csv">
+                                CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         <!-- Begin page -->
         <div class="wrapper min-h-100">
             <div class="d-flex flex-column min-h-100 h-100">
@@ -564,16 +589,19 @@
                                             <%--<div class="queue-body"></div>--%>
                                         </div>
                                     </div>
-                                    <div id="monitoring-tab-pane" class="tab-pane active bg-white">
+                                    <div id="monitoring-tab-pane" class="tab-pane active position-relative bg-white">
                                         <div id="monitoring-chart-group1" class="d-flex flex-column">
                                             <div class="d-flex flex-1 align-baseline align-items-center">
-                                                <div class="gray-box flex-1 rounded d-flex flex-column pb-2 h-100">
+                                                <div class="gray-box flex-1 rounded d-flex flex-column pb-2 h-100 position-relative">
+                                                    <button type="button" class="expand-btn"><span class="mdi mdi-arrow-expand mdi-14px"></span></button>
                                                     <h5 class="mx-2 text-center">Transactions</h5>
                                                     <div class=" d-flex flex-column align-items-center justify-content-center flex-1">
                                                         <div id="monitoring-transactions-pie-chart"></div>
                                                     </div>
                                                 </div>
-                                                <div class="gray-box flex-1 rounded d-flex flex-column pb-2 h-100">
+                                                <div id="group1-filler" class="flex-1 pb-2 h-100 d-none"></div>
+                                                <div class="gray-box flex-1 rounded d-flex flex-column pb-2 h-100 position-relative">
+                                                    <button type="button" class="expand-btn"><span class="mdi mdi-arrow-expand mdi-14px"></span></button>
                                                     <h5 class="mx-2 text-center">Truck Status</h5>
                                                     <div class=" d-flex flex-column align-items-center justify-content-center flex-1">
                                                         <div id="monitoring-truck-status-chart"></div>
@@ -752,7 +780,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="monitoring-list-container">
+                                        <div id="monitoring-list-container" class="position-relative">
+                                            <button type="button" class="expand-btn"><span class="mdi mdi-arrow-expand mdi-14px"></span></button>
                                             <div class="overflow-auto">
                                                 <div class="above-the-fold-spacer"></div>
                                                 <div class="container-row header align-self-start">
@@ -768,7 +797,8 @@
                                             </div>
                                         </div>
                                         <div id="monitoring-box-chart-container1" class="d-flex">
-                                            <div class="rounded gray-box d-flex flex-column flex-1">
+                                            <div class="rounded gray-box d-flex flex-column flex-1 position-relative">
+                                                <button type="button" class="expand-btn"><span class="mdi mdi-arrow-expand mdi-14px"></span></button>
                                                 <h5 class="mx-2 mb-0 text-center">Transactions</h5>
                                                 <div class=" d-flex flex-column align-items-center justify-content-center flex-1 pb-2 px-2">
                                                     <div id="monitoring-transactions-treemap-chart"></div>
@@ -776,14 +806,16 @@
                                             </div>
                                         </div>
                                         <div id="monitoring-box-chart-container2" class="d-flex">
-                                            <div class="rounded gray-box d-flex flex-column flex-1">
+                                            <div class="rounded gray-box d-flex flex-column flex-1 position-relative">
+                                                <button type="button" class="expand-btn"><span class="mdi mdi-arrow-expand mdi-14px"></span></button>
                                                 <h5 class="mx-2 mb-0 text-center">Inventory Volume</h5>
                                                 <div class=" d-flex flex-column align-items-center justify-content-center flex-1 pb-2 px-2">
                                                     <div id="monitoring-inventory-treemap-chart"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="monitoring-line-chart-container">
+                                        <div id="monitoring-line-chart-container" class="position-relative">
+                                            <button type="button" class="expand-btn"><span class="mdi mdi-arrow-expand mdi-8px"></span></button>
                                             <div id="monitoring-line-chart" class="gray-box rounded"></div>
                                         </div>
                                     </div>

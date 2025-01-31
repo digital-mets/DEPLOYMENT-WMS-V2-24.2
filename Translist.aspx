@@ -1230,10 +1230,10 @@
                     let alertType = "error";
                     alertMesage(alertType, "No selected row/s in table", "Please select on table");
                 }
-				else if (s.cp_countsubmited == s.cp_counttotal || s.cp_success == "success") {
-					let alertType = "success";
-					alertMesage(alertType, s.cp_modaltitle, s.cp_submitalert);
-				}
+                else if (s.cp_countsubmited == s.cp_counttotal || s.cp_success == "success") {
+                    let alertType = "success";
+                    alertMesage(alertType, s.cp_modaltitle, s.cp_submitalert);
+                }
                 else if (s.cp_countsubmited == 0 || s.cp_counttotal == 0) {
                     let alertType = "error";
                     alertMesage(alertType, s.cp_modaltitle, s.cp_submitalert);
@@ -1466,7 +1466,7 @@
                     let alertType = "warning";
                     alertMesage(alertType, s.cp_modaltitle, s.cp_submitalert);
                 }
-                delete (s.cp_Truck);
+                delete (s.cp_TruckPick);
                 // 2020-09-28   TL  reset flags
                 if (s.cp_selectdata != null) {
                     delete (s.cp_selectdata);
@@ -3580,6 +3580,12 @@
 
             var WarehouseC = WarehouseCheck.toString();
 
+            if (isEmptyOrNull(WarehouseC.trim())) {
+                AssignPop.Hide();
+                alertMesage("error", "", 'No selected warehouse checker.');
+                return;
+            }
+
             $.ajax({
                 type: 'POST',
                 url: "Translist.aspx/UpdateAssign",
@@ -3627,6 +3633,12 @@
             }
 
             var WarehouseC = WarehouseCheck.toString();
+
+            if (isEmptyOrNull(WarehouseC.trim())) {
+                MultiAssignPop.Hide();
+                alertMesage("error", "", 'No selected warehouse checker.');
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
@@ -4169,7 +4181,7 @@
         }
 
 
-	</script>
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -4324,7 +4336,7 @@
                                                 <SmallImage IconID="tasks_edittask_32x32">
                                                 </SmallImage>
                                                 <ItemStyle HorizontalAlign="Center"></ItemStyle>
-                                            </dx:RibbonButtonItem> 
+                                            </dx:RibbonButtonItem>
 
                                             <dx:RibbonButtonItem Name="RSubmit" Size="Large" Text="Submit" Visible="false">
                                                 <LargeImage IconID="tasks_task_32x32">
@@ -4931,8 +4943,9 @@
         <%--2016-02-16  Tony  End--%>
         <dx:ASPxButton ID="Refresh" runat="server" AutoPostBack="False" HorizontalAlign="Left">
             <ClientSideEvents Click="function(s, e) {
-                                  gv2.Refresh();  e.processOnServer = false;
-
+                                  gv2.Refresh();
+                                  gv2.UnselectRows();
+                                  e.processOnServer = false;
                                  }" />
             <Image Url="~/icons/Refresh.png"></Image>
         </dx:ASPxButton>
@@ -6281,7 +6294,7 @@
             <ClientSideEvents Shown="function(){Assigngrid.PerformCallback('Shown');}" />
             <ContentCollection>
                 <dx:PopupControlContentControl runat="server">
-                    <dx:ASPxGridView ID="Assigngrid" runat="server" Width="100%" ClientInstanceName="Assigngrid" EnableTheming="True" KeyFieldName="DocNumber"
+                    <dx:ASPxGridView ID="Assigngrid" runat="server" Width="100%" ClientInstanceName="Assigngrid" EnableTheming="True" KeyFieldName="DocNumber;WarehouseChecker"
                         Theme="Office2010Blue" AutoGenerateColumns="true" Settings-ShowStatusBar="Hidden" OnCustomCallback="Assigngrid_CustomCallback" SettingsEditing-BatchEditSettings-ShowConfirmOnLosingChanges="true">
 
                         <SettingsBehavior AllowSort="False" FilterRowMode="OnClick" ColumnResizeMode="NextColumn" AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />

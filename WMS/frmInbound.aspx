@@ -1379,19 +1379,20 @@
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
 
-                                            <dx:LayoutItem Caption="Clone #">
-                                                <LayoutItemNestedControlCollection>
-                                                    <dx:LayoutItemNestedControlContainer runat="server">
-                                                        <dx:ASPxTextBox ID="txtClone" runat="server" ClientInstanceName="clone" Width="170px">
-                                                        </dx:ASPxTextBox>
-                                                    </dx:LayoutItemNestedControlContainer>
-                                                </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
                                             <dx:LayoutItem Caption="Normal Receiving">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxCheckBox ID="CheckBlastReq" runat="server" ClientEnabled="false" CheckState="Unchecked" OnLoad="CheckboxLoad" Text=" ">
                                                         </dx:ASPxCheckBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            
+                                            <dx:LayoutItem Caption="Clone #">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxTextBox ID="txtClone" runat="server" ClientInstanceName="clone" Width="170px">
+                                                        </dx:ASPxTextBox>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
