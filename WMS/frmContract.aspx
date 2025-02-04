@@ -1500,7 +1500,7 @@
                 const min = gv2.batchEditApi.GetCellValue(rowIndex, 'Min');
                 const max = gv2.batchEditApi.GetCellValue(rowIndex, 'Max');
 
-                if (serviceType.trim() !== '' && serviceType.toUpperCase().includes('BLAST')) { //&& allocChargeable && ((min <= 0 && max <= 0) || (min > 0 && min > max) || (min < 0 || max < 0))) {
+                if (serviceType.trim() !== '' && serviceType.toUpperCase().includes('BLAST') && ((min <= 0 && max <= 0) || (min > 0 && min > max) || (min < 0 || max < 0))) {
                     errors.push(`${serviceType} requires MIN and MAX value`);
                 }
             });
