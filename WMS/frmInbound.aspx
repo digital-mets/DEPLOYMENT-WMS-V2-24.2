@@ -1961,7 +1961,7 @@
 
                                         </Items>
                                     </dx:LayoutGroup>
-                                    <dx:LayoutGroup Caption="COMI">
+                                    <dx:LayoutGroup Caption="VQMILC">
                                         <Items>
                                             <dx:LayoutItem Caption="Batch:">
                                                 <LayoutItemNestedControlCollection>

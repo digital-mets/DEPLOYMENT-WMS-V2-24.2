@@ -148,7 +148,7 @@
             }
 
             if (s.cp_vatrate != null) {
-
+                var Amount = 0;
                 var num1 = 0;
                 var num3 = 0;
                 var num2 = 0;
@@ -163,17 +163,20 @@
                     num2 = field4.GetText();
                 }
 
-
                 vatrateval = s.cp_vatrate;
                 num3 = s.cp_vatrate;
                 var total = 0;
                 total = num1 * num3 * num2;
 
-                console.log(num1);
-                console.log(num2);
-                console.log(num3);
-                console.log(total);
+                //console.log(num1);
+                //console.log(num2);
+                //console.log(num3);
+                //console.log(total);
 
+                Amount = num1 * num2;
+
+                // amount
+                field7.SetText(Amount);
                 // vat
                 field6.SetText(total);
 
@@ -187,7 +190,6 @@
                 
                 cp.PerformCallback('vat');
                 autocalculate();
-                console.log("ditoooo");
                 delete (s.cp_servicetype);
             }
 
@@ -301,30 +303,6 @@
         }
         function autocalculate(s, e) {
             OnInitTrans();
-            var amount = 0;
-            var num1 = 0;
-            var num2 = 0;
-
-            //quantity
-            if (field4.GetText() == null || field4.GetText() == "") {
-                num1 = 0;
-            }
-            else {
-                num1 = field4.GetText();
-            }
-
-            // Rate
-            if (field5.GetText() == null || field5.GetText() == "") {
-                num2 = 0;
-            }
-            else {
-                num2 = field5.GetText();
-            }
-
-            amount = num1 * num2;
-
-            // amount
-            field7.SetText(amount);
             cp.PerformCallback('vat');
         }
 
