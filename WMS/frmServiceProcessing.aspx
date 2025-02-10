@@ -582,6 +582,13 @@
             var PalletID = txtPalletID.GetValue();
             var Location = txtLocation.GetValue();
 
+            let warehouse = txtwarehousecode.GetText();
+            let customer = cmbStorerKey.GetText();
+            if ((warehouse == "" || warehouse == null) || (customer == "" || customer == null)) {
+                alert('Please check all the fields!');
+                return;
+            }
+
             if ((DocNumber == "" || DocNumber == null)
                 && (ItemCode == "" || ItemCode == null)
                 && (PalletID == "" || PalletID == null)
@@ -641,7 +648,7 @@
                                                                 <dx:LayoutItem Caption="Warehouse Code:" Name="WarehouseCode">
                                                                     <LayoutItemNestedControlCollection>
                                                                         <dx:LayoutItemNestedControlContainer runat="server">
-                                                                            <dx:ASPxGridLookup ID="txtwarehousecode" runat="server" AutoGenerateColumns="True" Width="170px" DataSourceID="Warehouse" OnLoad="LookupLoad" TextFormatString="{0}" KeyFieldName="WarehouseCode">
+                                                                            <dx:ASPxGridLookup ID="txtwarehousecode" ClientInstanceName="txtwarehousecode" runat="server" AutoGenerateColumns="True" Width="170px" DataSourceID="Warehouse" OnLoad="LookupLoad" TextFormatString="{0}" KeyFieldName="WarehouseCode">
                                                                                 <GridViewProperties>
                                                                                     <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
                                                                                     <Settings ShowFilterRow="True"></Settings>
@@ -792,7 +799,7 @@
                                                                                                     </dx:ASPxLabel>
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <dx:ASPxGridLookup ID="cmbStorerKey" runat="server" Width="170px" AutoGenerateColumns="False" DataSourceID="StorerKey" KeyFieldName="BizPartnerCode" OnLoad="LookupLoad" TextFormatString="{0}">
+                                                                                                    <dx:ASPxGridLookup ID="cmbStorerKey" ClientInstanceName="cmbStorerKey" runat="server" Width="170px" AutoGenerateColumns="False" DataSourceID="StorerKey" KeyFieldName="BizPartnerCode" OnLoad="LookupLoad" TextFormatString="{0}">
                                                                                                         <GridViewProperties>
                                                                                                             <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
                                                                                                             <Settings ShowFilterRow="True"></Settings>
@@ -803,7 +810,7 @@
                                                                                                             <dx:GridViewDataTextColumn FieldName="Name" ShowInCustomizationForm="True" VisibleIndex="1">
                                                                                                             </dx:GridViewDataTextColumn>
                                                                                                         </Columns>
-                                                                                                        <ClientSideEvents ValueChanged="function(s,e){refreshGridLookup();}" />
+                                                                                                        <ClientSideEvents ValueChanged="function(s,e){refreshGridLookup();}" Validation="OnValidation"/>
                                                                                                         <ValidationSettings Display="None" ErrorDisplayMode="ImageWithTooltip">
                                                                                                             <ErrorImage ToolTip="Customer is required">
                                                                                                             </ErrorImage>

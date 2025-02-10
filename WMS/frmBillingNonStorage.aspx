@@ -48,6 +48,7 @@
 
         $(document).ready(function () {
             PerfStart(module, entry, id);
+            cp.PerformCallback('RR');
         });
 
         function OnValidation(s, e) { //Validation function for header controls (Set this for each header controls)
@@ -482,7 +483,7 @@
                                             <dx:LayoutItem Caption="Total Amount:" Name="TotalAmount ">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                        <dx:ASPxTextBox ID="txtTotalAmount" runat="server" ClientInstanceName="txtTotalAmount" ReadOnly="True" Width="170px">
+                                                        <dx:ASPxTextBox ID="txtTotalAmount" runat="server" ClientInstanceName="txtTotalAmount" ClientEnabled="false" Width="170px">
                                                         </dx:ASPxTextBox>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
@@ -517,7 +518,7 @@
                                             <dx:LayoutItem Caption="TotalVat:" Name="TotalVat">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                        <dx:ASPxTextBox ID="txtTotalVat" runat="server" Width="170px" ReadOnly="True" ClientInstanceName="txtTotalVat">
+                                                        <dx:ASPxTextBox ID="txtTotalVat" runat="server" Width="170px" ClientEnabled="false" ClientInstanceName="txtTotalVat">
                                                         </dx:ASPxTextBox>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
@@ -525,7 +526,7 @@
                                             <dx:LayoutItem Caption="ContractNumber:">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                        <dx:ASPxTextBox ID="txtContractNumber" ClientInstanceName="txtContractNumber" runat="server" Width="170px" ReadOnly="true">
+                                                        <dx:ASPxTextBox ID="txtContractNumber" ClientInstanceName="txtContractNumber" runat="server" Width="170px" ClientEnabled="false">
                                                         </dx:ASPxTextBox>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
@@ -541,7 +542,7 @@
                                             <dx:LayoutItem Caption="BillingPeriodType:" Name="BillingPeriodType">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                        <dx:ASPxTextBox ID="txtBillingPeriodType" ClientInstanceName="txtBillingPeriodType" runat="server" Width="170px" ReadOnly="true">
+                                                        <dx:ASPxTextBox ID="txtBillingPeriodType" ClientInstanceName="txtBillingPeriodType" runat="server" Width="170px" ClientEnabled="false">
                                                         </dx:ASPxTextBox>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>

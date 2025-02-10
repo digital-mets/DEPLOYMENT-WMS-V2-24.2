@@ -95,7 +95,7 @@ dxValidator: { validationRules: validationRules || [] }"></div>
         var module = getParameterByName("transtype");
         var id = getParameterByName("userid");
         var entry = getParameterByName("param");
-        let IsExport = false;
+        //let IsExport = false;
 
         //console.log(module, id, entry)
 
@@ -172,16 +172,16 @@ dxValidator: { validationRules: validationRules || [] }"></div>
         }
 
         function customizeMenu(s, e) {
-            var actionPrint = e.Actions.filter(function (action) { return action.text === "Print"; })[0];
-            var actionPrint2 = e.Actions.filter(function (action) { return action.text === "Print Page"; })[0];
-            actionPrint2.visible = false;
+            var actionPrint = e.Actions.filter(action => action.text === "Print")[0];
+            var actionPrint2 = e.Actions.filter(action => action.text === "Print Page")[0];
+
+            if (actionPrint2) actionPrint2.visible = false;
 
             e.Actions.push({
                 text: "New Tab",
                 imageClassName: "dxrd-image-open",
                 disabled: ko.observable(false),
                 visible: true,
-                //index: 8,
                 clickAction: function () {
                     window.open(window.location.href, '_blank');
                 }
@@ -189,26 +189,70 @@ dxValidator: { validationRules: validationRules || [] }"></div>
 
             var defaultPrintClickAction = actionPrint.clickAction;
             actionPrint.clickAction = async function () {
-                //console.log(reprint);
-                if (reprint == "True") {
+                if (typeof reprint !== "undefined" && reprint === "True") {
                     var r = confirm('Are you sure that you want to proceed with printing? ' +
                         'This will be marked as Re-Printed after this process');
-                    if (r == true) {
+                    if (r) {
                         defaultPrintClickAction();
-                        cp.PerformCallback();
+                        if (typeof cp !== "undefined" && cp.PerformCallback) {
+                            cp.PerformCallback();
+                        }
                         window.close();
                     }
-                }
-                else {
+                } else {
                     await Validation();
 
-                    if (IsExport == true) {
-                        await s.PerformCustomDocumentOperation("ExportToCustomPath");
-                    }
+                    var content = $("<div style='height: auto; max-height: none; min-height: 0px; display: flex; justify-content: center; flex-direction: column; align-items: center;'/>");
 
-                    await defaultPrintClickAction();
+                    $("#popup").dxPopup({
+                        showTitle: false,
+                        visible: false,
+                        hideOnOutsideClick: false,
+                        dragEnabled: false,
+                        position: { my: "center", at: "center", of: window },
+                        width: 450,
+                        height: "auto",
+                        contentTemplate: function () {
+                            content.empty().append(
+                                $("<i class='dx-icon-warning' style='color: yellow; font-size: 75px; text-align: center; margin: 20px'></i>"),
+                                $("<h1 />")
+                                    .text("Do you want to upload this document?")
+                                    .css({ color: "black", "text-align": "center", "font-size": "20px" }),
+
+                                // Buttons inside the same div with Flexbox
+                                $("<div />").css({
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    gap: "20px", // Space between buttons
+                                    marginTop: "20px",
+                                    marginBottom: "20px"
+                                }).append(
+                                    $("<div style='padding-left: 50px; padding-right: 50px;'/>").attr("id", "btnYes").dxButton({
+                                        text: "Yes",
+                                        type: "success", // Green color
+                                        stylingMode: "contained",
+                                        onClick: async function () {
+                                            await s.PerformCustomDocumentOperation("ExportToCustomPath");
+                                            $("#popup").dxPopup("hide");
+                                            await defaultPrintClickAction();
+                                        }
+                                    }),
+                                    $("<div style='padding-left: 50px; padding-right: 50px;'/>").attr("id", "btnNo").dxButton({
+                                        text: "No",
+                                        type: "danger", // Red color
+                                        stylingMode: "contained",
+                                        onClick: async function () {
+                                            $("#popup").dxPopup("hide");
+                                            await defaultPrintClickAction();
+                                        }
+                                    })
+                                )
+                            );
+                            return content;
+                        }
+                    }).dxPopup("instance").show(); // Show popup
                 }
-            }
+            };
         }
 
         async function Validation() {
@@ -224,10 +268,10 @@ dxValidator: { validationRules: validationRules || [] }"></div>
 
                 if (data.d[0] !== "Success") {
                     if (data.d[1] == 'IsNotForExport') {
-                        IsExport = false;
+                        //IsExport = false;
                     } else {
                         alert(data.d[0]);
-                        IsExport = false;
+                        //IsExport = false;
                     }
                 } else {
                     IsExport = true;
@@ -309,13 +353,13 @@ dxValidator: { validationRules: validationRules || [] }"></div>
                 <ClientSideEvents Init="Init" CustomizeParameterEditors="CustomizeParameterEditors" CustomizeMenuActions="customizeMenu" />
             </dx:ASPxWebDocumentViewer>
             <dx:ASPxCallback ID="cp" runat="server" OnCallback="cp_Callback"></dx:ASPxCallback>
+            <div id="popup"></div>
             <script type="text/javascript">
                 function ResizeReport() {
                     report.SetHeight(document.documentElement.clientHeight - 45);
                 }
                 window.onresize = function resize() { ResizeReport(); }
             </script>
-
         </div>
     </form>
 </body>

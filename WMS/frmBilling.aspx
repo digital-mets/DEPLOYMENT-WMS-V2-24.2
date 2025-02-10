@@ -609,7 +609,7 @@
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxSpinEdit ID="speTotalAmount" runat="server" Width="170px" Number="0.00" NullDisplayText="0.00" ConvertEmptyStringToNull="False" NullText="0.00"
-                                                            ClientInstanceName="speTotalAmount" DisplayFormatString="{0:N}" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="False" ReadOnly="true">
+                                                            ClientInstanceName="speTotalAmount" DisplayFormatString="{0:N}" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="False" ClientEnabled="false">
                                                             <SpinButtons ShowIncrementButtons="False"></SpinButtons>
                                                         </dx:ASPxSpinEdit>
                                                     </dx:LayoutItemNestedControlContainer>
@@ -627,7 +627,7 @@
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxSpinEdit ID="speTotalVat" runat="server" Width="170px" Number="0.00" NullDisplayText="0.00" ConvertEmptyStringToNull="False" NullText="0.00"
-                                                            ClientInstanceName="speTotalVat" DisplayFormatString="{0:N}" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="False" ReadOnly="true">
+                                                            ClientInstanceName="speTotalVat" DisplayFormatString="{0:N}" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="False" ClientEnabled="false">
                                                             <SpinButtons ShowIncrementButtons="False"></SpinButtons>
                                                         </dx:ASPxSpinEdit>
                                                     </dx:LayoutItemNestedControlContainer>
@@ -677,7 +677,7 @@
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxSpinEdit ID="speTotalGross" runat="server" Width="170px" Number="0.00" NullDisplayText="0.00" ConvertEmptyStringToNull="False" NullText="0.00"
-                                                            ClientInstanceName="speTotalGross" DisplayFormatString="{0:N}" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="False" ReadOnly="true">
+                                                            ClientInstanceName="speTotalGross" DisplayFormatString="{0:N}" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="False" ClientEnabled="false">
                                                             <SpinButtons ShowIncrementButtons="False"></SpinButtons>
                                                         </dx:ASPxSpinEdit>
                                                     </dx:LayoutItemNestedControlContainer>
