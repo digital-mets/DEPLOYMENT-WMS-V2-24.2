@@ -1740,6 +1740,34 @@
                 conf.Hide();
 
             }
+            if (s.cp_SubmitReplenishment != null) {
+                if (gv2.GetSelectedRowCount() == 0 && s.cp_selectdata != "selectData") {
+                    let alertType = "error";
+                    alertMesage(alertType, "No selected row/s in table", "Please select on table");
+                }
+                else if (s.cp_countsubmited == s.cp_counttotal || s.cp_success == "success") {
+                    let alertType = "success";
+                    alertMesage(alertType, s.cp_modaltitle, s.cp_submitalert);
+                }
+                else if (s.cp_countsubmited == 0 || s.cp_counttotal == 0) {
+                    let alertType = "error";
+                    alertMesage(alertType, s.cp_modaltitle, s.cp_submitalert);
+                }
+                else {
+                    let alertType = "warning";
+                    alertMesage(alertType, s.cp_modaltitle, s.cp_submitalert);
+                }
+                delete (s.cp_SubmitReplenishment);
+               
+                if (s.cp_selectdata != null) {
+                    delete (s.cp_selectdata);
+                }
+                if (s.cp_success != null) {
+                    delete (s.cp_success);
+                }
+                
+                conf.Hide();
+            }
             if (s.cp_RStartUnloadProcess != null) {
                 //SubmitAlert.Show();
                 //delete (s.cp_RStartUnloadProcess);
@@ -1918,6 +1946,11 @@
             if (s.cp_ReturnForDistri) {
                 delete (s.cp_ReturnForDistri);
                 DistriReturnPop.Show();
+            }
+            if (s.cp_Replenishment) {
+                delete (s.cp_Replenishment);
+                transclick = "Replenishment";
+                conf.Show();
             }
             if (s.cp_RPartialS) {
                 delete (s.cp_RPartialS);
@@ -2242,6 +2275,10 @@
             }
             if (transclick == "Return") {
                 cp.PerformCallback('RReturnValidate');
+                e.processOnServer = false;
+            }
+            if (transclick == "Replenishment") {
+                cp.PerformCallback('SubmitReplenishment');
                 e.processOnServer = false;
             }
             if (transclick == "PartialS") {
@@ -4552,6 +4589,12 @@
                                                 </SmallImage>
                                             </dx:RibbonButtonItem>
                                             <%-- 2016-07-12  Terence  End --%>
+                                            <dx:RibbonButtonItem Name="RReplenishment" Text="Replenishment" Size="Large" Visible="false">
+                                                <LargeImage IconID="richedit_updatetableofcontents_32x32">
+                                                </LargeImage>
+                                                <SmallImage IconID="richedit_updatetableofcontents_16x16">
+                                                </SmallImage>
+                                            </dx:RibbonButtonItem>
                                         </Items>
                                     </dx:RibbonGroup>
                                     <dx:RibbonGroup Name="NonStorage" Text="NonStorage" Visible="false">
