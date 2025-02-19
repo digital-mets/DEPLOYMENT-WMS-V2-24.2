@@ -36,7 +36,7 @@
     <script>
         var isValid = true;
         var counterror = 0;
-        
+
         function getParameterByName(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
             var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -187,7 +187,7 @@
             }
 
             if (s.cp_servicetype == true) {
-                
+
                 cp.PerformCallback('vat');
                 autocalculate();
                 delete (s.cp_servicetype);
@@ -256,7 +256,7 @@
             if (!Type.includes("REEFERVAN")) {
                 //console.log(Type);
                 Volume.SetValue(null);
-               ActualKm.SetValue(null);
+                ActualKm.SetValue(null);
             }
             // field4.SetValue(null);
             //txtHField5.SetText(null);
@@ -524,11 +524,22 @@
                                             <dx:LayoutItem Caption="Field 7:" Name="Field7">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxSpinEdit ID="txtHField7" runat="server" ClientInstanceName="field7" MaxValue="999999999" Number="0" Width="170px" OnLoad="SpinEdit_Load">
+                                                            <SpinButtons ShowIncrementButtons="False">
+                                                            </SpinButtons>
+                                                            <ClientSideEvents ValueChanged="autocalculate" />
+                                                        </dx:ASPxSpinEdit>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <%--<dx:LayoutItem Caption="Field 7:" Name="Field7">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxTextBox ID="txtHField7" runat="server" Width="170px" ClientInstanceName="field7" ReadOnly="True">
                                                         </dx:ASPxTextBox>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
+                                            </dx:LayoutItem>--%>
                                             <dx:LayoutItem Caption="Field 8:" Name="Field8">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -545,7 +556,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                             <dx:LayoutItem Caption="" Name="Volume">
+                                            <dx:LayoutItem Caption="" Name="Volume">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxTextBox ID="txtVolume" runat="server" Width="170px" ClientInstanceName="Volume" OnLoad="TextboxLoad">
@@ -553,7 +564,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                             <dx:LayoutItem Caption="" Name="ActualKilometer">
+                                            <dx:LayoutItem Caption="" Name="ActualKilometer">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxTextBox ID="txtActualKm" runat="server" Width="170px" ClientInstanceName="ActualKm" OnLoad="TextboxLoad">
@@ -561,7 +572,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                            
+
                                         </Items>
                                     </dx:LayoutGroup>
                                     <dx:LayoutGroup Caption="Audit Trail" ColCount="2" ColSpan="2">
