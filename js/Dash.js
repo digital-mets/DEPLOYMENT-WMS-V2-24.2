@@ -2976,7 +2976,7 @@ function fillMonitoringCounts(rows) {
 }
 
 $('#monitoring-list-container>div').on('scroll', function () {
-    const currentScrollTop = Math.ceil((this).scrollTop()); // Current vertical scroll position
+    const currentScrollTop = Math.ceil((this).scrollTop); // Current vertical scroll position
     const lastScrollTop = $(this).data('last-scroll-top') || 0;
     const scrollHeight = this.scrollHeight;
     const clientHeight = this.clientHeight;

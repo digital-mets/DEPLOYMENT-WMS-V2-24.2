@@ -223,7 +223,7 @@
 
         //validation
         function Grid_BatchEditRowValidating(s, e) {//Client side validation. Check empty fields. (only visible fields)
-            for (var i = 0; i < gv1.GetColumnsCount() ; i++) {
+            for (var i = 0; i < gv1.GetColumnsCount(); i++) {
                 var column = s.GetColumn(i);
                 //if (column != s.GetColumn(6) && column != s.GetColumn(1) && column != s.GetColumn(7) && column != s.GetColumn(5) && column != s.GetColumn(8) && column != s.GetColumn(9) && column != s.GetColumn(10) && column != s.GetColumn(11) && column != s.GetColumn(12) && column != s.GetColumn(13) && column != s.GetColumn(14) && column != s.GetColumn(15) && column != s.GetColumn(16) && column != s.GetColumn(17) && column != s.GetColumn(18) && column != s.GetColumn(19) && column != s.GetColumn(20) && column != s.GetColumn(21) && column != s.GetColumn(22) && column != s.GetColumn(23) && column != s.GetColumn(24) && column != s.GetColumn(13)) {//Set to skip all unnecessary columns that doesn't need validation//Column index needed to set //Example for Qty
                 //    var cellValidationInfo = e.validationInfo[column.index];
@@ -537,7 +537,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                             <dx:LayoutItem Caption="OnHand BaseUnit">
+                                            <dx:LayoutItem Caption="OnHand BaseUnit">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxTextBox ID="txtBaseUnit" runat="server" Width="170px" ReadOnly="true">
@@ -570,7 +570,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                            
+
                                             <dx:LayoutItem Caption="Minimum Weight">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -579,7 +579,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                             <dx:LayoutItem Caption="Max QTY">
+                                            <%-- <dx:LayoutItem Caption="Max QTY">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxSpinEdit ID="txtMaxQty" runat="server" Number="0" Width="170px" MinValue="0" OnLoad="SpinEdit_Load" MaxValue="999999999999" ClientInstanceName="maxQty">
@@ -588,9 +588,9 @@
                                                         </dx:ASPxSpinEdit>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
+                                            </dx:LayoutItem>--%>
 
-                                          
+
 
 
                                             <dx:LayoutItem Caption="Priority">
@@ -602,8 +602,8 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                            
-                                            <dx:LayoutItem Caption="Minimum QTY">
+
+                                            <%-- <dx:LayoutItem Caption="Minimum QTY">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxSpinEdit ID="txtMinQty" runat="server" Number="0" Width="170px" MinValue="0" OnLoad="SpinEdit_Load" MaxValue="999999999999" ClientInstanceName="minQty">
@@ -613,7 +613,7 @@
                                                         </dx:ASPxSpinEdit>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
+                                            </dx:LayoutItem>--%>
                                             <dx:LayoutItem Caption="ABC">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -626,7 +626,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                            <dx:LayoutItem Caption="Replenish">
+                                            <%-- <dx:LayoutItem Caption="Replenish">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxCheckBox ID="chkReplenish" runat="server" OnLoad="CheckboxLoad" CheckState="Unchecked" Text=" " ClientInstanceName="replenishCheckBox" CheckedChanged="chkReplenish_CheckedChanged">
@@ -634,8 +634,8 @@
                                                         </dx:ASPxCheckBox>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
-                                            
+                                            </dx:LayoutItem>--%>
+
                                             <dx:LayoutItem Caption="IsInactive">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -645,7 +645,14 @@
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
 
-
+                                            <dx:LayoutItem Caption="ForReplenish">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxCheckBox ID="txtForRep" runat="server" OnLoad="CheckboxLoad" CheckState="Unchecked" Text=" " Enabled="false">
+                                                        </dx:ASPxCheckBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
                                         </Items>
                                     </dx:LayoutGroup>
                                     <dx:LayoutGroup Caption="User Defined" ColCount="2">

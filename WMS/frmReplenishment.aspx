@@ -113,58 +113,58 @@
 
             if (s.cp_delete == "Loc") {
                 delete (s.cp_delete);
-            }else{
-            if (s.cp_delete) {
+            } else {
+                if (s.cp_delete) {
                     delete (s.cp_delete);
                     DeleteControl.Show();
-                } 
-         
-            if (s.cp_success) {
-                //alert(s.cp_valmsg);
-                alert(s.cp_message);
-                if (s.cp_message2 != null) {
-                    alert(s.cp_message2);
                 }
 
-                delete (s.cp_valmsg);
-                delete (s.cp_success);//deletes cache variables' data
-                delete (s.cp_message);
-                delete (s.cp_message2);
-            }
-
-            else {
-
-                if (s.cp_close == undefined) {
+                if (s.cp_success) {
+                    //alert(s.cp_valmsg);
                     alert(s.cp_message);
+                    if (s.cp_message2 != null) {
+                        alert(s.cp_message2);
+                    }
+
+                    delete (s.cp_valmsg);
                     delete (s.cp_success);//deletes cache variables' data
                     delete (s.cp_message);
-                    return;
+                    delete (s.cp_message2);
                 }
 
-            }
-
-
-            if (s.cp_close) {
-                console.log('nats');
-                if (s.cp_message != null) {
-                    alert(s.cp_message);
-                    delete (s.cp_message);
-                }
-                if (s.cp_valmsg != null) {
-                    alert(s.cp_valmsg);
-                    delete (s.cp_valmsg);
-                }
-                if (glcheck.GetChecked()) {
-                    delete (s.cp_close);
-                    window.location.reload();
-                }
                 else {
-                    delete (cp_close);
-                    window.close();//close window if callback successful
-                }
-            }
 
-        }
+                    if (s.cp_close == undefined) {
+                        alert(s.cp_message);
+                        delete (s.cp_success);//deletes cache variables' data
+                        delete (s.cp_message);
+                        return;
+                    }
+
+                }
+
+
+                if (s.cp_close) {
+                    console.log('nats');
+                    if (s.cp_message != null) {
+                        alert(s.cp_message);
+                        delete (s.cp_message);
+                    }
+                    if (s.cp_valmsg != null) {
+                        alert(s.cp_valmsg);
+                        delete (s.cp_valmsg);
+                    }
+                    if (glcheck.GetChecked()) {
+                        delete (s.cp_close);
+                        window.location.reload();
+                    }
+                    else {
+                        delete (cp_close);
+                        window.close();//close window if callback successful
+                    }
+                }
+
+            }
 
             //autocalculate();
         }
@@ -321,7 +321,11 @@
                 }
             }
         }
-
+        function gridLookup_CloseUp(s, e) { //Automatically leaves the current cell if an item is selected.
+            setTimeout(function () {
+                gv1.batchEditApi.EndEdit();
+            }, 500);
+        }
         function ProcessCells2(selectedIndex, focused, column, s) {//Auto calculate qty function :D
             if (val == null) {
                 val = ";";
@@ -391,7 +395,7 @@
             if (valchange) {
                 valchange = false;
                 closing = false;
-                for (var i = 0; i < gv1.GetColumnsCount() ; i++) {
+                for (var i = 0; i < gv1.GetColumnsCount(); i++) {
                     var column = gv1.GetColumn(i);
                     if (column.visible == false || column.fieldName == undefined)
                         continue;
@@ -428,7 +432,7 @@
             console.log(keyCode);
             if (keyCode == 13)
                 gv1.batchEditApi.EndEdit();
-            
+
             //ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
         }
 
@@ -440,7 +444,7 @@
 
         //validation
         function Grid_BatchEditRowValidating(s, e) {//Client side validation. Check empty fields. (only visible fields)
-            for (var i = 0; i < gv1.GetColumnsCount() ; i++) {
+            for (var i = 0; i < gv1.GetColumnsCount(); i++) {
                 var column = s.GetColumn(i);
                 //if (column != s.GetColumn(6) && column != s.GetColumn(1) && column != s.GetColumn(7) && column != s.GetColumn(8) && column != s.GetColumn(9) && column != s.GetColumn(10) && column != s.GetColumn(11) && column != s.GetColumn(12) && column != s.GetColumn(13) && column != s.GetColumn(14) && column != s.GetColumn(15) && column != s.GetColumn(16) && column != s.GetColumn(17) && column != s.GetColumn(18) && column != s.GetColumn(19) && column != s.GetColumn(20) && column != s.GetColumn(21) && column != s.GetColumn(22) && column != s.GetColumn(23) && column != s.GetColumn(24) && column != s.GetColumn(13)) {//Set to skip all unnecessary columns that doesn't need validation//Column index needed to set //Example for Qty
                 //    var cellValidationInfo = e.validationInfo[column.index];
@@ -507,7 +511,7 @@
             return array.indexOf(value) > -1;
         }
 
-      
+
 
         function isInArray(value, array) {
             return array.indexOf(value) > -1;
@@ -556,7 +560,7 @@
             loader.Hide();
         }
 
-     
+
 
         function Bindgrid(item, e, column, s) {//Clone function :D
             //if (column.fieldName == "DocNumber") {
@@ -600,12 +604,12 @@
             //if (column.fieldName == "BulkUnit") {
             //    s.batchEditApi.SetCellValue(e.visibleIndex, column.fieldName, item[14] == 'null' ? null : item[14]);
             //}
-            if (column.fieldName == "ManufacturingDate") {
-                s.batchEditApi.SetCellValue(e.visibleIndex, column.fieldName, item[4] == 'null' ? null : new Date(item[4]));
-            }
-            if (column.fieldName == "ExpiryDate") {
-                s.batchEditApi.SetCellValue(e.visibleIndex, column.fieldName, item[5] == 'null' ? null : new Date(item[5]));
-            }
+            //if (column.fieldName == "ManufacturingDate") {
+            //    s.batchEditApi.SetCellValue(e.visibleIndex, column.fieldName, item[4] == 'null' ? null : new Date(item[4]));
+            //}
+            //if (column.fieldName == "ExpiryDate") {
+            //    s.batchEditApi.SetCellValue(e.visibleIndex, column.fieldName, item[5] == 'null' ? null : new Date(item[5]));
+            //}
             if (column.fieldName == "BatchNumber") {
                 s.batchEditApi.SetCellValue(e.visibleIndex, column.fieldName, item[6] == 'null' ? null : item[6]);
             }
@@ -649,7 +653,15 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                            <dx:LayoutItem Caption="Document Date:" Name="DocDate" ColSpan="2">
+                                            <dx:LayoutItem Caption="Minimum Weight">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxSpinEdit ID="txtMinWeight" runat="server" Width="170px" MinValue="0" MaxValue="9999999999">
+                                                        </dx:ASPxSpinEdit>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Document Date:" Name="DocDate">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxDateEdit ID="dtpdocdate" runat="server" Width="170px" ReadOnly="true">
@@ -663,113 +675,107 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Current Weight">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxSpinEdit ID="txtCurWeight" runat="server" Width="170px" MinValue="0" MaxValue="9999999999">
+                                                        </dx:ASPxSpinEdit>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
                                             <dx:LayoutItem Caption="Warehouse">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxGridLookup ID="glWarehousecode" runat="server" Width="170px" ClientInstanceName="glWarehousecode" DataSourceID="warehouseC" OnLoad="LookupLoad" KeyFieldName="WarehouseCode" TextFormatString="{0}">
-                                                                <ValidationSettings Display="None" ValidateOnLeave="true" ErrorDisplayMode="ImageWithTooltip">
-                                                                    <RequiredField IsRequired="True" />
-                                                                </ValidationSettings>
-                                                                <InvalidStyle BackColor="Pink">
-                                                                </InvalidStyle>
-                                                                <GridViewProperties Settings-ShowFilterRow="true">
-                                                                    <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                            <ValidationSettings Display="None" ValidateOnLeave="true" ErrorDisplayMode="ImageWithTooltip">
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                            <InvalidStyle BackColor="Pink">
+                                                            </InvalidStyle>
+                                                            <GridViewProperties Settings-ShowFilterRow="true">
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
 
-                                                                    <Settings ShowFilterRow="True"></Settings>
-                                                                </GridViewProperties>
-                                                                <Columns>
-                                                                    <dx:GridViewDataTextColumn FieldName="WarehouseCode" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
-                                                                    </dx:GridViewDataTextColumn>
+                                                                <Settings ShowFilterRow="True"></Settings>
+                                                            </GridViewProperties>
+                                                            <Columns>
+                                                                <dx:GridViewDataTextColumn FieldName="WarehouseCode" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                </dx:GridViewDataTextColumn>
 
-                                                                </Columns>
-                                                                <ClientSideEvents Valuechanged="function (s, e){ cp.PerformCallback('Loc');}" Validation="OnValidation" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
-                                                            </dx:ASPxGridLookup>
-                                                    </dx:LayoutItemNestedControlContainer>
-                                                </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
-                                            <dx:LayoutItem Caption="Minimum Weight">
-                                                <LayoutItemNestedControlCollection>
-                                                    <dx:LayoutItemNestedControlContainer runat="server">
-                                                         <dx:ASPxSpinEdit ID="txtMinWeight" runat="server" Width="170px"  MinValue="0" MaxValue="9999999999">
-                                                        </dx:ASPxSpinEdit>
-                                                    </dx:LayoutItemNestedControlContainer>
-                                                </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
-                               
-                                            <dx:LayoutItem Caption="Customer">
-                                                <LayoutItemNestedControlCollection>
-                                                    <dx:LayoutItemNestedControlContainer runat="server">
-                                                         <dx:ASPxGridLookup Width="170px" ID="glStorerKey" runat="server" AutoGenerateColumns="False" ClientInstanceName="glStorerKey"
-                                                                DataSourceID="customer" KeyFieldName="CustomerCode" OnLoad="LookupLoad" TextFormatString="{0}">
-                                                                <ValidationSettings Display="None" ValidateOnLeave="true" ErrorDisplayMode="ImageWithTooltip">
-                                                                    <RequiredField IsRequired="True" />
-                                                                </ValidationSettings>
-                                                                <InvalidStyle BackColor="Pink">
-                                                                </InvalidStyle>
-                                                                <GridViewProperties>
-                                                                    <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
-                                                                    <Settings ShowFilterRow="True" />
-                                                                </GridViewProperties>
-                                                                <Columns>
-                                                                    <dx:GridViewDataTextColumn FieldName="CustomerCode" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="Name" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
-                                                                    </dx:GridViewDataTextColumn>
-                                                                </Columns>
-                                                                <ClientSideEvents Valuechanged="function (s, e){ cp.PerformCallback('Loc');}" Validation="OnValidation" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
-
-                                                            </dx:ASPxGridLookup>
-                                                    </dx:LayoutItemNestedControlContainer>
-                                                </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
-                                            <dx:LayoutItem Caption="Current Weight">
-                                                <LayoutItemNestedControlCollection>
-                                                    <dx:LayoutItemNestedControlContainer runat="server">
-                                                         <dx:ASPxSpinEdit ID="txtCurWeight" runat="server" Width="170px" MinValue="0" MaxValue="9999999999">
-                                                        </dx:ASPxSpinEdit>
+                                                            </Columns>
+                                                            <ClientSideEvents ValueChanged="function (s, e){ cp.PerformCallback('Loc');}" Validation="OnValidation" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
+                                                        </dx:ASPxGridLookup>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
 
-                                            <dx:LayoutItem Caption="Location">
-                                                <LayoutItemNestedControlCollection>
-                                                    <dx:LayoutItemNestedControlContainer runat="server">
-                                                        <dx:ASPxGridLookup Width="170px" ID="gLoc" runat="server" AutoGenerateColumns="False"  OnInit="glItemCode_Init" ClientInstanceName="gLoc"
-                                                                           DataSourceID="loc" KeyFieldName="LocationCode" OnLoad="gvLookupLoad" TextFormatString="{0}">
-                                                                           <GridViewProperties>
-                                                                               <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
-                                                                               <Settings ShowFilterRow="True" />
-                                                                           </GridViewProperties>
-                                                                           <Columns>
-                                                                               <dx:GridViewDataTextColumn Caption="Location" FieldName="LocationCode" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
-                                                                               </dx:GridViewDataTextColumn>
-                                                                        
-                                                                       
-                                                                           </Columns>
-                                                                           <ClientSideEvents  KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
-
-                                                         </dx:ASPxGridLookup>
-                                                    </dx:LayoutItemNestedControlContainer>
-                                                </LayoutItemNestedControlCollection>
-                                            </dx:LayoutItem>
                                             <dx:LayoutItem Caption="Excess Weight">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                         <dx:ASPxSpinEdit ID="txtRemWeight" Readonly="true" runat="server" Width="170px">
+                                                        <dx:ASPxSpinEdit ID="txtRemWeight" ReadOnly="true" runat="server" Width="170px">
                                                         </dx:ASPxSpinEdit>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
-                                             <dx:EmptyLayoutItem>
-                                            </dx:EmptyLayoutItem>
-                                             <dx:LayoutItem Caption="Max Weight">
+                                            <dx:LayoutItem Caption="Customer">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                         <dx:ASPxSpinEdit ID="txtMaxWeight" Readonly="true" runat="server" Width="170px">
+                                                        <dx:ASPxGridLookup Width="170px" ID="glStorerKey" runat="server" AutoGenerateColumns="False" ClientInstanceName="glStorerKey"
+                                                            DataSourceID="customer" KeyFieldName="CustomerCode" OnLoad="LookupLoad" TextFormatString="{0}" ReadOnly="true" >
+                                                            <ValidationSettings Display="None" ValidateOnLeave="true" ErrorDisplayMode="ImageWithTooltip">
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                            <InvalidStyle BackColor="Pink">
+                                                            </InvalidStyle>
+                                                            <GridViewProperties>
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                <Settings ShowFilterRow="True" />
+                                                            </GridViewProperties>
+                                                            <Columns>
+                                                                <dx:GridViewDataTextColumn FieldName="CustomerCode" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                </dx:GridViewDataTextColumn>
+                                                                <dx:GridViewDataTextColumn FieldName="Name" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                </dx:GridViewDataTextColumn>
+                                                            </Columns>
+                                                            <ClientSideEvents  Validation="OnValidation" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
+
+                                                        </dx:ASPxGridLookup>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+
+                                            <dx:LayoutItem Caption="Max Weight">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxSpinEdit ID="txtMaxWeight" ReadOnly="true" runat="server" Width="170px">
                                                         </dx:ASPxSpinEdit>
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>
+                                            <%--<dx:LayoutItem Caption="Location">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                        <dx:ASPxGridLookup Width="170px" ID="gLoc" runat="server" AutoGenerateColumns="False" OnInit="glItemCode_Init" ClientInstanceName="gLoc"
+                                                            DataSourceID="loc" KeyFieldName="LocationCode" OnLoad="gvLookupLoad" TextFormatString="{0}">
+                                                            <GridViewProperties>
+                                                                <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                <Settings ShowFilterRow="True" />
+                                                            </GridViewProperties>
+                                                            <Columns>
+                                                                <dx:GridViewDataTextColumn Caption="Location" FieldName="LocationCode" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                </dx:GridViewDataTextColumn>
+
+
+                                                            </Columns>
+                                                            <ClientSideEvents KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
+
+                                                        </dx:ASPxGridLookup>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>--%>
+
+                                            <dx:EmptyLayoutItem>
+                                            </dx:EmptyLayoutItem>
+
 
 
 
@@ -833,94 +839,119 @@
                             <%-- <!--#endregion --> --%>
 
                             <%--<!--#region Region Details --> --%>
-                               <dx:LayoutGroup Caption="Replenishment Detail">
-                                   <Items>
-                                       <dx:LayoutItem Caption="">
-                                           <LayoutItemNestedControlCollection>
-                                               <dx:LayoutItemNestedControlContainer runat="server">
-                                                   <div id="loadingcont">
-                                                       <dx:ASPxGridView ID="gv1" runat="server" AutoGenerateColumns="False" Width="747px" OnInit="gv1_Init"
-                                                           OnCommandButtonInitialize="gv_CommandButtonInitialize" OnCellEditorInitialize="gv1_CellEditorInitialize" ClientInstanceName="gv1"
-                                                           OnBatchUpdate="gv1_BatchUpdate" KeyFieldName="DocNumber;LineNumber"
-                                                           SettingsBehavior-AllowSort="false" OnRowValidating="grid_RowValidating">
-                                                           <ClientSideEvents CustomButtonClick="OnCustomClick" />
-                                                           <ClientSideEvents BatchEditConfirmShowing="OnConfirm" Init="OnInitTrans"
-                                                               BatchEditStartEditing="OnStartEditing" BatchEditEndEditing="OnEndEditing" BatchEditRowValidating="Grid_BatchEditRowValidating" />
-                                                           <SettingsPager Mode="ShowAllRecords" />
-                                                           <SettingsEditing Mode="Batch" />
-                                                           <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" ColumnMinWidth="120" VerticalScrollableHeight="530" ShowFooter="True" />
+                            <dx:LayoutGroup Caption="Replenishment Detail">
+                                <Items>
+                                    <dx:LayoutItem Caption="">
+                                        <LayoutItemNestedControlCollection>
+                                            <dx:LayoutItemNestedControlContainer runat="server">
+                                                <div id="loadingcont">
+                                                    <dx:ASPxGridView ID="gv1" runat="server" AutoGenerateColumns="False" Width="747px" OnInit="gv1_Init"
+                                                        OnCommandButtonInitialize="gv_CommandButtonInitialize" OnCellEditorInitialize="gv1_CellEditorInitialize" ClientInstanceName="gv1"
+                                                        OnBatchUpdate="gv1_BatchUpdate" KeyFieldName="DocNumber;LineNumber"
+                                                        SettingsBehavior-AllowSort="false" OnRowValidating="grid_RowValidating">
+                                                        <ClientSideEvents CustomButtonClick="OnCustomClick" />
+                                                        <ClientSideEvents BatchEditConfirmShowing="OnConfirm" Init="OnInitTrans"
+                                                            BatchEditStartEditing="OnStartEditing" BatchEditEndEditing="OnEndEditing" BatchEditRowValidating="Grid_BatchEditRowValidating" />
+                                                        <SettingsPager Mode="ShowAllRecords" />
+                                                        <SettingsEditing Mode="Batch" />
+                                                        <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" VerticalScrollableHeight="530" ShowFooter="True" />
 
-                                                           <SettingsBehavior AllowSort="False"></SettingsBehavior>
+                                                        <SettingsBehavior AllowSelectByRowClick="True" AllowSort="False"></SettingsBehavior>
 
-                                                           <SettingsCommandButton>
-                                                               <NewButton>
-                                                                   <Image IconID="actions_addfile_16x16"></Image>
-                                                               </NewButton>
-                                                               <DeleteButton>
-                                                                   <Image IconID="actions_cancel_16x16"></Image>
-                                                               </DeleteButton>
-                                                           </SettingsCommandButton>
-                                                           <Columns>
-                                                               <dx:GridViewCommandColumn ShowDeleteButton="true" ButtonType="Image" ShowInCustomizationForm="True" ShowNewButtonInHeader="True" VisibleIndex="0" Width="60px">
-                                                                   <CustomButtons>
-                                                                       <dx:GridViewCommandColumnCustomButton ID="Details">
-                                                                           <Image IconID="support_info_16x16"></Image>
-                                                                       </dx:GridViewCommandColumnCustomButton>
-                                                                   </CustomButtons>
+                                                        <SettingsCommandButton>
+                                                            <NewButton>
+                                                                <Image IconID="actions_addfile_16x16"></Image>
+                                                            </NewButton>
+                                                            <DeleteButton>
+                                                                <Image IconID="actions_cancel_16x16"></Image>
+                                                            </DeleteButton>
+                                                        </SettingsCommandButton>
+                                                        <Columns>
+                                                            <dx:GridViewCommandColumn ShowDeleteButton="true" ButtonType="Image" ShowInCustomizationForm="True" ShowNewButtonInHeader="True" VisibleIndex="0" Width="0px">
+                                                                <CustomButtons>
+                                                                    <dx:GridViewCommandColumnCustomButton ID="Details">
+                                                                        <Image IconID="support_info_16x16"></Image>
+                                                                    </dx:GridViewCommandColumnCustomButton>
+                                                                </CustomButtons>
 
-                                                               </dx:GridViewCommandColumn>
-                                                               <dx:GridViewDataTextColumn FieldName="DocNumber" Visible="false" VisibleIndex="1">
-                                                               </dx:GridViewDataTextColumn>
-                                                               <dx:GridViewDataTextColumn FieldName="LineNumber" Visible="false" Caption="LineNumber" ReadOnly="True" Width="100px">
-                                                               </dx:GridViewDataTextColumn>
-              
-                                                               <dx:GridViewDataTextColumn Caption="Itemcode" FieldName="ItemCode" VisibleIndex="3" Width="200px" Name="Item">
-                                                                   <EditItemTemplate>
-                                                                       <dx:ASPxGridLookup ID="glItemCode" runat="server" AutoGenerateColumns="False" AutoPostBack="false"  OnInit="glItemCode_Init"
-                                                                           DataSourceID="Masterfileitem" KeyFieldName="ItemCode" ClientInstanceName="gl" TextFormatString="{0}" Width="200px">
-                                                                           <GridViewProperties Settings-ShowFilterRow="true">
-                                                                               <SettingsBehavior AllowFocusedRow="True" AllowSelectByRowClick="True"
-                                                                                   AllowSelectSingleRowOnly="True" AllowDragDrop="False" />
-                                                                           </GridViewProperties>
-                                                                           <Columns>
-                                                                               <dx:GridViewDataTextColumn FieldName="ItemCode" ReadOnly="True" VisibleIndex="0" Settings-AutoFilterCondition="Contains" />
-                                                                               <dx:GridViewDataTextColumn FieldName="FullDesc" ReadOnly="True" VisibleIndex="1" Settings-AutoFilterCondition="Contains" />
-                                                                           </Columns>
-                                                                           <ClientSideEvents DropDown="function(s,e){gl.GetGridView().PerformCallback('ItemCodeDropDown'+ '|' + glWarehousecode.GetValue()+'|'+gLoc.GetValue());}" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
-                                                                       </dx:ASPxGridLookup>
-                                                                   </EditItemTemplate>
-                                                               </dx:GridViewDataTextColumn>
-                                                               <dx:GridViewDataTextColumn Caption="Location" FieldName="LocationCode" VisibleIndex="4" Width="200px" Name="Customer">
-                                                                   <EditItemTemplate>
-                                                                       <dx:ASPxGridLookup Width="200px" ID="glLoc" runat="server" AutoGenerateColumns="False"  OnInit="glItemCode_Init" ClientInstanceName="glLoc"
-                                                                           DataSourceID="Masterfileloc" KeyFieldName="Location" OnLoad="gvLookupLoad" TextFormatString="{0}">
-                                                                           <GridViewProperties>
-                                                                               <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
-                                                                               <Settings ShowFilterRow="True" />
-                                                                           </GridViewProperties>
-                                                                           <Columns>
-                                                                               <dx:GridViewDataTextColumn FieldName="Location" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
-                                                                               </dx:GridViewDataTextColumn>
-                                                                        
-                                                                       
-                                                                           </Columns>
-                                                                           <ClientSideEvents DropDown="function(s,e){glLoc.GetGridView().PerformCallback('LocationCodeDropDown'+ '|' + gl.GetValue());}" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
+                                                            </dx:GridViewCommandColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="DocNumber" Visible="false" VisibleIndex="1">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="LineNumber" Visible="false" Caption="LineNumber" ReadOnly="True" Width="100px">
+                                                            </dx:GridViewDataTextColumn>
 
-                                                                       </dx:ASPxGridLookup>
-                                                                   </EditItemTemplate>
-                                                               </dx:GridViewDataTextColumn>
-                                                               <dx:GridViewDataSpinEditColumn Caption="Qty" Name="Quantity" ShowInCustomizationForm="True" VisibleIndex="9" FieldName="Qty" PropertiesSpinEdit-DisplayFormatString="{0:N}" UnboundType="Decimal" Width="100px">
-                                                                   <PropertiesSpinEdit Increment="0" NullDisplayText="0" ConvertEmptyStringToNull="False" NullText="0" DisplayFormatString="{0:N}" MaxValue="9999999999" MinValue="0" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="false">
-                                                                   </PropertiesSpinEdit>
-                                                               </dx:GridViewDataSpinEditColumn>
-                                                               <dx:GridViewDataSpinEditColumn Caption="Kilo" Name="Kilo" ShowInCustomizationForm="True" VisibleIndex="10" FieldName="Kilo" PropertiesSpinEdit-DisplayFormatString="{0:N}" UnboundType="Decimal" Width="100px">
-                                                                   <PropertiesSpinEdit Increment="0" NullDisplayText="0" ConvertEmptyStringToNull="False" NullText="0" DisplayFormatString="{0:N}" MaxValue="9999999999999999" MinValue="0" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="false">
-                                                                   </PropertiesSpinEdit>
-                                                               </dx:GridViewDataSpinEditColumn>
-                                              
+                                                            <dx:GridViewDataTextColumn Caption="Itemcode" FieldName="ItemCode" VisibleIndex="2" Width="200px" Name="Item">
+                                                                <EditItemTemplate>
+                                                                    <dx:ASPxGridLookup ID="glItemCode" runat="server" AutoGenerateColumns="False" AutoPostBack="false" OnInit="glItemCode_Init"
+                                                                        DataSourceID="Masterfileitem" KeyFieldName="ItemCode" ClientInstanceName="gl" TextFormatString="{0}" Width="200px">
+                                                                        <GridViewProperties Settings-ShowFilterRow="true">
+                                                                            <SettingsBehavior AllowFocusedRow="True" AllowSelectByRowClick="True"
+                                                                                AllowSelectSingleRowOnly="True" AllowDragDrop="False" />
+                                                                        </GridViewProperties>
+                                                                        <Columns>
+                                                                            <dx:GridViewDataTextColumn FieldName="ItemCode" ReadOnly="True" VisibleIndex="0" Settings-AutoFilterCondition="Contains" />
+                                                                            <dx:GridViewDataTextColumn FieldName="FullDesc" ReadOnly="True" VisibleIndex="1" Settings-AutoFilterCondition="Contains" />
+                                                                        </Columns>
+                                                                        <ClientSideEvents RowClick="gridLookup_CloseUp" ValueChanged="function(s, e){ console.log('Selected Value:', s.GetValue()); }" DropDown="function(s,e){gl.GetGridView().PerformCallback('ItemCodeDropDown'+ '|' + glStorerKey.GetValue());}" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
+                                                                    </dx:ASPxGridLookup>
+                                                                </EditItemTemplate>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="PalletID" Name="PalletID" ShowInCustomizationForm="True" VisibleIndex="2" FieldName="PalletID" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="ColorCode" Name="ColorCode" Width="0px" ShowInCustomizationForm="True" VisibleIndex="3" FieldName="ColorCode" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="ClassCode" Name="ClassCode" Width="0px" ShowInCustomizationForm="True" VisibleIndex="4" FieldName="ClassCode" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="SizeCode" Name="SizeCode" Width="0px" ShowInCustomizationForm="True" VisibleIndex="5" FieldName="SizeCode" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="BulkUnit" Name="BulkUnit" Width="0px" ShowInCustomizationForm="True" VisibleIndex="6" FieldName="BulkUnit" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="Unit" Name="Unit" ShowInCustomizationForm="True" VisibleIndex="7" FieldName="Unit" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="FromLoc" Name="FromLoc" ShowInCustomizationForm="True" VisibleIndex="8" FieldName="FromLoc" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="ToLoc" Name="ToLoc" ShowInCustomizationForm="True" VisibleIndex="9" FieldName="ToLoc" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="Location" FieldName="LocationCode" VisibleIndex="10" Width="0px" Name="Customer">
+                                                                <EditItemTemplate>
+                                                                    <dx:ASPxGridLookup Width="200px" ID="glLoc" runat="server" AutoGenerateColumns="False" OnInit="glItemCode_Init" ClientInstanceName="glLoc"
+                                                                        DataSourceID="Masterfileloc" KeyFieldName="Location" OnLoad="gvLookupLoad" TextFormatString="{0}">
+                                                                        <GridViewProperties>
+                                                                            <SettingsBehavior AllowFocusedRow="True" AllowSelectSingleRowOnly="True" />
+                                                                            <Settings ShowFilterRow="True" />
+                                                                        </GridViewProperties>
+                                                                        <Columns>
+                                                                            <dx:GridViewDataTextColumn FieldName="Location" ReadOnly="True" Settings-AutoFilterCondition="Contains" ShowInCustomizationForm="True" VisibleIndex="0">
+                                                                            </dx:GridViewDataTextColumn>
 
 
-                                                               <%--<dx:GridViewDataTextColumn Caption="Field1" Name="Field1" ShowInCustomizationForm="True" VisibleIndex="17" FieldName="Field1" UnboundType="String">
+                                                                        </Columns>
+                                                                        <ClientSideEvents DropDown="function(s,e){glLoc.GetGridView().PerformCallback('LocationCodeDropDown'+ '|' + gl.GetValue());}" KeyPress="gridLookup_KeyPress" KeyDown="gridLookup_KeyDown" />
+
+                                                                    </dx:ASPxGridLookup>
+                                                                </EditItemTemplate>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataSpinEditColumn Caption="Qty" Name="Quantity" ShowInCustomizationForm="True" VisibleIndex="11" FieldName="Qty" PropertiesSpinEdit-DisplayFormatString="{0:N}" UnboundType="Decimal" Width="100px">
+                                                                <PropertiesSpinEdit Increment="0" NullDisplayText="0" ConvertEmptyStringToNull="False" NullText="0" DisplayFormatString="{0:N}" MaxValue="9999999999" MinValue="0" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="false">
+                                                                </PropertiesSpinEdit>
+                                                            </dx:GridViewDataSpinEditColumn>
+                                                            <dx:GridViewDataSpinEditColumn Caption="Kilo" Name="Kilo" ShowInCustomizationForm="True" VisibleIndex="12" FieldName="Kilo" PropertiesSpinEdit-DisplayFormatString="{0:N}" UnboundType="Decimal" Width="100px">
+                                                                <PropertiesSpinEdit Increment="0" NullDisplayText="0" ConvertEmptyStringToNull="False" NullText="0" DisplayFormatString="{0:N}" MaxValue="9999999999999999" MinValue="0" SpinButtons-ShowIncrementButtons="false" AllowMouseWheel="false">
+                                                                </PropertiesSpinEdit>
+                                                            </dx:GridViewDataSpinEditColumn>
+
+
+                                                            <dx:GridViewDataTextColumn Caption="MfgDate" FieldName="Field1" ShowInCustomizationForm="True" VisibleIndex="13">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="ExpDate" FieldName="Field2"  ShowInCustomizationForm="True" VisibleIndex="14">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="RRDate" FieldName="Field3"  ShowInCustomizationForm="True" VisibleIndex="15">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="BatchNumber" Name="BatchNumber" ShowInCustomizationForm="True" VisibleIndex="16" FieldName="BatchNumber" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn Caption="LotNumber" Name="LotNumber" ShowInCustomizationForm="True" VisibleIndex="17" FieldName="LotNumber" UnboundType="String">
+                                                            </dx:GridViewDataTextColumn>
+                                                            <%--<dx:GridViewDataTextColumn Caption="Field1" Name="Field1" ShowInCustomizationForm="True" VisibleIndex="17" FieldName="Field1" UnboundType="String">
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn Caption="Field2" Name="Field2" ShowInCustomizationForm="True" VisibleIndex="18" FieldName="Field2" UnboundType="String">
                                                             </dx:GridViewDataTextColumn>
@@ -938,15 +969,15 @@
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn Caption="Field9" Name="Field9" ShowInCustomizationForm="True" VisibleIndex="25" FieldName="Field9" UnboundType="String">
                                                             </dx:GridViewDataTextColumn>--%>
-                                                           </Columns>
-                                                       </dx:ASPxGridView>
-                                                   </div>
+                                                        </Columns>
+                                                    </dx:ASPxGridView>
+                                                </div>
 
-                                               </dx:LayoutItemNestedControlContainer>
-                                           </LayoutItemNestedControlCollection>
-                                       </dx:LayoutItem>
-                                   </Items>
-                               </dx:LayoutGroup>
+                                            </dx:LayoutItemNestedControlContainer>
+                                        </LayoutItemNestedControlCollection>
+                                    </dx:LayoutItem>
+                                </Items>
+                            </dx:LayoutGroup>
                             <%-- <!--#endregion --> --%>
                         </Items>
                     </dx:ASPxFormLayout>
@@ -1014,18 +1045,18 @@
         </SelectParameters>
     </asp:ObjectDataSource>
     <asp:SqlDataSource ID="sdsDetail" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT * FROM wms.ReplenishmentDetail where DocNumber is null " OnInit="Connection_Init"></asp:SqlDataSource>
-   
-     <asp:SqlDataSource ID="Masterfileitemdetail" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="" OnInit="Connection_Init">
-     </asp:SqlDataSource>
-     <asp:SqlDataSource ID="warehouseC" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="select A.WarehouseCode from Masterfile.Location A Left Join Masterfile.Warehouse B on A.WarehouseCode=B.WarehouseCode where ISNULL(Replenish,0) !=0 and B.WarehouseCode is not null group by A.WarehouseCode" OnInit="Connection_Init"></asp:SqlDataSource>
-        <asp:SqlDataSource ID="customer" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="select C.CustomerC as CustomerCode,B.Name from Masterfile.Location A  LEFT JOIN wms.CountSheetSetup C ON A.LocationCode = C.Location Left Join Masterfile.BizPartner B on C.CustomerC=B.BizPartnerCode where ISNULL(A.Replenish,0) !=0 and B.BizPartnerCode is not null group by C.CustomerC,B.Name" OnInit="Connection_Init"></asp:SqlDataSource>
-       
-   <asp:SqlDataSource ID="loc" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT LocationCode from Masterfile.Location where ISNULL(Replenish,0) != 0" OnInit="Connection_Init"></asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="Masterfileitemdetail" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="" OnInit="Connection_Init"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="warehouseC" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="select A.WarehouseCode from Masterfile.Location A Left Join Masterfile.Warehouse B on A.WarehouseCode=B.WarehouseCode where ISNULL(Replenish,0) !=0 and B.WarehouseCode is not null group by A.WarehouseCode" OnInit="Connection_Init"></asp:SqlDataSource>
+    <%--<asp:SqlDataSource ID="customer" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="select C.CustomerC as CustomerCode,B.Name from Masterfile.Location A  LEFT JOIN wms.CountSheetSetup C ON A.LocationCode = C.Location Left Join Masterfile.BizPartner B on C.CustomerC=B.BizPartnerCode where ISNULL(A.Replenish,0) !=0 and B.BizPartnerCode is not null group by C.CustomerC,B.Name" OnInit="Connection_Init"></asp:SqlDataSource>--%>
+    <asp:SqlDataSource ID="customer" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT [BizPartnerCode] as CustomerCode, [Name] FROM Masterfile.[BizPartner] WHERE ISNULL([IsInactive],0) = 0" OnInit="Connection_Init"></asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="loc" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT LocationCode from Masterfile.Location where ISNULL(Replenish,0) != 0" OnInit="Connection_Init"></asp:SqlDataSource>
 
     <asp:SqlDataSource ID="Masterfileitem" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="" OnInit="Connection_Init"></asp:SqlDataSource>
-      <asp:SqlDataSource ID="Masterfileloc" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="" OnInit="Connection_Init"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="Masterfileloc" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="" OnInit="Connection_Init"></asp:SqlDataSource>
 
-      <asp:SqlDataSource ID="Warehouse" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT WarehouseCode,Description FROM Masterfile.[Warehouse] where isnull(IsInactive,0)=0" OnInit="Connection_Init"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="Warehouse" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT WarehouseCode,Description FROM Masterfile.[Warehouse] where isnull(IsInactive,0)=0" OnInit="Connection_Init"></asp:SqlDataSource>
     <!--#endregion-->
 </body>
 </html>

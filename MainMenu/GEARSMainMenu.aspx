@@ -648,6 +648,7 @@
                 <!--begin::Nav-->
                 <button id="getEmail" type="button" data-toggle="modal" data-target="#updateEmailModal" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5 mb-3 col-12" runat="server">Update Email</button>
                 <button type="button" data-toggle="modal" data-target="#changePasswordModal" class="btn btn-sm btn-light-warning font-weight-bolder py-2 px-5 mb-3 col-12">Change Password</button>
+                <button id="btnPin" type="button" data-toggle="modal" data-target="#changePinModal" class="btn btn-sm btn-light-info font-weight-bolder py-2 px-5 mb-3 col-12">Set Pin</button>
                 <a href="#" onclick="FreshWidget.show(); return false;" type="button" class="btn btn-sm btn-light-success font-weight-bolder py-2 px-5 mb-3 col-12">Contact Support</a>
 
                 <div class="navi navi-spacer-x-0 p-0">
@@ -1040,6 +1041,108 @@
             </div>
         </div>
 
+         <div class="modal fade" id="setPinModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="setPinModalLabel">Set PIN</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <i aria-hidden="true" class="ki ki-close"></i>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="form-group row">
+                         <label class="col-sm-4 col-form-label text-lg-left">Enter PIN:</label>
+                         <div class="col-sm-8">
+                             <div class="input-group input-group-sm">
+                                 <input type="password" id="txtSetPin" class="form-control" placeholder="PIN" aria-describedby="basic-addon2" />
+                                 <div class="input-group-append">
+                                     <span class="input-group-text">
+                                         <i class="la la-key"></i>
+                                     </span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="form-group row">
+                         <label class="col-sm-4 col-form-label text-lg-left">Re-enter PIN:</label>
+                         <div class="col-sm-8">
+                             <div class="input-group input-group-sm">
+                                 <input type="password" id="txtSetREnPin" class="form-control" placeholder="Re-enter PIN" aria-describedby="basic-addon2" />
+                                 <div class="input-group-append">
+                                     <span class="input-group-text">
+                                         <i class="la la-key"></i>
+                                     </span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" id="btnSetPin" onclick="SetPin(this)" class="btn btn-primary font-weight-bold">Submit</button>
+                 </div>
+             </div>
+         </div>
+        </div>
+
+        <div class="modal fade" id="changePinModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePinModalLabel">Change PIN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-lg-left">Enter Old PIN:</label>
+                    <div class="col-sm-8">
+                        <div class="input-group input-group-sm">
+                            <input type="password" id="txtOldPin" class="form-control" placeholder="Pin" aria-describedby="basic-addon2" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-key"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-lg-left">Enter New PIN:</label>
+                    <div class="col-sm-8">
+                        <div class="input-group input-group-sm">
+                            <input type="password" id="txtNewPin" class="form-control" placeholder="New PIN" aria-describedby="basic-addon2" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-key"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-lg-left">Re-enter PIN:</label>
+                    <div class="col-sm-8">
+                        <div class="input-group input-group-sm">
+                            <input type="password" id="txtREnPin" class="form-control" placeholder="Re-enter PIN" aria-describedby="basic-addon2" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-key"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnChangePin" onclick="ChangePin(this)" class="btn btn-primary font-weight-bold">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     </form>
     <script src="assets/js/CreationMenu.js"></script>
     <!--end::Scrolltop-->
@@ -1128,6 +1231,15 @@
             });
 
             tour_checker();
+
+            $('#btnPin').click(function () {
+                // clean the input fields
+                $('#txtSetPin').val('');
+                $('#txtSetREnPin').val('');
+                $('#txtOldPin').val('');
+                $('#txtNewPin').val('');
+                $('#txtREnPin').val('');
+            })
         });
 
         function tour_checker() {
@@ -1186,6 +1298,53 @@
             else {
                 alert("All fields are required!!!");
             }
+        }
+        
+        function SetPin(type) {
+            let pin = document.getElementById('txtSetPin').value;
+            let confirmPin = document.getElementById('txtSetREnPin').value;
+
+            fetch("GEARSMainMenu.aspx/SetPin", {
+                method: "POST",
+                body: '{Pin: "' + pin + '", ConfirmPin: "' + confirmPin +'"}',
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                alert(data.d);
+                if (data.d == "PIN set successfully!") {
+                    $('.close').click();
+                    $("#btnPin").text("Change PIN");
+                    $("#btnPin").attr("data-target", "#changePinModal");
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+
+        function ChangePin(type) {
+            let oldPin = document.getElementById('txtOldPin').value;
+            let newPin = document.getElementById('txtNewPin').value;
+            let reEnPin = document.getElementById('txtREnPin').value
+
+            fetch("GEARSMainMenu.aspx/ChangePin", {
+                method: "POST",
+                body: '{OldPin: "' + oldPin + '", NewPin: "' + newPin + '", ReEnPin: "' + reEnPin + '"}',
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                alert(data.d);
+                if (data.d == "PIN updated successfully!") {
+                    $('.close').click();
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
 
 

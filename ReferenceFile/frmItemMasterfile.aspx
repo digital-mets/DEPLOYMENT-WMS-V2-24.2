@@ -107,13 +107,13 @@
                 else {
                     var key = gvFabric.GetRowKey(indicies[i]);
                     //if (gvFabric.batchEditApi.IsDeletedRow(key))
-                        //console.log("deleted row " + indicies[i]);
+                    //console.log("deleted row " + indicies[i]);
                     //else {
-                        perc = parseFloat(gvFabric.batchEditApi.GetCellValue(indicies[i], "Percentage"));
-                        gvFabric.batchEditApi.ValidateRow(indicies[i]);
-                        gvFabric.batchEditApi.StartEdit(indicies[i], gvFabric.GetColumnByField("Percentage").index);
-                        gvFabric.batchEditApi.EndEdit();
-                        totalperc += perc;
+                    perc = parseFloat(gvFabric.batchEditApi.GetCellValue(indicies[i], "Percentage"));
+                    gvFabric.batchEditApi.ValidateRow(indicies[i]);
+                    gvFabric.batchEditApi.StartEdit(indicies[i], gvFabric.GetColumnByField("Percentage").index);
+                    gvFabric.batchEditApi.EndEdit();
+                    totalperc += perc;
                     //}
                 }
             }
@@ -687,7 +687,7 @@
         }
 
         window.addEventListener("load", (event) => {
-            
+
         });
     </script>
     <!--#endregion-->
@@ -1017,7 +1017,7 @@
                                                 <Border BorderStyle="None" />
                                                 <Paddings Padding="0px"></Paddings>
                                                 <GroupBoxStyle>
-                                                    <border borderstyle="None"></border>
+                                                    <Border BorderStyle="None"></Border>
                                                 </GroupBoxStyle>
                                                 <Items>
                                                     <dx:LayoutItem Paddings-Padding="0px" Caption="Retail Fabric Code">
@@ -1117,7 +1117,7 @@
                                                 <Paddings Padding="0px"></Paddings>
 
                                                 <GroupBoxStyle>
-                                                    <border borderstyle="None"></border>
+                                                    <Border BorderStyle="None"></Border>
                                                 </GroupBoxStyle>
                                                 <Items>
                                                     <dx:LayoutItem Paddings-Padding="0px" ShowCaption="False">
@@ -1876,7 +1876,7 @@
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                                         <dx:ASPxTextBox ID="txtTolerance" ClientInstanceName="txtTolerance" runat="server">
                                                                             <%--<ClientSideEvents ValueChanged="function(s,e){cp.PerformCallback('Tolerance'); e.processOnServer = false;}" />--%>
-                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange"/>
+                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange" />
                                                                         </dx:ASPxTextBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -1884,20 +1884,22 @@
                                                             <dx:LayoutItem Caption="Catch Weight">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                                        <dx:ASPxCheckBox runat="server" CheckState="Unchecked" ID="chkCatchWeight" ClientInstanceName="chkCatchWeight" OnLoad="Check_Load" 
+                                                                        <dx:ASPxCheckBox runat="server" CheckState="Unchecked" ID="chkCatchWeight" ClientInstanceName="chkCatchWeight" OnLoad="Check_Load"
                                                                             ClientSideEvents-CheckedChanged="function(s, e) {
                                                                                 onCatchWgtCheckBoxChanged();
-                                                                            }"></dx:ASPxCheckBox>
+                                                                            }">
+                                                                        </dx:ASPxCheckBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Standard Weight">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
-                                                                        <dx:ASPxCheckBox runat="server" CheckState="Unchecked" ID="chkStandWeight" ClientInstanceName="chkStandWeight" OnLoad="Check_Load" 
+                                                                        <dx:ASPxCheckBox runat="server" CheckState="Unchecked" ID="chkStandWeight" ClientInstanceName="chkStandWeight" OnLoad="Check_Load"
                                                                             ClientSideEvents-CheckedChanged="function(s, e) {
                                                                                 onStandardWgtCheckBoxChanged();
-                                                                            }"></dx:ASPxCheckBox>
+                                                                            }">
+                                                                        </dx:ASPxCheckBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -1906,7 +1908,7 @@
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                                         <dx:ASPxTextBox ID="txtCatchWeightVal" ClientInstanceName="txtCatchWeightVal" runat="server">
                                                                             <%--<ClientSideEvents ValueChanged="function(s,e){ cp.PerformCallback('Tolerance'); e.processOnServer = false;}" />--%>
-                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange"/>
+                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange" />
                                                                         </dx:ASPxTextBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -1916,7 +1918,7 @@
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                                         <dx:ASPxTextBox ID="txtstandardqty" ClientInstanceName="txtstandardqty" runat="server">
                                                                             <%--<ClientSideEvents ValueChanged="function(s,e){ cp.PerformCallback('Tolerance'); e.processOnServer = false;}" />--%>
-                                                                            <ClientSideEvents KeyUp="onDecimalInputKeyUp"/>
+                                                                            <ClientSideEvents KeyUp="onDecimalInputKeyUp" />
                                                                         </dx:ASPxTextBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -1925,7 +1927,7 @@
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                                         <dx:ASPxTextBox ID="txtMinWeight" ClientInstanceName="txtMinWeight" runat="server">
-                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange"/>
+                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange" />
                                                                         </dx:ASPxTextBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -1934,7 +1936,7 @@
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                                         <dx:ASPxTextBox ID="txtMaxWeight" ClientInstanceName="txtMaxWeight" runat="server">
-                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange"/>
+                                                                            <ClientSideEvents KeyUp="setCatchWeightOnKeyUp" LostFocus="setCatchWeightOnChange" />
                                                                         </dx:ASPxTextBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -1970,6 +1972,16 @@
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
+                                                            <dx:LayoutItem Caption="Min Replenish Qty">
+                                                                <LayoutItemNestedControlCollection>
+                                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                                        <dx:ASPxSpinEdit ID="minRepQty" runat="server" ClientInstanceName="minRepQty" OnLoad="SpinEdit_Load" Width="170px" MaxValue="999999999">
+                                                                            <SpinButtons ShowIncrementButtons="False">
+                                                                            </SpinButtons>
+                                                                        </dx:ASPxSpinEdit>
+                                                                    </dx:LayoutItemNestedControlContainer>
+                                                                </LayoutItemNestedControlCollection>
+                                                            </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Scannable">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -1983,6 +1995,16 @@
                                                                                 OnScannableCheckBoxChanged(s, e);
                                                                             }">
                                                                         </dx:ASPxCheckBox>
+                                                                    </dx:LayoutItemNestedControlContainer>
+                                                                </LayoutItemNestedControlCollection>
+                                                            </dx:LayoutItem>
+                                                            <dx:LayoutItem Caption="Max Replenish Qty">
+                                                                <LayoutItemNestedControlCollection>
+                                                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                                                        <dx:ASPxSpinEdit ID="maxRepQty" runat="server" ClientInstanceName="maxRepQty" OnLoad="SpinEdit_Load" Width="170px" MaxValue="999999999">
+                                                                            <SpinButtons ShowIncrementButtons="False">
+                                                                            </SpinButtons>
+                                                                        </dx:ASPxSpinEdit>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -2090,7 +2112,7 @@
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                                         <dx:ASPxCheckBox runat="server" CheckState="Unchecked" ID="ChkDelimiter" OnLoad="Check_Load" ClientEnabled="false" ClientInstanceName="ChkDelimiter">
-                                                                            <ClientSideEvents CheckedChanged="isDelimitedCheckChanged"/>
+                                                                            <ClientSideEvents CheckedChanged="isDelimitedCheckChanged" />
                                                                         </dx:ASPxCheckBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -2328,12 +2350,12 @@
                                                                     SettingsBehavior-AllowSort="false">
                                                                     <StylesEditors Native="True"></StylesEditors>
                                                                     <Columns>
-                                                                        <dx:GridViewCommandColumn ButtonType="Image" ShowDeleteButton="True" ShowInCustomizationForm="True" ShowNewButtonInHeader="True" VisibleIndex="0" Width="50px">
+                                                                        <dx:GridViewCommandColumn ButtonType="Image" ShowDeleteButton="True" ShowInCustomizationForm="True" ShowNewButtonInHeader="True" VisibleIndex="0" Width="25%">
                                                                         </dx:GridViewCommandColumn>
                                                                         <dx:GridViewDataTextColumn FieldName="RecordID" Caption="RecordID" VisibleIndex="1" Width="0px" PropertiesTextEdit-Native="true" ReadOnly="true">
                                                                             <PropertiesTextEdit Native="True"></PropertiesTextEdit>
                                                                         </dx:GridViewDataTextColumn>
-                                                                        <dx:GridViewDataTextColumn FieldName="ItemCode" VisibleIndex="2" Width="150px" Name="ItemCode" PropertiesTextEdit-Native="true">
+                                                                        <dx:GridViewDataTextColumn FieldName="ItemCode" VisibleIndex="2" Width="25%" Name="ItemCode" PropertiesTextEdit-Native="true">
                                                                             <PropertiesTextEdit Native="True"></PropertiesTextEdit>
                                                                             <EditItemTemplate>
                                                                                 <dx:ASPxGridLookup ID="KittingItem" runat="server" AutoGenerateColumns="False" AutoPostBack="false"
@@ -2367,10 +2389,10 @@
                                                                                 </dx:ASPxGridLookup>
                                                                             </EditItemTemplate>
                                                                         </dx:GridViewDataTextColumn>
-                                                                        <dx:GridViewDataTextColumn FieldName="ItemDesc" Caption="ItemDesc" VisibleIndex="3" Width="350px" PropertiesTextEdit-Native="true" ReadOnly="true">
+                                                                        <dx:GridViewDataTextColumn FieldName="ItemDesc" Caption="ItemDesc" VisibleIndex="3" Width="25%" PropertiesTextEdit-Native="true" ReadOnly="true">
                                                                             <PropertiesTextEdit Native="True"></PropertiesTextEdit>
                                                                         </dx:GridViewDataTextColumn>
-                                                                        <dx:GridViewDataSpinEditColumn FieldName="Units" Caption="Qty" VisibleIndex="4" Width="80px">
+                                                                        <dx:GridViewDataSpinEditColumn FieldName="Units" Caption="Qty" VisibleIndex="4" Width="25%">
                                                                             <PropertiesSpinEdit NullDisplayText="0" ConvertEmptyStringToNull="False" NullText="0" DisplayFormatString="{0}"
                                                                                 SpinButtons-ShowIncrementButtons="false" ClientInstanceName="Units">
                                                                                 <SpinButtons ShowIncrementButtons="False"></SpinButtons>
@@ -2391,7 +2413,7 @@
                                                                     </SettingsCommandButton>
                                                                     <SettingsPager Mode="ShowAllRecords" />
                                                                     <SettingsBehavior AllowSort="false" />
-                                                                    <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" ColumnMinWidth="500" VerticalScrollableHeight="400" />
+                                                                    <Settings HorizontalScrollBarMode="Visible" VerticalScrollBarMode="Auto" ColumnMinWidth="0" VerticalScrollableHeight="400" />
                                                                     <ClientSideEvents BatchEditConfirmShowing="OnConfirm"
                                                                         BatchEditStartEditing="OnStartEditing" BatchEditEndEditing="OnEndEditing" />
                                                                     <SettingsEditing Mode="Batch" />
@@ -2710,7 +2732,8 @@
                 <asp:QueryStringParameter DefaultValue="" Name="ItemCode" QueryStringField="docnumber" Type="String" />
             </SelectParameters>
         </asp:ObjectDataSource>
-        <asp:ObjectDataSource ID="ODSKittingComponent" runat="server" SelectMethod="getdata" TypeName="Entity.ItemMasterfile+KittingComponent" DataObjectTypeName="Entity.ItemMasterfile+KittingComponent" DeleteMethod="DeleteKittingData" InsertMethod="InsertKittingData" UpdateMethod="UpdateKittingData"><SelectParameters>
+        <asp:ObjectDataSource ID="ODSKittingComponent" runat="server" SelectMethod="getdata" TypeName="Entity.ItemMasterfile+KittingComponent" DataObjectTypeName="Entity.ItemMasterfile+KittingComponent" DeleteMethod="DeleteKittingData" InsertMethod="InsertKittingData" UpdateMethod="UpdateKittingData">
+            <SelectParameters>
                 <asp:Parameter DefaultValue="" Name="MotherItemCode" Type="String" />
                 <asp:SessionParameter Name="Conn" SessionField="ConnString" Type="String" />
             </SelectParameters>

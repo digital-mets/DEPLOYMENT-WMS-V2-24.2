@@ -1482,7 +1482,7 @@
                                                     <dx:LayoutItem Caption="StorageType">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server">
-                                                                <dx:ASPxGridLookup ID="glStorageType" runat="server" AutoGenerateColumns="False" ClientInstanceName="glStorageType" DataSourceID="StorageSrc" KeyFieldName="StorageType" OnLoad="LookupLoad" TextFormatString="{0}" Width="150px">
+                                                                <dx:ASPxGridLookup ID="glStorageType" runat="server" AutoGenerateColumns="False" ClientInstanceName="glStorageType" DataSourceID="StorageSrc" KeyFieldName="StorageType" OnLoad="LookupLoad" TextFormatString="{0}" Width="150px" ClientEnabled="false">
                                                                     <GridViewProperties>
                                                                         <SettingsBehavior AllowFocusedRow="True" AllowSelectByRowClick="True" AllowSelectSingleRowOnly="True" />
                                                                         <Settings ShowFilterRow="True" />
@@ -1639,6 +1639,14 @@
                                                             <dx:LayoutItemNestedControlContainer runat="server">
                                                                 <dx:ASPxTextBox ID="txtNote" runat="server" OnLoad="TextboxLoad" Width="150px">
                                                                 </dx:ASPxTextBox>
+                                                            </dx:LayoutItemNestedControlContainer>
+                                                        </LayoutItemNestedControlCollection>
+                                                    </dx:LayoutItem>
+                                                    <dx:LayoutItem Caption="Replenish">
+                                                        <LayoutItemNestedControlCollection>
+                                                            <dx:LayoutItemNestedControlContainer runat="server">
+                                                                <dx:ASPxCheckBox ID="chkreplenish" ClientEnabled="false" ClientInstanceName="chkreplenish" runat="server" CheckState="Unchecked">
+                                                                </dx:ASPxCheckBox>
                                                             </dx:LayoutItemNestedControlContainer>
                                                         </LayoutItemNestedControlCollection>
                                                     </dx:LayoutItem>
