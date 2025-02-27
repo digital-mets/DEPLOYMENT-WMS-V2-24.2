@@ -355,7 +355,7 @@
                                                     </dx:LayoutItemNestedControlContainer>
                                                 </LayoutItemNestedControlCollection>
                                             </dx:LayoutItem>--%>
-                                            <dx:LayoutItem Caption="Location" ColSpan="2" RowSpan="2" Name="Location">
+                                            <dx:LayoutItem Caption="DistriLocation" ColSpan="2" RowSpan="2" Name="Location">
                                                 <LayoutItemNestedControlCollection>
                                                     <dx:LayoutItemNestedControlContainer runat="server">
                                                         <dx:ASPxGridLookup Width="170px" ID="txtLocation" ClientInstanceName="txtLocation" runat="server" DataSourceID="MasterfileLocation" KeyFieldName="LocationCode" AutoGenerateColumns="false" TextFormatString="{0}" ClientEnabled="false">
@@ -370,12 +370,12 @@
 
                                                             </Columns>
                                                             <ClientSideEvents Validation="OnValidation" />
-                                                            <ClientSideEvents DropDown="function (s,e){
+                                                           <%-- <ClientSideEvents DropDown="function (s,e){
                                                                 
                                                                 txtLocation.GetGridView(); 
                                                                 e.processOnServer = false;
                                                                 }"
-                                                               />
+                                                               />--%>
 
                                                             <ValidationSettings Display="None" ErrorDisplayMode="ImageWithTooltip">
                                                                 <RequiredField IsRequired="True" />
@@ -540,7 +540,12 @@
         </SelectParameters>
     </asp:ObjectDataSource>
     <asp:SqlDataSource ID="Masterfilebizaccount" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT BizAccountCode, BizAccountName FROM Masterfile.[BizAccount]" OnInit="Connection_Init"></asp:SqlDataSource>
-    <asp:SqlDataSource ID="MasterfileLocation" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="" OnInit="Connection_Init"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="MasterfileLocation" runat="server" ConnectionString="<%$ ConnectionStrings:GEARS-METSITConnectionString %>" SelectCommand="SELECT LTRIM(RTRIM(LocationCode)) AS LocationCode FROM Masterfile.Location WHERE WarehouseCode = @WarehouseCode group by LTRIM(RTRIM(LocationCode))" OnInit="Connection_Init">
+        <SelectParameters>
+    <asp:QueryStringParameter Name="WarehouseCode" QueryStringField="WarehouseCode" />
+</SelectParameters>
+
+    </asp:SqlDataSource>
 
     <!--#endregion-->
 </body>
