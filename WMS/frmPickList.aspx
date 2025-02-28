@@ -1645,7 +1645,7 @@
                                                     <dx:LayoutItem Caption="Replenish">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server">
-                                                                <dx:ASPxCheckBox ID="chkreplenish" ClientEnabled="false" ClientInstanceName="chkreplenish" runat="server" CheckState="Unchecked">
+                                                                <dx:ASPxCheckBox ID="chkreplenish"  ClientInstanceName="chkreplenish" runat="server" CheckState="Unchecked">
                                                                 </dx:ASPxCheckBox>
                                                             </dx:LayoutItemNestedControlContainer>
                                                         </LayoutItemNestedControlCollection>
